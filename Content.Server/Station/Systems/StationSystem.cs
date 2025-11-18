@@ -331,7 +331,7 @@ public sealed partial class StationSystem : SharedStationSystem
     /// <param name="name">Optional override for the station name.</param>
     /// <remarks>This is for ease of use, manually spawning the entity works just fine.</remarks>
     /// <returns>The initialized station.</returns>
-    public EntityUid InitializeNewStation(StationConfig stationConfig, IEnumerable<EntityUid>? gridIds, string? name = null)
+    public EntityUid InitializeNewStation(StationConfig stationConfig, IEnumerable<EntityUid>? gridIds, string? name = null, string? owner = null)
     {
         // Use overrides for setup.
         var station = EntityManager.SpawnEntity(stationConfig.StationPrototype, MapCoordinates.Nullspace, stationConfig.StationComponentOverrides);
@@ -340,7 +340,8 @@ public sealed partial class StationSystem : SharedStationSystem
         var data = Comp<StationDataComponent>(station);
         if (name is not null && data.StationName is null)
             RenameStation(station, name, false);
-
+        if (owner is not null)
+            data.AddOwner(owner);
 
         name ??= MetaData(station).EntityName;
 

@@ -32,6 +32,9 @@
     <Compile Update="GridControl\UI\GridConfigWindow.xaml.cs">
       <DependentUpon>GridConfigWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Update="GridControl\UISC\StationCreatorWindow.xaml.cs">
+      <DependentUpon>StationCreatorWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Access\UI\IdPrinterConsoleWindow.xaml" />

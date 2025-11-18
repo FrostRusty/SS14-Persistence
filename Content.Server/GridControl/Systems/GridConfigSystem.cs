@@ -1,9 +1,11 @@
+using Content.Server.Construction.Completions;
 using Content.Server.Popups;
 using Content.Server.Station.Systems;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CrewAccesses.Components;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.CrewRecords.Components;
@@ -15,15 +17,18 @@ using Content.Shared.Interaction;
 using Content.Shared.Station;
 using Content.Shared.Station.Components;
 using JetBrains.Annotations;
+using Robust.Server.Containers;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using System;
 using System.Globalization;
 using System.Linq;
 using static Content.Shared.GridControl.Components.GridConfigComponent;
+using static Content.Shared.GridControl.Components.StationCreatorComponent;
 
 namespace Content.Server.GridControl.Systems;
 
@@ -40,6 +45,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -47,6 +53,8 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         SubscribeLocalEvent<GridConfigComponent, ComponentStartup>(UpdateUserInterface);
         SubscribeLocalEvent<GridConfigComponent, EntInsertedIntoContainerMessage>(UpdateUserInterface);
         SubscribeLocalEvent<GridConfigComponent, EntRemovedFromContainerMessage>(OnRemoved);
+        SubscribeLocalEvent<StationCreatorComponent, EntInsertedIntoContainerMessage>(UpdateUserInterface);
+        SubscribeLocalEvent<StationCreatorComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<GridConfigComponent, AfterInteractEvent>(AfterInteractOn);
         SubscribeLocalEvent<GridConfigComponent, GridConfigDoAfterEvent>(OnDoAfter);
 
@@ -60,9 +68,23 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             subs.Event<GridConfigConnect>(OnConnect);
             subs.Event<GridConfigDisconnect>(OnDisconnect);
         });
+
+
+
+        Subs.BuiEvents<StationCreatorComponent>(StationCreatorUiKey.Key, subs =>
+        {
+            subs.Event<BoundUIOpenedEvent>(UpdateUserInterface);
+            subs.Event<StationCreatorFinish>(OnStationCreate);
+        });
+
     }
 
     private void OnRemoved(EntityUid uid, GridConfigComponent component, EntityEventArgs args)
+    {
+        component.ConnectedStation = null;
+        UpdateUserInterface(uid, component, args);
+    }
+    private void OnRemoved(EntityUid uid, StationCreatorComponent component, EntityEventArgs args)
     {
         component.ConnectedStation = null;
         UpdateUserInterface(uid, component, args);
@@ -232,6 +254,32 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             }
         }
         UpdateUserInterface(uid, component, args);
+    }
+
+    private void OnStationCreate(EntityUid uid, StationCreatorComponent component, StationCreatorFinish args)
+    {
+        string? realName = null;
+        EntityUid? idCard = null;
+        if (component.PrivilegedIdSlot.Item is { Valid: true } idc)
+        {
+            idCard = idc;
+            if (TryComp<IdCardComponent>(idCard, out var id) && id.FullName != null)
+            {
+               realName = id.FullName;
+            }
+
+        }
+        if (realName == null || realName == "") return;
+        if (args.StationName == null || args.StationName == "") return;
+        StationConfig config = new();
+        config.StationPrototype = "StandardNanotrasenStation";
+        _station.InitializeNewStation(config, null, args.StationName, realName);
+        if(idCard != null)
+        {
+            _popupSystem.PopupEntity($"The station {args.StationName} was created.", idCard.Value);
+            _itemSlots.TryEjectToHands(idCard.Value, component.PrivilegedIdSlot, args.Actor);
+        }
+        EntityManager.TryQueueDeleteEntity(uid);
     }
 
     private void OnDisconnect(EntityUid uid, GridConfigComponent component, GridConfigDisconnect args)
@@ -455,5 +503,30 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
 
         _userInterface.SetUiState(uid, GridConfigUiKey.Key, newState);
     }
-    
+
+    private void UpdateUserInterface(EntityUid uid, StationCreatorComponent component, EntityEventArgs args)
+    {
+        if (!component.Initialized)
+            return;
+        var privilegedIdName = string.Empty;
+        var privilegedName = string.Empty;
+        bool idPresent = false;
+        if (component.PrivilegedIdSlot.Item is { Valid: true } idCard)
+        {
+            idPresent = true;
+            privilegedIdName = Comp<MetaDataComponent>(idCard).EntityName;
+            if (TryComp<IdCardComponent>(idCard, out var id) && id.FullName != null)
+            {
+                privilegedName = id.FullName;
+            }
+
+        }
+
+        StationCreatorBoundUserInterfaceState newState;
+
+        newState = new StationCreatorBoundUserInterfaceState(idPresent, privilegedIdName, privilegedName);
+
+        _userInterface.SetUiState(uid, StationCreatorUiKey.Key, newState);
+    }
+
 }

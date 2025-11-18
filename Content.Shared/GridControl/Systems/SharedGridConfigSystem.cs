@@ -23,8 +23,19 @@ public abstract partial class SharedGridConfigSystem : EntitySystem
 
         SubscribeLocalEvent<GridConfigComponent, ComponentRemove>(OnComponentRemove);
         SubscribeLocalEvent<GridConfigComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<StationCreatorComponent, ComponentRemove>(OnComponentRemove);
+        SubscribeLocalEvent<StationCreatorComponent, ComponentInit>(OnComponentInit);
     }
 
+    private void OnComponentInit(EntityUid uid, StationCreatorComponent component, ComponentInit args)
+    {
+        _itemSlotsSystem.AddItemSlot(uid, StationCreatorComponent.PrivilegedIdCardSlotId, component.PrivilegedIdSlot);
+    }
+
+    private void OnComponentRemove(EntityUid uid, StationCreatorComponent component, ComponentRemove args)
+    {
+        _itemSlotsSystem.RemoveItemSlot(uid, component.PrivilegedIdSlot);
+    }
     private void OnComponentInit(EntityUid uid, GridConfigComponent component, ComponentInit args)
     {
         _itemSlotsSystem.AddItemSlot(uid, GridConfigComponent.PrivilegedIdCardSlotId, component.PrivilegedIdSlot);
