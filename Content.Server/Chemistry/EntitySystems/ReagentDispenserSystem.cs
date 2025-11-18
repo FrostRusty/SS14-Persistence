@@ -51,6 +51,7 @@ namespace Content.Server.Chemistry.EntitySystems
             SubscribeLocalEvent<ReagentDispenserComponent, ReagentDispenserClearContainerSolutionMessage>(OnClearContainerSolutionMessage);
 
             SubscribeLocalEvent<ReagentDispenserComponent, MapInitEvent>(OnMapInit, before: new[] { typeof(ItemSlotsSystem) });
+            SubscribeLocalEvent<ReagentDispenserComponent, ComponentInit>(OnCompInit, before: new[] { typeof(ItemSlotsSystem) });
         }
 
         private void SubscribeUpdateUiState<T>(Entity<ReagentDispenserComponent> ent, ref T ev)
@@ -191,6 +192,11 @@ namespace Content.Server.Chemistry.EntitySystems
         /// Initializes the beaker slot
         /// </summary>
         private void OnMapInit(Entity<ReagentDispenserComponent> ent, ref MapInitEvent args)
+        {
+            _itemSlotsSystem.AddItemSlot(ent.Owner, SharedReagentDispenser.OutputSlotName, ent.Comp.BeakerSlot);
+        }
+
+        private void OnCompInit(Entity<ReagentDispenserComponent> ent, ref ComponentInit args)
         {
             _itemSlotsSystem.AddItemSlot(ent.Owner, SharedReagentDispenser.OutputSlotName, ent.Comp.BeakerSlot);
         }
