@@ -40,6 +40,17 @@ public sealed partial class BankSystem : SharedBankSystem
     {
     }
 
+    public void DirtyMoneyAccountsComponent()
+    {
+        var target = _map.GetMapOrInvalid(_gameTicker.DefaultMap);
+        if (!EntityManager.TryGetComponent<MoneyAccountsComponent>(target, out var moneyComp))
+        {
+            _log.Info($"GetMoneyAccountsComponent: No MoneyAccountsComponent found.");
+        }
+        if(moneyComp != null)
+          Dirty(target, moneyComp);
+    }
+
     public MoneyAccountsComponent? GetMoneyAccountsComponent()
     {
         var target = _map.GetMapOrInvalid(_gameTicker.DefaultMap);
@@ -99,6 +110,7 @@ public sealed partial class BankSystem : SharedBankSystem
         {
             account.Balance -= amount;
             _log.Info($"{mobUid} withdrew {amount}");
+            DirtyMoneyAccountsComponent();
             return true;
 
         }
@@ -133,6 +145,7 @@ public sealed partial class BankSystem : SharedBankSystem
         }
         account!.Balance += amount;
         _log.Info($"{mobUid} deposited {amount}");
+        DirtyMoneyAccountsComponent();
         return true;
     }
 

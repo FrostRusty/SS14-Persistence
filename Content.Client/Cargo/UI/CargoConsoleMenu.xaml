@@ -1,4 +1,4 @@
-﻿<controls:FancyWindow xmlns="https://spacestation14.io"
+<controls:FancyWindow xmlns="https://spacestation14.io"
                            xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                            xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                            SetSize="600 600"
@@ -9,6 +9,10 @@
                    StyleClasses="LabelKeyText" />
             <RichTextLabel Name="AccountNameLabel"
                    Text="{Loc 'cargo-console-menu-account-name-none-text'}" />
+            <Control HorizontalExpand="True"/>
+            <Label Text="Change Account Type: "
+                   StyleClasses="LabelKeyText" />
+            <Button Name="AccountTypeMode" Text="Station" Access="Public" />
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Label Text="{Loc 'cargo-console-menu-points-label'}"

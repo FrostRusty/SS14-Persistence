@@ -15,3 +15,12 @@ public sealed class CargoConsoleRemoveOrderMessage : BoundUserInterfaceMessage
         OrderId = orderId;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed class CargoConsoleChangeAccountType : BoundUserInterfaceMessage
+{
+
+    public CargoConsoleChangeAccountType()
+    {
+    }
+}

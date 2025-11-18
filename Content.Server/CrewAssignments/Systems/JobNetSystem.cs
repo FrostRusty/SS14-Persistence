@@ -194,6 +194,7 @@ public sealed partial class JobNetSystem : EntitySystem
                                                     false,
                                                     actor.PlayerSession.Channel
                                                     );
+                                            _bank.DirtyMoneyAccountsComponent();
                                         }
                                     }
                                     else

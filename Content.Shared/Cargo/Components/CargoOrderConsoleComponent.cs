@@ -17,6 +17,8 @@ namespace Content.Shared.Cargo.Components;
 [Access(typeof(SharedCargoSystem))]
 public sealed partial class CargoOrderConsoleComponent : Component
 {
+    [DataField]
+    public bool PersonalAccountMode = false;
     /// <summary>
     /// The account that this console pulls from for ordering.
     /// </summary>

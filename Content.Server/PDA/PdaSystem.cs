@@ -159,7 +159,7 @@ namespace Content.Server.PDA
             if (!_containerSystem.TryGetContainingContainer((ent, null, null), out var container)
                 || !TryComp<ActorComponent>(container.Owner, out var actor))
                 return;
-
+            if (actor.PlayerSession == null) return;
             var message = FormattedMessage.EscapeText(args.Message);
             var wrappedMessage = Loc.GetString("pda-notification-message",
                 ("header", args.Header),

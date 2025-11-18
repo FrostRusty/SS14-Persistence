@@ -13,8 +13,9 @@ public sealed class CargoConsoleInterfaceState : BoundUserInterfaceState
     public NetEntity Station;
     public List<CargoOrderData> Orders;
     public List<ProtoId<CargoProductPrototype>> Products;
+    public bool PersonalMode = false;
 
-    public CargoConsoleInterfaceState(string name, int count, int capacity, NetEntity station, List<CargoOrderData> orders, List<ProtoId<CargoProductPrototype>> products)
+    public CargoConsoleInterfaceState(string name, int count, int capacity, NetEntity station, List<CargoOrderData> orders, List<ProtoId<CargoProductPrototype>> products, bool personalMode = false)
     {
         Name = name;
         Count = count;
@@ -22,5 +23,6 @@ public sealed class CargoConsoleInterfaceState : BoundUserInterfaceState
         Station = station;
         Orders = orders;
         Products = products;
+        PersonalMode = personalMode;
     }
 }
