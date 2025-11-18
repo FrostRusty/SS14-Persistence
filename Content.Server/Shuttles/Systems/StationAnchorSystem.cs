@@ -1,4 +1,4 @@
-﻿using Content.Server.Popups;
+using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Shared.Construction.Components;
@@ -21,9 +21,18 @@ public sealed class StationAnchorSystem : EntitySystem
         SubscribeLocalEvent<StationAnchorComponent, ChargedMachineDeactivatedEvent>(OnDeactivated);
 
         SubscribeLocalEvent<StationAnchorComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<StationAnchorComponent, ComponentInit>(OnCompInit);
     }
 
     private void OnMapInit(Entity<StationAnchorComponent> ent, ref MapInitEvent args)
+    {
+        if (!ent.Comp.SwitchedOn)
+            return;
+
+        SetStatus(ent, true);
+    }
+
+    private void OnCompInit(Entity<StationAnchorComponent> ent, ref ComponentInit args)
     {
         if (!ent.Comp.SwitchedOn)
             return;
