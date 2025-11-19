@@ -8,15 +8,15 @@
   category: cargoproduct-category-name-engineering
   group: market
 
-- type: cargoProduct
-  id: EngineSingularityGenerator
-  icon:
-    sprite: Structures/Power/Generation/Singularity/generator.rsi
-    state: icon
-  product: CrateEngineeringSingularityGenerator
-  cost: 4000
-  category: cargoproduct-category-name-engineering
-  group: market
+# - type: cargoProduct
+  # id: EngineSingularityGenerator
+  # icon:
+   # sprite: Structures/Power/Generation/Singularity/generator.rsi
+   # state: icon
+  # product: CrateEngineeringSingularityGenerator
+  # cost: 4000
+  # category: cargoproduct-category-name-engineering
+  # group: market
 
 - type: cargoProduct
   id: EngineSingularityContainment
@@ -68,15 +68,15 @@
   category: cargoproduct-category-name-engineering
   group: market
 
-- type: cargoProduct
-  id: EngineTeslaGenerator
-  icon:
-    sprite: Structures/Power/Generation/Tesla/generator.rsi
-    state: icon
-  product: CrateEngineeringTeslaGenerator
-  cost: 4000
-  category: cargoproduct-category-name-engineering
-  group: market
+#- type: cargoProduct
+#  id: EngineTeslaGenerator
+#  icon:
+#    sprite: Structures/Power/Generation/Tesla/generator.rsi
+#    state: icon
+#  product: CrateEngineeringTeslaGenerator
+#  cost: 4000
+#  category: cargoproduct-category-name-engineering
+#  group: market
 
 - type: cargoProduct
   id: EngineTeslaCoil
@@ -97,3 +97,14 @@
   cost: 400
   category: cargoproduct-category-name-engineering
   group: market
+
+- type: cargoProduct
+  id: EngineTEG
+  icon:
+    sprite: Structures/Power/Generation/teg.rsi
+    state: teg
+  product: EngineTEGFlatPacks
+  cost: 8000
+  category: cargoproduct-category-name-engineering
+  group: market
+

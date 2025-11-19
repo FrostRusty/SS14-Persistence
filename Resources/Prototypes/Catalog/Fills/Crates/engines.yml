@@ -171,3 +171,15 @@
   - type: StorageFill
     contents:
       - id: TeslaGroundingRodFlatpack
+
+- type: entity
+  id: EngineTegFlatPacks
+  parent: CrateEngineeringSecure
+  name: teg crate flatpacks
+  description: Two Circulators, One Engine, and a headache
+  components:
+  - type: StorageFill
+    contents:
+      - id: TegFlatpack
+      - id: TegCirculatorFlatpack
+      - id: TegCirculatorFlatpack
