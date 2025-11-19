@@ -20,10 +20,12 @@ public sealed class CargoPalletConsoleInterfaceState : BoundUserInterfaceState
     /// </summary>
     public bool Enabled;
 
-    public CargoPalletConsoleInterfaceState(int appraisal, int count, bool enabled)
+    public bool CashMode;
+    public CargoPalletConsoleInterfaceState(int appraisal, int count, bool enabled, bool cashmode)
     {
         Appraisal = appraisal;
         Count = count;
         Enabled = enabled;
+        CashMode = cashmode;
     }
 }

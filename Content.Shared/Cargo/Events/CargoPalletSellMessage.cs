@@ -10,3 +10,9 @@ public sealed class CargoPalletSellMessage : BoundUserInterfaceMessage
 {
 
 }
+
+[Serializable, NetSerializable]
+public sealed class CargoPalletChangeMoneyMode : BoundUserInterfaceMessage
+{
+
+}

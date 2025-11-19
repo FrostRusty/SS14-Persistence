@@ -6,4 +6,8 @@ namespace Content.Server.Cargo.Components;
 
 [RegisterComponent]
 [Access(typeof(CargoSystem))]
-public sealed partial class CargoPalletConsoleComponent : Component;
+public sealed partial class CargoPalletConsoleComponent : Component
+{
+    [DataField]
+    public bool CashMode = false;
+}

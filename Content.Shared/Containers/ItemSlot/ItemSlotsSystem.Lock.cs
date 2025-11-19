@@ -7,9 +7,17 @@ public sealed partial class ItemSlotsSystem
     private void InitializeLock()
     {
         SubscribeLocalEvent<ItemSlotsLockComponent, MapInitEvent>(OnLockMapInit);
+        SubscribeLocalEvent<ItemSlotsLockComponent, ComponentInit>(OnLockCompInit);
         SubscribeLocalEvent<ItemSlotsLockComponent, LockToggledEvent>(OnLockToggled);
     }
 
+    private void OnLockCompInit(Entity<ItemSlotsLockComponent> ent, ref ComponentInit args)
+    {
+        if (!TryComp(ent.Owner, out LockComponent? lockComp))
+            return;
+
+        UpdateLocks(ent, lockComp.Locked);
+    }
     private void OnLockMapInit(Entity<ItemSlotsLockComponent> ent, ref MapInitEvent args)
     {
         if (!TryComp(ent.Owner, out LockComponent? lockComp))

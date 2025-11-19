@@ -1,4 +1,4 @@
-﻿using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -32,6 +32,7 @@ public sealed class ItemCabinetSystem : EntitySystem
     private void OnStartup(Entity<ItemCabinetComponent> ent, ref ComponentStartup args)
     {
         UpdateAppearance(ent);
+        SetSlotLock(ent, _openable.IsClosed(ent, null));
     }
 
     private void OnMapInit(Entity<ItemCabinetComponent> ent, ref MapInitEvent args)

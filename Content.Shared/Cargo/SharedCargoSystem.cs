@@ -43,6 +43,10 @@ public abstract class SharedCargoSystem : EntitySystem
     /// </summary>
     public Dictionary<ProtoId<CargoAccountPrototype>, double> CreateAccountDistribution(Entity<StationBankAccountComponent> stationBank)
     {
+        return new Dictionary<ProtoId<CargoAccountPrototype>, double>
+        {
+            { stationBank.Comp.PrimaryAccount, 1.0 }
+        };
         var distribution = new Dictionary<ProtoId<CargoAccountPrototype>, double>
         {
             { stationBank.Comp.PrimaryAccount, stationBank.Comp.PrimaryCut }
