@@ -18,6 +18,26 @@
   category: cargoproduct-category-name-shuttle
   group: market
 
+- type: cargoProduct
+  id: GridConfigurator
+  icon:
+    sprite: Objects/Tools/access_configurator.rsi
+    state: icon
+  product: GridConfigurator
+  cost: 5000
+  category: cargoproduct-category-name-shuttle
+  group: market
+
+- type: cargoProduct
+  id: ComputerStationModificationFlatpack
+  icon:
+    sprite: Objects/Devices/flatpack.rsi
+    state: base
+  product: ComputerStationModificationFlatpack
+  cost: 1000
+  category: cargoproduct-category-name-shuttle
+  group: market
+
 # - type: cargoProduct
   # id: ShuttlePowerKit
   # icon:

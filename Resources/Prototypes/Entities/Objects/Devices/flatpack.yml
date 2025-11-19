@@ -244,6 +244,15 @@
 
 - type: entity
   parent: BaseFlatpack
+  id: ComputerStationModificationFlatpack
+  name: station modifcation computer flatpack
+  description: A flatpack used for constructing a station modifcation computer.
+  components:
+  - type: Flatpack
+    entity: ComputerStationModification
+
+- type: entity
+  parent: BaseFlatpack
   id: CrewMonitoringComputerFlatpack
   name: crew monitoring computer flatpack
   description: A flatpack used for constructing a crew monitoring console.

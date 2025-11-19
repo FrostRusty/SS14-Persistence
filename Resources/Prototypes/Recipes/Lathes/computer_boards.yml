@@ -103,3 +103,8 @@
   parent: [ BaseCircuitboardRecipe, BaseGeneralComputerRecipeCategory ]
   id: ComputerTelevisionCircuitboard
   result: ComputerTelevisionCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseGeneralComputerRecipeCategory ]
+  id: IdPrinterCircuitboard
+  result: IdPrinterCircuitboard
