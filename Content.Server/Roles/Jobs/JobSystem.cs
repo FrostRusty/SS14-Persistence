@@ -53,7 +53,7 @@ public sealed class JobSystem : SharedJobSystem
         if (prototype.RequireAdminNotify)
             _chat.DispatchServerMessage(session, Loc.GetString("job-greet-important-disconnect-admin-notify"));
 
-        _chat.DispatchServerMessage(session, "You have been brought to an area of space called 'The Threshold' which was previously uninhabitable. You are entitled to a paying job from Nanotrasen but you are also free to choose your own destiny. ");
+        _chat.DispatchServerMessage(session, "You are entitled to a paying job from Nanotrasen but you are also free to choose your own destiny. ");
     }
 
     public void MindAddJob(EntityUid mindId, string jobPrototypeId)

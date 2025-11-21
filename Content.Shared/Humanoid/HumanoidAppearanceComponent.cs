@@ -14,6 +14,8 @@ namespace Content.Shared.Humanoid;
 public sealed partial class HumanoidAppearanceComponent : Component
 {
     public MarkingSet ClientOldMarkings = new();
+    [DataField, AutoNetworkedField]
+    public bool Setup = false;
 
     [DataField, AutoNetworkedField]
     public MarkingSet MarkingSet = new();
