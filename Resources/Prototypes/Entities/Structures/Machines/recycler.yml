@@ -1,6 +1,6 @@
 ﻿- type: entity
   id: Recycler
-  parent: BaseMachinePowered
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: recycler
   description: A large crushing machine used to recycle small items inefficiently. There are lights on the side.
   components:
@@ -11,6 +11,8 @@
     sound:
       # TODO: https://freesound.org/people/derjuli/sounds/448133/ CC-NC-
       path: /Audio/Ambience/Objects/circular_saw.ogg
+  - type: Machine
+    board: RecyclerMachineCircuitboard
   - type: Fixtures
     fixtures:
       brrt:
