@@ -73,6 +73,8 @@
       state: icon
     - map: ["computerLayerScreen"]
       state: unshaded
+  - type: Anchorable
+    flags: none
 
 - type: entity
   parent: ComputerBankATMWithdraw
@@ -87,8 +89,6 @@
       state: icon
     - map: ["computerLayerScreen"]
       state: unshaded
-  - type: Computer
-    board: ComputerWithdrawBankATMComputerCircuitboard
 
 - type: entity
   suffix: BlackMarket

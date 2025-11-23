@@ -214,6 +214,21 @@
 
 - type: entity
   parent: BaseFlatpack
+  id: PortableGeneratorJrPacmanFlatpack
+  name: J.R.P.A.C.M.A.N. flatpack
+  description: A flatpack used for constructing a J.R.P.A.C.M.A.N. Generator
+  components:
+  - type: Flatpack
+    entity: PortableGeneratorJrPacman
+  - type: Sprite
+    layers:
+    - state: base
+    - state: overlay
+      color: "#cec8ac"
+    - state: icon-default
+
+- type: entity
+  parent: BaseFlatpack
   id: SpaceHeaterFlatpack
   name: space heater flatpack
   description: A flatpack used for constructing a space heater.
@@ -232,6 +247,21 @@
     - state: fax-machine
   - type: Flatpack
     entity: FaxMachineBase
+
+- type: entity
+  parent: BaseFlatpack
+  id: ComputerWithdrawBankATMFlatpack
+  name: withdraw-only ATM flatpack
+  description: A flatpack used for constructing a withdraw ATM.
+  components:
+  - type: Sprite
+    layers:
+    - state: base
+    - state: overlay
+      color: "#cec8ac"
+    - state: icon-default
+  - type: Flatpack
+    entity: ComputerWithdrawBankATM
 
 - type: entity
   parent: BaseFlatpack
