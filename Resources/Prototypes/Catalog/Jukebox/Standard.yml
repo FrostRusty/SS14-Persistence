@@ -39,3 +39,15 @@
   name: PigeonBeans - Sunset
   path:
     path: /Audio/Jukebox/sunset.ogg
+
+- type: jukebox
+  id: thisisrain
+  name: Koollan - This is Rain
+  path:
+    path: /Audio/Jukebox/thisisrain.ogg
+
+- type: jukebox
+  id: peaceandtranquility
+  name: Dolan Somans - Peace and Tranquility
+  path:
+    path: /Audio/Jukebox/peaceandtranquility.ogg
