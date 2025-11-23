@@ -1,6 +1,6 @@
 - type: cargoBounty
   id: BountyArtifact
-  reward: 2500
+  reward: 5000
   description: bounty-description-artifact
   entries:
   - name: bounty-item-artifact
@@ -11,19 +11,19 @@
 
 - type: cargoBounty
   id: BountyBaseballBat
-  reward: 4000
+  reward: 2500
   description: bounty-description-baseball-bat
   idPrefix: CC
   entries:
   - name: bounty-item-baseball-bat
-    amount: 5
+    amount: 3
     whitelist:
       tags:
       - BaseballBat
 
 - type: cargoBounty
   id: BountyBrain
-  reward: 12500
+  reward: 5000
   description: bounty-description-brain
   entries:
   - name: bounty-item-brain
@@ -38,7 +38,7 @@
   description: bounty-description-bread
   entries:
   - name: bounty-item-bread
-    amount: 1
+    amount: 6
     whitelist:
       tags:
       - Bread
@@ -48,7 +48,7 @@
 
 - type: cargoBounty
   id: BountyCarrot
-  reward: 7500
+  reward: 2000
   description: bounty-description-carrot
   idPrefix: SS15-
   entries:
@@ -60,7 +60,7 @@
 
 - type: cargoBounty
   id: BountyCarrotFries
-  reward: 7000
+  reward: 1500
   description: bounty-description-carrot-fries
   entries:
   - name: bounty-item-carrot-fries
@@ -71,7 +71,7 @@
 
 - type: cargoBounty
   id: BountyCarp
-  reward: 12500
+  reward: 5000
   description: bounty-description-carp
   idPrefix: CC
   entries:
@@ -99,7 +99,7 @@
 
 - type: cargoBounty
   id: BountyCorn
-  reward: 10000
+  reward: 2000
   description: bounty-description-corn
   entries:
   - name: bounty-item-corn
@@ -121,7 +121,7 @@
 
 - type: cargoBounty
   id: BountyCubanCarp
-  reward: 16000
+  reward: 10000
   description: bounty-description-cuban-carp
   idPrefix: CC
   entries:
@@ -133,7 +133,7 @@
 
 - type: cargoBounty
   id: BountyDonut
-  reward: 6000
+  reward: 3500
   description: bounty-description-donut
   idPrefix: CC
   entries:
@@ -145,11 +145,11 @@
 
 - type: cargoBounty
   id: BountyFigurine
-  reward: 8000
+  reward: 4000
   description: bounty-description-figurine
   entries:
   - name: bounty-item-figurine
-    amount: 5
+    amount: 3
     whitelist:
       tags:
       - Figurine
@@ -168,7 +168,7 @@
 
 - type: cargoBounty
   id: BountyGalaxyThistle
-  reward: 12000
+  reward: 5000
   description: bounty-description-galaxythistle
   entries:
   - name: bounty-item-galaxythistle
@@ -191,11 +191,11 @@
 
 - type: cargoBounty
   id: BountyInstrument
-  reward: 1900
+  reward: 1500
   description: bounty-description-instrument
   entries:
   - name: bounty-item-instrument
-    amount: 5
+    amount: 2
     whitelist:
       components:
       - Instrument
@@ -206,7 +206,7 @@
   description: bounty-description-knife
   entries:
   - name: bounty-item-knife
-    amount: 5
+    amount: 4
     whitelist:
       components:
       - Sharp
@@ -215,7 +215,7 @@
 
 - type: cargoBounty
   id: BountyLemon
-  reward: 10000
+  reward: 2500
   description: bounty-description-lemon
   entries:
   - name: bounty-item-lemon
@@ -226,7 +226,7 @@
 
 - type: cargoBounty
   id: BountyLime
-  reward: 10000
+  reward: 2500
   description: bounty-description-lime
   idPrefix: CC
   entries:
@@ -238,11 +238,11 @@
 
 - type: cargoBounty
   id: BountyLung
-  reward: 2000
+  reward: 1000
   description: bounty-description-lung
   entries:
   - name: bounty-item-lung
-    amount: 3
+    amount: 1
     whitelist:
       components:
       - Lung
@@ -254,14 +254,14 @@
   idPrefix: CC
   entries:
   - name: bounty-item-monkey-cube
-    amount: 3
+    amount: 2
     whitelist:
       tags:
       - MonkeyCube
 
 - type: cargoBounty
   id: BountyMouse
-  reward: 2400
+  reward: 3000
   description: bounty-description-mouse
   idPrefix: SS13-
   entries:
@@ -273,33 +273,33 @@
 
 - type: cargoBounty
   id: BountyPancake
-  reward: 10000
+  reward: 4000
   description: bounty-description-pancake
   entries:
   - name: bounty-item-pancake
-    amount: 13
+    amount: 10
     whitelist:
       tags:
       - Pancake
 
 - type: cargoBounty
   id: BountyPen
-  reward: 8000
+  reward: 600
   description: bounty-description-pen
   entries:
   - name: bounty-item-pen
-    amount: 5
+    amount: 3
     whitelist:
       tags:
       - Pen
 
 - type: cargoBounty
   id: BountyPercussion
-  reward: 15000
+  reward: 1500
   description: bounty-description-percussion
   entries:
   - name: bounty-item-percussion
-    amount: 4
+    amount: 1
     whitelist:
       tags:
       - PercussionInstrument
@@ -320,23 +320,23 @@
 
 - type: cargoBounty
   id: BountyPrisonUniform
-  reward: 8000
+  reward: 4000
   description: bounty-description-prison-uniform
   idPrefix: TG
   entries:
   - name: bounty-item-prison-uniform
-    amount: 4
+    amount: 3
     whitelist:
       tags:
       - PrisonUniform
 
 - type: cargoBounty
   id: BountyRadio
-  reward: 6500
+  reward: 2500
   description: bounty-description-radio
   entries:
   - name: bounty-item-radio
-    amount: 7
+    amount: 4
     whitelist:
       components:
       - Headset
@@ -346,7 +346,7 @@
 
 - type: cargoBounty
   id: BountyShiv
-  reward: 4000
+  reward: 2500
   description: bounty-description-shiv
   idPrefix: SYN
   entries:
@@ -358,18 +358,18 @@
 
 - type: cargoBounty
   id: BountySoap
-  reward: 4000
+  reward: 2000
   description: bounty-description-soap
   entries:
   - name: bounty-item-soap
-    amount: 3
+    amount: 2
     whitelist:
       tags:
       - Soap
 
 - type: cargoBounty
   id: BountySoup
-  reward: 6000
+  reward: 2000
   description: bounty-description-soup
   entries:
   - name: bounty-item-soup
@@ -380,18 +380,18 @@
 
 - type: cargoBounty
   id: BountySpear
-  reward: 8000
+  reward: 2000
   description: bounty-description-spear
   entries:
   - name: bounty-item-spear
-    amount: 5
+    amount: 4
     whitelist:
       tags:
       - Spear
 
 - type: cargoBounty
   id: BountySyringe
-  reward: 5000
+  reward: 2000
   description: bounty-description-syringe
   entries:
   - name: bounty-item-syringe
@@ -402,19 +402,19 @@
 
 - type: cargoBounty
   id: BountyTechDisk
-  reward: 25000
+  reward: 6500
   description: bounty-description-tech-disk
   idPrefix: SS13-
   entries:
   - name: bounty-item-tech-disk
-    amount: 5
+    amount: 4
     whitelist:
       components:
       - TechnologyDisk
 
 - type: cargoBounty
   id: BountyToolbox
-  reward: 8000
+  reward: 2500
   description: bounty-description-toolbox
   idPrefix: CC
   entries:
@@ -448,22 +448,22 @@
 
 - type: cargoBounty
   id: BountyBorgModule
-  reward: 3500
+  reward: 2500
   description: bounty-description-borg-module
   entries:
   - name: bounty-item-borg-module
-    amount: 3
+    amount: 2
     whitelist:
       components:
       - BorgModule
 
 - type: cargoBounty
   id: BountyArtifactFragment
-  reward: 32500
+  reward: 20000
   description: bounty-description-artifact-fragment
   entries:
   - name: bounty-item-artifact-fragment
-    amount: 7
+    amount: 20
     whitelist:
       tags:
       - ArtifactFragment
@@ -482,11 +482,11 @@
 
 - type: cargoBounty
   id: BountyLabeler
-  reward: 6660
+  reward: 3000
   description: bounty-description-labeler
   entries:
   - name: bounty-item-labeler
-    amount: 5
+    amount: 3
     whitelist:
       components:
       - HandLabeler
@@ -510,24 +510,24 @@
 
 - type: cargoBounty
   id: BountyBattery
-  reward: 15000
+  reward: 5500
   description: bounty-description-battery
   idPrefix: UNTH
   entries:
   - name: bounty-item-battery
-    amount: 15
+    amount: 10
     whitelist:
       components:
       - Battery
 
 - type: cargoBounty
   id: BountyLaserGun
-  reward: 28500
+  reward: 10000
   description: bounty-description-lasergun
   idPrefix: IV
   entries:
   - name: bounty-item-lasergun
-    amount: 6
+    amount: 5
     whitelist:
       components:
       - HitscanBatteryAmmoProvider
@@ -537,7 +537,7 @@
 
 - type: cargoBounty
   id: BountyFood
-  reward: 4000
+  reward: 3000
   description: bounty-description-food
   idPrefix: UNTH
   entries:
@@ -552,11 +552,11 @@
 
 - type: cargoBounty
   id: BountyFruit
-  reward: 5000
+  reward: 2000
   description: bounty-description-fruit
   entries:
   - name: bounty-item-fruit
-    amount: 12
+    amount: 20
     whitelist:
       tags:
       - Fruit
@@ -571,11 +571,11 @@
 
 - type: cargoBounty
   id: BountyVegetable
-  reward: 6000
+  reward: 2500
   description: bounty-description-vegetable
   entries:
   - name: bounty-item-vegetable
-    amount: 14
+    amount: 20
     whitelist:
       tags:
       - Vegetable
@@ -588,18 +588,18 @@
 
 - type: cargoBounty
   id: BountyChili
-  reward: 5555
+  reward: 2000
   description: bounty-description-chili
   entries:
   - name: bounty-item-chili
-    amount: 3
+    amount: 5
     whitelist:
       tags:
       - ChiliBowl
 
 - type: cargoBounty
   id: BountyRollerskates
-  reward: 6500
+  reward: 3500
   description: bounty-description-rollerskates
   entries:
   - name: bounty-item-rollerskates
@@ -610,29 +610,29 @@
 
 - type: cargoBounty
   id: BountyBedsheet
-  reward: 4100
+  reward: 3000
   description: bounty-description-bedsheet
   entries:
   - name: bounty-item-bedsheet
-    amount: 5
+    amount: 3
     whitelist:
       tags:
       - Bedsheet
 
 - type: cargoBounty
   id: BountyBandana
-  reward: 4000
+  reward: 2500
   description: bounty-description-bandana
   entries:
   - name: bounty-item-bandana
-    amount: 7
+    amount: 5
     whitelist:
       tags:
       - Bandana
 
 - type: cargoBounty
   id: BountySteak
-  reward: 3200
+  reward: 2000
   description: bounty-description-steak
   entries:
   - name: bounty-item-steak
@@ -643,18 +643,18 @@
 
 - type: cargoBounty
   id: BountyBanana
-  reward: 6009
+  reward: 6000
   description: bounty-description-banana
   entries:
   - name: bounty-item-banana
-    amount: 9
+    amount: 10
     whitelist:
       tags:
       - Banana
 
 - type: cargoBounty
   id: BountyBeer
-  reward: 3100
+  reward: 4000
   description: bounty-description-beer
   entries:
   - name: bounty-item-beer
@@ -665,7 +665,7 @@
 
 - type: cargoBounty
   id: BountyHiVizVest
-  reward: 3030
+  reward: 2500
   description: bounty-description-hi-viz-vest
   entries:
   - name: bounty-item-hi-viz-vest
@@ -676,18 +676,18 @@
 
 - type: cargoBounty
   id: BountyTorch
-  reward: 2220
+  reward: 1500
   description: bounty-description-torch
   entries:
   - name: bounty-item-torch
-    amount: 6
+    amount: 4
     whitelist:
       tags:
       - Torch
 
 - type: cargoBounty
   id: BountyMedkitBox
-  reward: 2300
+  reward: 2000
   description: bounty-description-medkit-box
   entries:
   - name: bounty-item-medkit-box
@@ -698,7 +698,7 @@
 
 - type: cargoBounty
   id: BountyCardboardBox
-  reward: 1500
+  reward: 5000
   description: bounty-description-cardboard-box
   entries:
   - name: bounty-item-cardboard-box
@@ -720,18 +720,18 @@
 
 - type: cargoBounty
   id: BountyCottonBoll
-  reward: 8600
+  reward: 8000
   description: bounty-description-cotton-boll
   entries:
   - name: bounty-item-cotton-boll
-    amount: 9
+    amount: 10
     whitelist:
       tags:
       - CottonBoll
 
 - type: cargoBounty
   id: BountyMicrowaveMachineBoard
-  reward: 4000
+  reward: 2000
   description: bounty-description-microwave-machine-board
   entries:
   - name: bounty-item-microwave-machine-board
@@ -742,7 +742,7 @@
 
 - type: cargoBounty
   id: BountyFlashes
-  reward: 5500
+  reward: 3000
   description: bounty-description-flashes
   entries:
   - name: bounty-item-flash
@@ -753,7 +753,7 @@
 
 - type: cargoBounty
   id: BountyRing
-  reward: 12500
+  reward: 7500
   description: bounty-description-ring
   entries:
   - name: bounty-item-ring
