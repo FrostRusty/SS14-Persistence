@@ -5,21 +5,21 @@ namespace Content.Shared.Forensics
     [Serializable, NetSerializable]
     public sealed class ForensicScannerBoundUserInterfaceState : BoundUserInterfaceState
     {
-        public readonly List<string> Fingerprints = new();
-        public readonly List<string> Fibers = new();
-        public readonly List<string> TouchDNAs = new();
-        public readonly List<string> SolutionDNAs = new();
-        public readonly List<string> Residues = new();
+        public readonly IEnumerable<string> Fingerprints = [];
+        public readonly IEnumerable<string> Fibers = [];
+        public readonly IEnumerable<string> TouchDNAs = [];
+        public readonly IEnumerable<string> SolutionDNAs = [];
+        public readonly IEnumerable<string> Residues = [];
         public readonly string LastScannedName = string.Empty;
         public readonly TimeSpan PrintCooldown = TimeSpan.Zero;
         public readonly TimeSpan PrintReadyAt = TimeSpan.Zero;
 
         public ForensicScannerBoundUserInterfaceState(
-            List<string> fingerprints,
-            List<string> fibers,
-            List<string> touchDnas,
-            List<string> solutionDnas,
-            List<string> residues,
+            IEnumerable<string> fingerprints,
+            IEnumerable<string> fibers,
+            IEnumerable<string> touchDnas,
+            IEnumerable<string> solutionDnas,
+            IEnumerable<string> residues,
             string lastScannedName,
             TimeSpan printCooldown,
             TimeSpan printReadyAt)

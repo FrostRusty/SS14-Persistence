@@ -45,3 +45,13 @@
   license: "CC-BY-SA-3.0"
   copyright: "Surfaceless by Noisia. Edited/remixed by Koollan. Mono OGG."
   source: "https://www.youtube.com/watch?v=i4oCAZPv6-M"
+
+- files: ["dreaminginspace.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Asleep in Space by Zachariehs. Edited/remixed by Koollan. Mono OGG."
+  source: "https://www.youtube.com/watch?v=2n5Djx-yW6c"
+
+- files: ["sanctuary.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Sanctuary by DM Dokuro. Mono OGG."
+  source: "https://soundcloud.com/dm-dokuro/sanctuary-ingame-version"

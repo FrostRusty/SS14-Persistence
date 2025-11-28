@@ -58,7 +58,7 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
 
     private void OnMindAdded(EntityUid uid, SiliconLawBoundComponent component, MindAddedMessage args)
     {
-        if (!TryComp<ActorComponent>(uid, out var actor))
+        if (!TryComp<ActorComponent>(uid, out var actor) || actor.PlayerSession == null)
             return;
 
         var msg = Loc.GetString("laws-notify");

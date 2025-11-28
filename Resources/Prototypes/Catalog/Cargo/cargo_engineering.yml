@@ -147,3 +147,33 @@
   cost: 350
   category: cargoproduct-category-name-engineering
   group: market
+
+- type: cargoProduct
+  id: StationAnchorBoard
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: generic
+  product: StationAnchorCircuitboard
+  cost: 10000
+  category: cargoproduct-category-name-engineering
+  group: market
+
+- type: cargoProduct
+  id: LockerEngineer
+  icon:
+    sprite: Clothing/Head/Hardsuits/engineering.rsi
+    state: icon
+  product: LockerEngineerFilledHardsuit
+  cost: 4000
+  category: cargoproduct-category-name-engineering
+  group: market
+
+- type: cargoProduct
+  id: LockerCE
+  icon:
+    sprite: Clothing/Head/Harsuits/engineering-white.rsi
+    state: icon
+  product: LockerChiefEngineerFilled
+  cost: 12500
+  category: cargoproduct-category-name-engineering
+  group: market

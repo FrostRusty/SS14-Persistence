@@ -147,3 +147,33 @@
   cost: 750
   category: cargoproduct-category-name-medical
   group: market
+
+- type: cargoProduct
+  id: ParamedicLocker
+  icon:
+    sprite: Clothing/Head/Soft/paramedicsoft.rsi
+    state: icon
+  product: LockerParamedicFilled
+  cost: 4000
+  category: cargoproduct-category-name-medical
+  group: market
+
+- type: cargoProduct
+  id: ChemistryLocker
+  icon:
+    sprite: Specific/Chemistry/chem_bag.rsi
+    state: icon
+  product: LockerChemistryFilled
+  cost: 3000
+  category: cargoproduct-category-name-medical
+  group: market
+
+- type: cargoProduct
+  id: CMOLocker
+  icon:
+    sprite: Clothing/Head/Hardsuits/medical.rsi
+    state: icon
+  product: LockerChiefMedicalOfficerFilledHardsuit
+  cost: 12500
+  category: cargoproduct-category-name-medical
+  group: market

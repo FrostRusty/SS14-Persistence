@@ -14,31 +14,31 @@ namespace Content.Server.Forensics
         /// A list of fingerprint GUIDs that the forensic scanner found from the <see cref="ForensicsComponent"/> on an entity.
         /// </summary>
         [ViewVariables(VVAccess.ReadOnly), DataField("fingerprints")]
-        public List<string> Fingerprints = new();
+        public IReadOnlyList<string> Fingerprints = [];
 
         /// <summary>
         /// A list of glove fibers that the forensic scanner found from the <see cref="ForensicsComponent"/> on an entity.
         /// </summary>
         [ViewVariables(VVAccess.ReadOnly), DataField("fibers")]
-        public List<string> Fibers = new();
+        public IReadOnlyList<string> Fibers = [];
 
         /// <summary>
         /// DNA that the forensic scanner found from the <see cref="DNAComponent"/> on an entity.
         /// </summary>
         [ViewVariables(VVAccess.ReadOnly), DataField("dnas")]
-        public List<string> TouchDNAs = new();
+        public IReadOnlyList<string> TouchDNAs = [];
 
         /// <summary>
         /// DNA that the forensic scanner found from the solution containers in an entity.
         /// </summary>
         [ViewVariables(VVAccess.ReadOnly), DataField]
-        public List<string> SolutionDNAs = new();
+        public IReadOnlyList<string> SolutionDNAs = [];
 
         /// <summary>
         /// Residue that the forensic scanner found from the <see cref="ForensicsComponent"/> on an entity.
         /// </summary>
         [ViewVariables(VVAccess.ReadOnly), DataField("residues")]
-        public List<string> Residues = new();
+        public IReadOnlyList<string> Residues = [];
 
         /// <summary>
         /// What is the name of the entity that was scanned last?
@@ -46,7 +46,7 @@ namespace Content.Server.Forensics
         /// <remarks>
         /// This will be used for the title of the printout and displayed to players.
         /// </remarks>
-        [ViewVariables(VVAccess.ReadOnly)]
+        [ViewVariables(VVAccess.ReadOnly), DataField("lastScannedName")]
         public string LastScannedName = string.Empty;
 
         /// <summary>

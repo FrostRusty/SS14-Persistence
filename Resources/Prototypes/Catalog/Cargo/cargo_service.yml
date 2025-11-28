@@ -119,6 +119,16 @@
   group: market
 
 - type: cargoProduct
+  id: ServiceEncryptionKeys
+  icon:
+    sprite: Clothing/Ears/Headsets/base.rsi
+    state: icon
+  product: CrateServiceEncryptionKeys
+  cost: 2000
+  category: cargoproduct-category-name-service
+  group: market
+
+- type: cargoProduct
   id: ServiceBooks
   icon:
     sprite: Objects/Misc/books.rsi

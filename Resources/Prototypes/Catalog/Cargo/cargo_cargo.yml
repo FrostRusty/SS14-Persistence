@@ -48,3 +48,12 @@
   category: cargoproduct-category-name-cargo
   group: market
 
+- type: cargoProduct
+  id: CargoRequestCircuitboard
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: icon
+  product: CargoRequestComputerCircuitboard
+  cost: 2500
+  category: cargoproduct-category-name-cargo
+  group: market

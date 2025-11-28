@@ -1,4 +1,4 @@
-﻿using Content.Server.NPC.Systems;
+using Content.Server.NPC.Systems;
 
 namespace Content.Server.NPC.Components;
 
@@ -19,6 +19,6 @@ public sealed partial class NPCRetaliationComponent : Component
     /// A dictionary that stores an entity and the time at which they will no longer be considered hostile.
     /// </summary>
     /// todo: this needs to support timeoffsetserializer at some point
-    [DataField("attackMemories")]
+    [ViewVariables(VVAccess.ReadWrite)]
     public Dictionary<EntityUid, TimeSpan> AttackMemories = new();
 }

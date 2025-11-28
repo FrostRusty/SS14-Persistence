@@ -47,6 +47,12 @@ namespace Content.Server.Forensics
             SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerPrintMessage>(OnPrint);
             SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerClearMessage>(OnClear);
             SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerDoAfterEvent>(OnDoAfter);
+            SubscribeLocalEvent<ForensicScannerComponent, ComponentInit>(OnInit);
+        }
+
+        private void OnInit(Entity<ForensicScannerComponent> ent, ref ComponentInit args)
+        {
+            UpdateUserInterface(ent, ent.Comp);
         }
 
         private void UpdateUserInterface(EntityUid uid, ForensicScannerComponent component)
@@ -76,25 +82,25 @@ namespace Content.Server.Forensics
             {
                 if (!TryComp<ForensicsComponent>(args.Args.Target, out var forensics))
                 {
-                    scanner.Fingerprints = new();
-                    scanner.Fibers = new();
-                    scanner.TouchDNAs = new();
-                    scanner.Residues = new();
+                    scanner.Fingerprints = [];
+                    scanner.Fibers = [];
+                    scanner.TouchDNAs = [];
+                    scanner.Residues = [];
                 }
                 else
                 {
-                    scanner.Fingerprints = forensics.Fingerprints.ToList();
-                    scanner.Fibers = forensics.Fibers.ToList();
-                    scanner.TouchDNAs = forensics.DNAs.ToList();
-                    scanner.Residues = forensics.Residues.ToList();
+                    scanner.Fingerprints = forensics.Fingerprints.ToArray();
+                    scanner.Fibers = forensics.Fibers.ToArray();
+                    scanner.TouchDNAs = forensics.DNAs.ToArray();
+                    scanner.Residues = forensics.Residues.ToArray();
                 }
 
                 if (_tag.HasTag(args.Args.Target.Value, DNASolutionScannableTag))
                 {
-                    scanner.SolutionDNAs = _forensicsSystem.GetSolutionsDNA(args.Args.Target.Value);
+                    scanner.SolutionDNAs = _forensicsSystem.GetSolutionsDNA(args.Args.Target.Value).ToArray();
                 } else
                 {
-                    scanner.SolutionDNAs = new();
+                    scanner.SolutionDNAs = [];
                 }
 
                 scanner.LastScannedName = MetaData(args.Args.Target.Value).EntityName;
@@ -255,10 +261,10 @@ namespace Content.Server.Forensics
 
         private void OnClear(EntityUid uid, ForensicScannerComponent component, ForensicScannerClearMessage args)
         {
-            component.Fingerprints = new();
-            component.Fibers = new();
-            component.TouchDNAs = new();
-            component.SolutionDNAs = new();
+            component.Fingerprints = [];
+            component.Fibers = [];
+            component.TouchDNAs = [];
+            component.SolutionDNAs = [];
             component.LastScannedName = string.Empty;
 
             UpdateUserInterface(uid, component);

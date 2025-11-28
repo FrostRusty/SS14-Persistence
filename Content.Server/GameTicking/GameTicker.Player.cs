@@ -279,6 +279,7 @@ namespace Content.Server.GameTicking
 
         public void PlayerJoinLobby(ICommonSession session)
         {
+            if (session == null) return;
             _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;
             _db.AddRoundPlayers(RoundId, session.UserId);
 

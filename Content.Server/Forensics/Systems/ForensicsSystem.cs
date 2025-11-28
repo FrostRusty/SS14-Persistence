@@ -21,6 +21,8 @@ using Robust.Shared.Random;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 using Content.Shared.Hands.Components;
+using Content.Shared.CCVar;
+using Robust.Shared.Configuration;
 
 namespace Content.Server.Forensics
 {
@@ -31,6 +33,8 @@ namespace Content.Server.Forensics
         [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
         [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+
+        [Dependency] private readonly IConfigurationManager _configurationManager = default!;
 
         public override void Initialize()
         {
@@ -95,7 +99,7 @@ namespace Content.Server.Forensics
             foreach (EntityUid part in args.GibbedParts)
             {
                 var partComp = EnsureComp<ForensicsComponent>(part);
-                partComp.DNAs.Add(dna);
+                ApplyForensics(partComp.DNAs, dna);
                 partComp.CanDnaBeCleaned = false;
             }
         }
@@ -109,7 +113,7 @@ namespace Content.Server.Forensics
                 foreach (EntityUid hitEntity in args.HitEntities)
                 {
                     if (TryComp<DnaComponent>(hitEntity, out var hitEntityComp) && hitEntityComp.DNA != null)
-                        component.DNAs.Add(hitEntityComp.DNA);
+                        ApplyForensics(component.DNAs, hitEntityComp.DNA);
                 }
             }
         }
@@ -128,22 +132,22 @@ namespace Content.Server.Forensics
             var dest = EnsureComp<ForensicsComponent>(target);
             foreach (var dna in src.DNAs)
             {
-                dest.DNAs.Add(dna);
+                ApplyForensics(dest.DNAs, dna);
             }
 
             foreach (var fiber in src.Fibers)
             {
-                dest.Fibers.Add(fiber);
+                ApplyForensics(dest.Fibers, fiber);
             }
 
             foreach (var print in src.Fingerprints)
             {
-                dest.Fingerprints.Add(print);
+                ApplyForensics(dest.Fingerprints, print);
             }
 
             foreach (var residue in src.Residues)
             {
-                dest.Residues.Add(residue);
+                ApplyForensics(dest.Residues, residue);
             }
         }
 
@@ -265,10 +269,21 @@ namespace Content.Server.Forensics
 
             // leave behind evidence it was cleaned
             if (TryComp<FiberComponent>(args.Used, out var fiber))
-                targetComp.Fibers.Add(string.IsNullOrEmpty(fiber.FiberColor) ? Loc.GetString("forensic-fibers", ("material", fiber.FiberMaterial)) : Loc.GetString("forensic-fibers-colored", ("color", fiber.FiberColor), ("material", fiber.FiberMaterial)));
+                ApplyForensics(targetComp.Fibers, string.IsNullOrEmpty(fiber.FiberColor) ? Loc.GetString("forensic-fibers", ("material", fiber.FiberMaterial)) : Loc.GetString("forensic-fibers-colored", ("color", fiber.FiberColor), ("material", fiber.FiberMaterial)));
 
             if (TryComp<ResidueComponent>(args.Used, out var residue))
-                targetComp.Residues.Add(string.IsNullOrEmpty(residue.ResidueColor) ? Loc.GetString("forensic-residue", ("adjective", residue.ResidueAdjective)) : Loc.GetString("forensic-residue-colored", ("color", residue.ResidueColor), ("adjective", residue.ResidueAdjective)));
+                ApplyForensics(targetComp.Residues, string.IsNullOrEmpty(residue.ResidueColor) ? Loc.GetString("forensic-residue", ("adjective", residue.ResidueAdjective)) : Loc.GetString("forensic-residue-colored", ("color", residue.ResidueColor), ("adjective", residue.ResidueAdjective)));
+        }
+
+        private void ApplyForensics(List<string> forensicsSource, string newForensic)
+        {
+            if (forensicsSource.Contains(newForensic)) return;
+
+            var maxEntries = _configurationManager.GetCVar(CCVars.ForensicsMaxEntries);
+
+            forensicsSource.Add(newForensic);
+            while (forensicsSource.Count > maxEntries)
+                forensicsSource.RemoveAt(0);
         }
 
         public string GenerateFingerprint()
@@ -300,11 +315,11 @@ namespace Content.Server.Forensics
             if (_inventory.TryGetSlotEntity(user, "gloves", out var gloves))
             {
                 if (TryComp<FiberComponent>(gloves, out var fiber) && !string.IsNullOrEmpty(fiber.FiberMaterial))
-                    component.Fibers.Add(string.IsNullOrEmpty(fiber.FiberColor) ? Loc.GetString("forensic-fibers", ("material", fiber.FiberMaterial)) : Loc.GetString("forensic-fibers-colored", ("color", fiber.FiberColor), ("material", fiber.FiberMaterial)));
+                    ApplyForensics(component.Fibers, string.IsNullOrEmpty(fiber.FiberColor) ? Loc.GetString("forensic-fibers", ("material", fiber.FiberMaterial)) : Loc.GetString("forensic-fibers-colored", ("color", fiber.FiberColor), ("material", fiber.FiberMaterial)));
             }
 
             if (TryComp<FingerprintComponent>(user, out var fingerprint) && CanAccessFingerprint(user, out _))
-                component.Fingerprints.Add(fingerprint.Fingerprint ?? "");
+                ApplyForensics(component.Fingerprints, fingerprint.Fingerprint ?? "");
         }
 
         // TODO: Delete this. A lot of systems are manually raising this method event instead of calling the identical <see cref="TransferDna"/> method.
@@ -315,7 +330,7 @@ namespace Content.Server.Forensics
                 return;
 
             var recipientComp = EnsureComp<ForensicsComponent>(args.Recipient);
-            recipientComp.DNAs.Add(component.DNA);
+            ApplyForensics(recipientComp.DNAs, component.DNA);
             recipientComp.CanDnaBeCleaned = args.CanDnaBeCleaned;
         }
 
@@ -346,7 +361,7 @@ namespace Content.Server.Forensics
             if (TryComp<DnaComponent>(donor, out var donorComp) && donorComp.DNA != null)
             {
                 EnsureComp<ForensicsComponent>(recipient, out var recipientComp);
-                recipientComp.DNAs.Add(donorComp.DNA);
+                ApplyForensics(recipientComp.DNAs, donorComp.DNA);
                 recipientComp.CanDnaBeCleaned = canDnaBeCleaned;
             }
         }

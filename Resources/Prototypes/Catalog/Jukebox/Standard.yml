@@ -63,3 +63,15 @@
   name: Koollan - Resurfaced
   path:
     path: /Audio/Jukebox/resurfaced.ogg
+
+- type: jukebox
+  id: sanctuary
+  name: DM Dokuro - Sanctuary
+  path:
+    path: /Audio/Jukebox/sanctuary.ogg
+
+- type: jukebox
+  id: dreaminginspace
+  name: Zachariehs - Dreaming in Space
+  path:
+    path: /Audio/Jukebox/dreaminginspace.ogg

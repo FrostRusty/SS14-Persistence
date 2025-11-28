@@ -30,6 +30,7 @@ public abstract class SharedGasPressurePumpSystem : EntitySystem
         SubscribeLocalEvent<GasPressurePumpComponent, GasPressurePumpToggleStatusMessage>(OnToggleStatusMessage);
 
         SubscribeLocalEvent<GasPressurePumpComponent, AtmosDeviceDisabledEvent>(OnPumpLeaveAtmosphere);
+        SubscribeLocalEvent<GasPressurePumpComponent, AtmosDeviceEnabledEvent>(OnPumpJoinAtmosphere);
         SubscribeLocalEvent<GasPressurePumpComponent, ExaminedEvent>(OnExamined);
     }
 
@@ -70,6 +71,7 @@ public abstract class SharedGasPressurePumpSystem : EntitySystem
     private void OnToggleStatusMessage(Entity<GasPressurePumpComponent> ent, ref GasPressurePumpToggleStatusMessage args)
     {
         ent.Comp.Enabled = args.Enabled;
+        ent.Comp.DesiredEnabled = args.Enabled;
         _adminLogger.Add(LogType.AtmosPowerChanged,
             LogImpact.Medium,
             $"{ToPrettyString(args.Actor):player} set the power on {ToPrettyString(ent):device} to {args.Enabled}");
@@ -95,6 +97,13 @@ public abstract class SharedGasPressurePumpSystem : EntitySystem
         UpdateAppearance(ent);
 
         UserInterfaceSystem.CloseUi(ent.Owner, GasPressurePumpUiKey.Key);
+    }
+
+    private void OnPumpJoinAtmosphere(Entity<GasPressurePumpComponent> ent, ref AtmosDeviceEnabledEvent args)
+    {
+        ent.Comp.Enabled = ent.Comp.DesiredEnabled;
+        Dirty(ent);
+        UpdateAppearance(ent);
     }
 
     protected virtual void UpdateUi(Entity<GasPressurePumpComponent> ent)

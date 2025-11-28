@@ -125,7 +125,6 @@
       output_mv:
         !type:CableDeviceNode
         nodeGroupID: MVPower
-        enabled: false
 
 - type: entity
   name: P.A.C.M.A.N.-type portable generator

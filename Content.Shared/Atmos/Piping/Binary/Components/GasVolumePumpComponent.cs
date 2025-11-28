@@ -9,6 +9,9 @@ public sealed partial class GasVolumePumpComponent : Component
     public bool Enabled = true;
 
     [DataField]
+    public bool DesiredEnabled = true;
+
+    [DataField]
     public bool Blocked = false;
 
     [ViewVariables(VVAccess.ReadWrite)]

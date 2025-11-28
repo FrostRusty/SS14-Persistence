@@ -107,3 +107,14 @@
 #  cost: 15500
 #  category: cargoproduct-category-name-atmospherics
 #  group: market
+
+
+- type: cargoProduct
+  id: LockerAtmospherics
+  icon:
+    sprite: Clothing/Head/Hardsuits/atmospherics.rsi
+    state: icon
+  product: LockerAtmosphericsFilled
+  cost: 4000
+  category: cargoproduct-category-name-engineering
+  group: market

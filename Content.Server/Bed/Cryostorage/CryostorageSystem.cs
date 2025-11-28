@@ -271,7 +271,7 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
             : "cryostorage-insert-message-permanent";
 
         var msg = Loc.GetString(locKey, ("time", comp.GracePeriod.TotalSeconds));
-        if (TryComp<ActorComponent>(args.Entity, out var actor))
+        if (TryComp<ActorComponent>(args.Entity, out var actor) && actor.PlayerSession != null && actor.PlayerSession.Channel != null)
             _chatManager.ChatMessageToOne(ChatChannel.Server, msg, msg, uid, false, actor.PlayerSession.Channel);
     }
 

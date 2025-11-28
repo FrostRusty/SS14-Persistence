@@ -57,3 +57,13 @@
   cost: 10000
   category: cargoproduct-category-name-science
   group: market
+
+- type: cargoProduct
+  id: RDLocker
+  icon:
+    sprite: Clothing/Head/Hardsuits/rd.rsi
+    state: icon
+  product: LockerResearchDirectorFilledHardsuit
+  cost: 15000
+  category: cargoproduct-category-name-science
+  group: market

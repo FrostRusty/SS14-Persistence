@@ -84,12 +84,12 @@ namespace Content.Server.Destructible.Thresholds.Behaviors
                 return;
 
             var comp = system.EntityManager.EnsureComponent<ForensicsComponent>(spawned);
-            comp.DNAs = forensicsComponent.DNAs;
+            comp.DNAs.AddRange(forensicsComponent.DNAs);
 
             if (!system.Random.Prob(0.4f))
                 return;
-            comp.Fingerprints = forensicsComponent.Fingerprints;
-            comp.Fibers = forensicsComponent.Fibers;
+            comp.Fingerprints.AddRange(forensicsComponent.Fingerprints);
+            comp.Fibers.AddRange(forensicsComponent.Fibers);
         }
     }
 }

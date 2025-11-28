@@ -411,4 +411,7 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> GameHostnameInTitlebar =
         CVarDef.Create("game.hostname_in_titlebar", true, CVar.SERVER | CVar.REPLICATED);
+
+    public static readonly CVarDef<int> ForensicsMaxEntries =
+        CVarDef.Create("game.forensics_max_entries", 5, CVar.SERVER);
 }
