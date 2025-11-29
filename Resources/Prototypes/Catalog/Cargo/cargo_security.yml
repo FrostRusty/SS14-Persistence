@@ -115,7 +115,7 @@
     sprite: Clothing/Head/Hats/warden.rsi
     state: icon
   product: LockerWardenFilledHardsuit
-  cost: 10000
+  cost: 9000
   category: cargoproduct-category-name-security
   group: market
 
@@ -124,7 +124,7 @@
   icon:
     sprite: Clothing/Head/Hats/hoshat.rsi
     state: icon
-  product: LockerHeadOfSecurityFilledHardsuit
-  cost: 15000
+  product: LockerHeadOfSecurityFilledHardsuitNoGun
+  cost: 12500
   category: cargoproduct-category-name-security
   group: market

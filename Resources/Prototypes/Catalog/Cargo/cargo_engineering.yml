@@ -173,7 +173,7 @@
   icon:
     sprite: Clothing/Head/Harsuits/engineering-white.rsi
     state: icon
-  product: LockerChiefEngineerFilled
+  product: LockerChiefEngineerFilledHardsuit
   cost: 12500
   category: cargoproduct-category-name-engineering
   group: market

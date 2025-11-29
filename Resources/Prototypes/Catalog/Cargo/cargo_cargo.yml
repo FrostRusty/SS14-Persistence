@@ -52,8 +52,28 @@
   id: CargoRequestCircuitboard
   icon:
     sprite: Objects/Misc/module.rsi
-    state: icon
+    state: cpu_supply
   product: CargoRequestComputerCircuitboard
   cost: 2500
+  category: cargoproduct-category-name-cargo
+  group: market
+
+- type: cargoProduct
+  id: QuartermasterLocker
+  icon:
+    sprite: Clothing/Head/beret_qm.rsi
+    state: icon
+  product: LockerQuarterMasterFilledNoDigi
+  cost: 7500
+  category: cargoproduct-category-name-cargo
+  group: market
+
+- type: cargoProduct
+  id: SalvageLocker
+  icon:
+    sprite: Clothing/Head/Hardsuits/salvage.rsi
+    state: icon
+  product: LockerSalvageSpecialistFilledHardsuit
+  cost: 5000
   category: cargoproduct-category-name-cargo
   group: market

@@ -159,16 +159,6 @@
   group: market
 
 - type: cargoProduct
-  id: ChemistryLocker
-  icon:
-    sprite: Specific/Chemistry/chem_bag.rsi
-    state: icon
-  product: LockerChemistryFilled
-  cost: 3000
-  category: cargoproduct-category-name-medical
-  group: market
-
-- type: cargoProduct
   id: CMOLocker
   icon:
     sprite: Clothing/Head/Hardsuits/medical.rsi

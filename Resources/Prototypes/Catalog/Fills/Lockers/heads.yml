@@ -13,6 +13,21 @@
     - id: AstroNavCartridge
     - id: ClothingHandsKnuckleDustersQM
 
+#No Digiboard
+- type: entityTable
+  id: LockerFillQuarterMasterNoDigi
+  table: !type:AllSelector
+    children:
+    - id: BoxEncryptionKeyCargo
+    - id: BoxQMCircuitboards
+    - id: BoxQMStamps
+    - id: CigPackGreen
+      prob: 0.50
+    - id: ClothingHeadsetAltCargo
+    - id: DoorRemoteCargo
+    - id: AstroNavCartridge
+    - id: ClothingHandsKnuckleDustersQM
+
 - type: entity
   id: LockerQuarterMasterFilled
   suffix: Filled
@@ -22,6 +37,17 @@
     containers:
       entity_storage: !type:NestedSelector
         tableId: LockerFillQuarterMaster
+
+#No Digiboard
+- type: entity
+  id: LockerQuarterMasterFilledNoDigi
+  suffix: Filled, NoDigi
+  parent: LockerQuarterMaster
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: LockerFillQuarterMasterNoDigi
 
 # No laser table
 - type: entityTable
@@ -268,6 +294,19 @@
     - id: HandTeleporter
     - id: RubberStampRd
 
+# No teleporter table
+- type: entityTable
+  id: LockerFillResearchDirectorNoHardsuitNoTP
+  table: !type:AllSelector
+    children:
+    - id: Intellicard
+    - id: BoxEncryptionKeyScience
+    - id: BoxRDCircuitboards
+    - id: ClothingBeltUtilityFilled
+    - id: ClothingHeadsetAltScience
+    - id: DoorRemoteResearch
+    - id: RubberStampRd
+
 # Hardsuit table, used for suit storage as well
 - type: entityTable
   id: FillResearchDirectorHardsuit
@@ -303,12 +342,52 @@
         - !type:NestedSelector
           tableId: FillResearchDirectorHardsuit
 
+# No teleporter + Hardsuit locker
+- type: entity
+  id: LockerResearchDirectorFilledHardsuitNoTP
+  suffix: Filled, Hardsuit, NoTP
+  parent: LockerResearchDirector
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - !type:NestedSelector
+          tableId: LockerFillResearchDirectorNoHardsuitNoTOP
+        - !type:NestedSelector
+          tableId: FillResearchDirectorHardsuit
+
 # No hardsuit table
 - type: entityTable
   id: LockerFillHeadOfSecurityNoHardsuit
   table: !type:AllSelector
     children:
     - id: WeaponEnergyMagnum
+    - id: BookSpaceLaw
+    - id: BoxEncryptionKeySecurity
+    - id: CigarGoldCase
+      prob: 0.50
+    - id: ClothingBeltSecurityFilled
+    - id: ClothingEyesGlassesSecurity
+    - id: ClothingHeadsetAltSecurity
+    - id: ClothingMaskNeckGaiter
+    - id: ClothingOuterCoatHoSTrench
+    - id: ClothingShoesBootsJack
+    - id: FlashlightSeclite
+    - id: DoorRemoteSecurity
+    - id: HoloprojectorSecurity
+    - id: RubberStampHos
+    - id: BoxHoSCircuitboards
+    - id: WeaponDisabler
+    - id: WeaponTaser
+    - id: WantedListCartridge
+    - id: DrinkHosFlask
+
+# No hardsuit or Magnum table
+- type: entityTable
+  id: LockerFillHeadOfSecurityNoHardsuitNoGun
+  table: !type:AllSelector
+    children:
     - id: BookSpaceLaw
     - id: BoxEncryptionKeySecurity
     - id: CigarGoldCase
@@ -362,6 +441,21 @@
         children:
         - !type:NestedSelector
           tableId: LockerFillHeadOfSecurityNoHardsuit
+        - !type:NestedSelector
+          tableId: FillHeadOfSecurityHardsuit
+
+# No gun + Hardsuit locker
+- type: entity
+  id: LockerHeadOfSecurityFilledHardsuitNoGun
+  suffix: Filled, Hardsuit, NoGun
+  parent: LockerHeadOfSecurity
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - !type:NestedSelector
+          tableId: LockerFillHeadOfSecurityNoHardsuitNoGun
         - !type:NestedSelector
           tableId: FillHeadOfSecurityHardsuit
 

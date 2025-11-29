@@ -114,7 +114,7 @@
   icon:
     sprite: Clothing/Head/Hardsuits/atmospherics.rsi
     state: icon
-  product: LockerAtmosphericsFilled
+  product: LockerAtmosphericsFilledHardsuit
   cost: 4000
   category: cargoproduct-category-name-engineering
   group: market
