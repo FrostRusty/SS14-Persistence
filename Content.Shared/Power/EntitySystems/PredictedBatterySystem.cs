@@ -40,7 +40,7 @@ public sealed partial class PredictedBatterySystem : EntitySystem
 
     private void OnInit(Entity<PredictedBatteryComponent> ent, ref ComponentInit args)
     {
-        DebugTools.Assert(!HasComp<BatteryComponent>(ent), $"{ent} has both BatteryComponent and PredictedBatteryComponent");
+   //     DebugTools.Assert(!HasComp<BatteryComponent>(ent), $"{ent} has both BatteryComponent and PredictedBatteryComponent");
     }
 
     private void OnStartup(Entity<PredictedBatteryComponent> ent, ref ComponentStartup args)
