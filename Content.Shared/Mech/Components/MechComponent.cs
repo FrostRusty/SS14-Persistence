@@ -16,20 +16,20 @@ public sealed partial class MechComponent : Component
     /// <summary>
     /// How much "health" the mech has left.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    [DataField, ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
     public FixedPoint2 Integrity;
 
     /// <summary>
     /// The maximum amount of damage the mech can take.
     /// </summary>
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
+    [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public FixedPoint2 MaxIntegrity = 250;
 
     /// <summary>
     /// How much energy the mech has.
     /// Derived from the currently inserted battery.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    [DataField, ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
     public FixedPoint2 Energy = 0;
 
     /// <summary>
