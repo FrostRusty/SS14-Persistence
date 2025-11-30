@@ -9,6 +9,7 @@ using Content.Shared.CrewMetaRecords;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
+using Content.Shared.Movement.Components;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
 using Content.Shared.Roles.Components;
@@ -211,6 +212,7 @@ namespace Content.Server.GameTicking
                 var ent = _map.GetMap(mapId);
                 EnsureComp<MoneyAccountsComponent>(ent);
                 EnsureComp<CrewMetaRecordsComponent>(ent);
+                EnsureComp<MapBoundsComponent>(ent);
                 return;
             }
 
@@ -224,6 +226,7 @@ namespace Content.Server.GameTicking
                 var ent = _map.GetMap(mapId);
                 EnsureComp<MoneyAccountsComponent>(ent);
                 EnsureComp<CrewMetaRecordsComponent>(ent);
+                EnsureComp<MapBoundsComponent>(ent);
             }
         }
 

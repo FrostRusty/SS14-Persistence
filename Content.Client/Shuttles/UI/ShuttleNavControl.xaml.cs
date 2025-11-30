@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.Movement.Components;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
@@ -141,6 +142,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         var xformQuery = EntManager.GetEntityQuery<TransformComponent>();
         var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
         var bodyQuery = EntManager.GetEntityQuery<PhysicsComponent>();
+        var mapBoundsQuery = EntManager.GetEntityQuery<MapBoundsComponent>();
 
         if (!xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform)
             || xform.MapID == MapId.Nullspace)
@@ -155,6 +157,15 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         var shuttleToWorld = Matrix3x2.Multiply(posMatrix, ourEntMatrix);
         Matrix3x2.Invert(shuttleToWorld, out var worldToShuttle);
         var shuttleToView = Matrix3x2.CreateScale(new Vector2(MinimapScale, -MinimapScale)) * Matrix3x2.CreateTranslation(MidPointVector);
+
+        var map = _transform.GetMap(xform.Coordinates);
+        if (map != null && mapBoundsQuery.TryGetComponent(map, out var mapBounds) && mapBounds != null)
+        {
+            var mapBoundsToWorld = Matrix3Helpers.CreateTransform(Vector2.Zero, Angle.Zero);
+            var mapBoundsToView = mapBoundsToWorld * worldToShuttle * shuttleToView;
+            var gridCentre = Vector2.Transform(Vector2.Zero, mapBoundsToView);
+            handle.DrawCircle(gridCentre, MinimapScale * mapBounds.Radius, Color.Red, false);
+        }
 
         // Draw our grid in detail
         var ourGridId = xform.GridUid;
