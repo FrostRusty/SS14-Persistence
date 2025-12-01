@@ -42,6 +42,15 @@
     price: 150
 
 - type: entity
+  id: HandHeldMassScannerDEBUG5K
+  parent: HandHeldMassScanner
+  suffix: "DEBUG 5km"
+  components:
+  - type: RadarConsole
+    maxRange: 5000
+    followEntity: true
+
+- type: entity
   id: HandHeldMassScannerEmpty
   parent: HandHeldMassScanner
   suffix: Empty

@@ -7,17 +7,7 @@ namespace Content.Shared.Shuttles.Components;
 [Access(typeof(SharedRadarConsoleSystem))]
 public sealed partial class RadarConsoleComponent : Component
 {
-    [ViewVariables(VVAccess.ReadWrite)]
-    public float RangeVV
-    {
-        get => MaxRange;
-        set => IoCManager
-            .Resolve<IEntitySystemManager>()
-            .GetEntitySystem<SharedRadarConsoleSystem>()
-            .SetRange(Owner, value, this);
-    }
-
-    [DataField, AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public float MaxRange = 256f;
 
     /// <summary>
