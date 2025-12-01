@@ -125,7 +125,7 @@
     sprite: Objects/Devices/flatpack.rsi
     state: fan
   product: TinyFanFlatpack
-  cost: 2000
+  cost: 4000
   category: cargoproduct-category-name-engineering
   group: market
 
@@ -135,6 +135,6 @@
     sprite: Objects/Devices/flatpack.rsi
     state: fan
   product: DirectionalFanFlatpack
-  cost: 2000
+  cost: 4000
   category: cargoproduct-category-name-engineering
   group: market
