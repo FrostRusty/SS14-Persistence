@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
+using Content.Shared.Movement.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
@@ -85,10 +86,13 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
             !_entManager.TryGetComponent<PhysicsComponent>(owner, out var body))
             return (false, null);
 
-        if (!_entManager.TryGetComponent<MapGridComponent>(xform.GridUid, out var ownerGrid) ||
-            !_entManager.TryGetComponent<MapGridComponent>(_transform.GetGrid(targetCoordinates), out var targetGrid))
+        if (!_entManager.TryGetComponent<MovementIgnoreGravityComponent>(owner, out var ignoreGrav))
         {
-            return (false, null);
+            if (!_entManager.TryGetComponent<MapGridComponent>(xform.GridUid, out var ownerGrid) ||
+                !_entManager.TryGetComponent<MapGridComponent>(_transform.GetGrid(targetCoordinates), out var targetGrid))
+            {
+                return (false, null);
+            }
         }
 
         var range = blackboard.GetValueOrDefault<float>(RangeKey, _entManager);
