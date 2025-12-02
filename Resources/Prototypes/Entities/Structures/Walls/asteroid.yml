@@ -764,7 +764,55 @@
     - state: rock_diamond
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
 
-# Rocks and ore veins
+- type: entity
+  id: IronRockCoalCrab
+  parent: IronRockCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: IronRockGoldCrab
+  parent: IronRockGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: IronRockQuartzCrab
+  parent: IronRockQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: IronRockTinCrab
+  parent: IronRockIron
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: IronRockUraniumCrab
+  parent: IronRockUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: IronRockBananiumCrab
+  parent: IronRockBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab
+
+# Brown rocks
 - type: entity
   id: WallRock
   parent: BaseWall
@@ -809,6 +857,25 @@
       state: rock_north
     - map: [ "enum.EdgeLayer.West" ]
       state: rock_west
+
+- type: entity
+  parent: [ BaseRockGibtonite, WallRock ]
+  id: WallRockGibtonite
+  components:
+  - type: Sprite
+    layers:
+    - state: rock
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_west
+    - state: gibtonite_inactive
+      visible: false
+      map: [ "enum.MiningScannerVisualLayers.Overlay", "gib" ]
 
 # Ore veins
 - type: entity
@@ -1136,6 +1203,54 @@
     - state: rock_salt
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
 
+- type: entity
+  id: WallRockCoalCrab
+  parent: WallRockCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: WallRockGoldCrab
+  parent: WallRockGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: WallRockQuartzCrab
+  parent: WallRockQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: WallRockTinCrab
+  parent: WallRockTin
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: WallRockUraniumCrab
+  parent: WallRockUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: WallRockBananiumCrab
+  parent: WallRockBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab
+
 # Basalt variants
 - type: entity
   id: WallRockBasalt
@@ -1157,6 +1272,25 @@
       state: rock_wall_north
     - map: [ "enum.EdgeLayer.West" ]
       state: rock_wall_west
+
+- type: entity
+  parent: [ BaseRockGibtonite, WallRockBasalt ]
+  id: WallRockBasaltGibtonite
+  components:
+  - type: Sprite
+    layers:
+    - state: rock_wall
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_wall_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_wall_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_wall_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_wall_west
+    - state: gibtonite_inactive
+      visible: false
+      map: [ "enum.MiningScannerVisualLayers.Overlay", "gib" ]
 
 - type: entity
   id: WallRockBasaltCoal
@@ -1412,10 +1546,58 @@
     - state: rock_salt
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
 
+- type: entity
+  id: WallRockBasaltCoalCrab
+  parent: WallRockBasaltCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: WallRockBasaltGoldCrab
+  parent: WallRockBasaltGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: WallRockBasaltQuartzCrab
+  parent: WallRockBasaltQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: WallRockBasaltTinCrab
+  parent: WallRockBasaltTin
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: WallRockBasaltUraniumCrab
+  parent: WallRockBasaltUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: WallRockBasaltBananiumCrab
+  parent: WallRockBasaltBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab
+
 # Snow variants
 - type: entity
   id: WallRockSnow
-  name: snowdrift
+  name: loose ice wall
   parent: WallRock
   components:
   - type: Icon
@@ -1433,6 +1615,25 @@
       state: rock_snow_north
     - map: [ "enum.EdgeLayer.West" ]
       state: rock_snow_west
+
+- type: entity
+  parent: [ BaseRockGibtonite, WallRockSnow ]
+  id: WallRockSnowGibtonite
+  components:
+  - type: Sprite
+    layers:
+    - state: rock_snow
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_snow_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_snow_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_snow_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_snow_west
+    - state: gibtonite_inactive
+      visible: false
+      map: [ "enum.MiningScannerVisualLayers.Overlay", "gib" ]
 
 - type: entity
   id: WallRockSnowCoal
@@ -1688,6 +1889,54 @@
     - state: rock_salt
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
 
+- type: entity
+  id: WallRockSnowCoalCrab
+  parent: WallRockSnowCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: WallRockSnowGoldCrab
+  parent: WallRockSnowGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: WallRockSnowQuartzCrab
+  parent: WallRockSnowQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: WallRockSnowTinCrab
+  parent: WallRockSnowTin
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: WallRockSnowUraniumCrab
+  parent: WallRockSnowUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: WallRockSnowBananiumCrab
+  parent: WallRockSnowBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab
+
 # Sand variants
 - type: entity
   id: WallRockSand
@@ -1709,6 +1958,25 @@
       state: rock_sand_north
     - map: [ "enum.EdgeLayer.West" ]
       state: rock_sand_west
+
+- type: entity
+  parent: [ BaseRockGibtonite, WallRockSand ]
+  id: WallRockSandGibtonite
+  components:
+  - type: Sprite
+    layers:
+    - state: rock_sand
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_sand_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_sand_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_sand_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_sand_west
+    - state: gibtonite_inactive
+      visible: false
+      map: [ "enum.MiningScannerVisualLayers.Overlay", "gib" ]
 
 - type: entity
   id: WallRockSandCoal
@@ -1963,6 +2231,54 @@
     - state: rock_salt
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
 
+- type: entity
+  id: WallRockSandCoalCrab
+  parent: WallRockSandCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: WallRockSandGoldCrab
+  parent: WallRockSandGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: WallRockSandQuartzCrab
+  parent: WallRockSandQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: WallRockSandTinCrab
+  parent: WallRockSandTin
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: WallRockSandUraniumCrab
+  parent: WallRockSandUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: WallRockSandBananiumCrab
+  parent: WallRockSandBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab
+
 # Chromite variants
 - type: entity
   id: WallRockChromite
@@ -1984,6 +2300,25 @@
       state: rock_chromite_north
     - map: [ "enum.EdgeLayer.West" ]
       state: rock_chromite_west
+
+- type: entity
+  parent: [ BaseRockGibtonite, WallRockChromite ]
+  id: WallRockChromiteGibtonite
+  components:
+  - type: Sprite
+    layers:
+    - state: rock_chromite
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_chromite_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_chromite_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_chromite_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_chromite_west
+    - state: gibtonite_inactive
+      visible: false
+      map: [ "enum.MiningScannerVisualLayers.Overlay", "gib" ]
 
 - type: entity
   id: WallRockChromiteCoal
@@ -2239,6 +2574,54 @@
     - state: rock_salt
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
 
+- type: entity
+  id: WallRockChromiteCoalCrab
+  parent: WallRockChromiteCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: WallRockChromiteGoldCrab
+  parent: WallRockChromiteGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: WallRockChromiteQuartzCrab
+  parent: WallRockChromiteQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: WallRockChromiteTinCrab
+  parent: WallRockChromiteTin
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: WallRockChromiteUraniumCrab
+  parent: WallRockChromiteUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: WallRockChromiteBananiumCrab
+  parent: WallRockChromiteBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab
+
 # Andesite variants
 - type: entity
   id: WallRockAndesite
@@ -2260,6 +2643,25 @@
       state: rock_andesite_north
     - map: [ "enum.EdgeLayer.West" ]
       state: rock_andesite_west
+
+- type: entity
+  parent: [ BaseRockGibtonite, WallRockAndesite ]
+  id: WallRockAndesiteGibtonite
+  components:
+  - type: Sprite
+    layers:
+    - state: rock_andesite
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_andesite_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_andesite_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_andesite_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_andesite_west
+    - state: gibtonite_inactive
+      visible: false
+      map: [ "enum.MiningScannerVisualLayers.Overlay", "gib" ]
 
 - type: entity
   id: WallRockAndesiteCoal
@@ -2514,3 +2916,51 @@
       state: rock_andesite_west
     - state: rock_salt
       map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  id: WallRockAndesiteCoalCrab
+  parent: WallRockAndesiteCoal
+  suffix: Coal Crab
+  components:
+  - type: OreVein
+    currentOre: OreCoalCrab
+
+- type: entity
+  id: WallRockAndesiteGoldCrab
+  parent: WallRockAndesiteGold
+  suffix: Gold Crab
+  components:
+  - type: OreVein
+    currentOre: OreGoldCrab
+
+- type: entity
+  id: WallRockAndesiteQuartzCrab
+  parent: WallRockAndesiteQuartz
+  suffix: Quartz Crab
+  components:
+  - type: OreVein
+    currentOre: OreQuartzCrab
+
+- type: entity
+  id: WallRockAndesiteTinCrab
+  parent: WallRockAndesiteTin
+  suffix: Iron Crab
+  components:
+  - type: OreVein
+    currentOre: OreIronCrab
+
+- type: entity
+  id: WallRockAndesiteUraniumCrab
+  parent: WallRockAndesiteUranium
+  suffix: Uranium Crab
+  components:
+  - type: OreVein
+    currentOre: OreUraniumCrab
+
+- type: entity
+  id: WallRockAndesiteBananiumCrab
+  parent: WallRockAndesiteBananium
+  suffix: Bananium Crab
+  components:
+  - type: OreVein
+    currentOre: OreBananiumCrab

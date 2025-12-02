@@ -2032,6 +2032,17 @@
   itemDrop: FloorTileItemAstroIce
 
 - type: tile
+  id: FloorAstroIceSpace
+  name: tiles-astro-ice-space
+  sprite: /Textures/Tiles/Planet/Snow/ice.png
+  baseTurf: Plating
+  isSubfloor: true
+  friction: 0.05
+  heatCapacity: 10000
+  mobFriction: 0.05
+  mobAcceleration: 0.1
+
+- type: tile
   id: FloorAstroSnow
   name: tiles-astro-snow
   parent: FloorSnow
@@ -2046,7 +2057,7 @@
   name: tiles-astro-asteroid-sand
   parent: FloorAsteroidSand
   baseTurf: Plating
-  isSubfloor: false
+  isSubfloor: true
   deconstructTools: [ Prying ]
   itemDrop: FloorTileItemAstroAsteroidSand
   weather: false

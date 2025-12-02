@@ -1,0 +1,305 @@
+- type: spaceBiome
+  parent: BaseBiome
+  id: VoidBiome
+  priority: 0
+  noiseRanges: {}
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: FrozenWasteBiome #REDO THESE SO THEY WORK WITH WEIGHTS AND TEMPERATURE
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 0,1
+    #Temperature:
+     # - 0.25,0.75
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: IceDebrisSmall
+        - id: ChromiteDebrisSmallBarren
+          prob: 0.3
+        - id: IceDebrisMedium
+          prob: 0.6
+        - id: IceDebrisLarge
+          prob: 0.4
+        - id: IceDebrisHuge
+          prob: 0.2
+        - id: ChromiteDebrisHugeBarren
+          prob: 0.1
+
+    - type: NoiseDrivenDebrisSelector
+      noiseChannel: Wreck
+      debrisTable:
+        - id: ScrapDebrisSmall
+          prob: 0.5
+        - id: ScrapDebrisMedium
+          prob: 0.7
+        - id: ScrapDebrisLarge
+    - type: NoiseRangeCarver
+      ranges:
+        - 0.4, 0.6
+      noiseChannel: Carver
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: ColdstoneBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 1,2
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: AsteroidDebrisSmall
+        - id: IceDebrisSmallBarren
+          prob: 0.8
+        - id: IceDebrisSmallRich
+          prob: 0.5
+        - id: AsteroidDebrisMedium
+          prob: 0.6
+        - id: IceDebrisHugeBarren
+          prob: 0.2
+        - id: AsteroidDebrisHuge
+          prob: 0.1
+
+    - type: NoiseDrivenDebrisSelector
+      noiseChannel: Wreck
+      debrisTable:
+        - id: ScrapDebrisLarge
+    - type: NoiseRangeCarver
+      ranges:
+        - 0.4, 0.6
+      noiseChannel: Carver
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: RockBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 2,3
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: AsteroidDebrisSmall
+        - id: AsteroidDebrisMedium
+          prob: 0.9
+        - id: AsteroidDebrisLarge
+          prob: 0.4
+        - id: AsteroidDebrisHuge
+          prob: 0.2
+        - id: IronrockDebrisSmall
+          prob: 0.5
+        - id: IronrockDebrisLargeBarren
+          prob: 0.1
+        - id: IronrockDebrisLarge
+          prob: 0.05
+        - id: IronrockDebrisLargeRich
+          prob: 0.025
+
+    - type: NoiseDrivenDebrisSelector
+      noiseChannel: Wreck
+      debrisTable:
+        - id: ScrapDebrisSmall
+    - type: NoiseRangeCarver
+      ranges:
+        - 0.4, 0.6
+      noiseChannel: Carver
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: IronrockBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 3,4
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: IronrockDebrisSmall
+        - id: IronrockDebrisMedium
+          prob: 0.7
+        - id: IronrockDebrisLarge
+          prob: 0.3
+        - id: IronrockDebrisHuge
+          prob: 0.1
+        - id: ConglomerateDebrisSmall
+          prob: 0.5
+        - id: ConglomerateDebrisLarge
+          prob: 0.1
+
+    - type: NoiseDrivenDebrisSelector
+      noiseChannel: Wreck
+      debrisTable:
+        - id: ScrapDebrisMedium
+    - type: NoiseRangeCarver
+      ranges:
+        - 0.4, 0.6
+      noiseChannel: Carver
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: RockyWastesBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 4,5
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: AsteroidDebrisSmall
+        - id: ConglomerateDebrisMediumBarren
+          prob: 0.7
+        - id: ConglomerateDebrisMediumRich
+          prob: 0.5
+        - id: ConglomerateDebrisLarge
+          prob: 0.3
+        - id: ConglomerateDebrisHuge
+          prob: 0.2
+        - id: IronrockDebrisMediumBarren
+          prob: 0.4
+        - id: AsteroidDebrisHuge
+          prob: 0.075
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: VolcanicRemnantsBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 5,6
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: ConglomerateDebrisSmallRich
+        - id: ConglomerateDebrisMediumRich
+          prob: 0.4
+        - id: BasaltDebrisSmall
+        - id: BasaltDebrisMedium
+          prob: 0.8
+        - id: BasaltDebrisLarge
+          prob: 0.5
+        - id: BasaltDebrisHuge
+          prob: 0.2
+        - id: AndesiteDebrisSmallRich
+          prob: 0.3
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: GeoactiveBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 6,7
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: BasaltDebrisSmall
+          prob: 0.8
+        - id: BasaltDebrisMedium
+          prob: 0.8
+        - id: AndesiteDebrisMedium
+        - id: AndesiteDebrisLarge
+          prob: 0.7
+        - id: AndesiteDebrisHuge
+          prob: 0.2
+        - id: ChromiteDebrisMediumRich
+          prob: 0.1
+
+    - type: NoiseDrivenDebrisSelector
+      noiseChannel: Wreck
+      debrisTable:
+        - id: ScrapDebrisLarge
+    - type: NoiseRangeCarver
+      ranges:
+        - 0.4, 0.6
+      noiseChannel: Carver
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: WeirdmetalBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 7,8
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: BasaltDebrisSmallBarren
+        - id: ChromiteDebrisSmall
+        - id: IronrockDebrisMedium
+          prob: 0.8
+        - id: ChromiteDebrisMedium
+          prob: 0.7
+        - id: ChromiteDebrisLarge
+          prob: 0.3
+        - id: ChromiteDebrisHuge
+          prob: 0.2
+        - id: ChromiteDebrisHugeRich
+          prob: 0.01
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: BrassmetalBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 8,9
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: BrassDebrisSmall
+          prob: 0.4
+        - id: ChromiteDebrisSmall
+          prob: 0.6
+        - id: IceDebrisMedium
+          prob: 0.8
+        - id: ChromiteDebrisMedium
+          prob: 0.5
+        - id: ChromiteDebrisLargeBarren
+          prob: 0.2
+        - id: ChromiteDebrisHugeBarren
+          prob: 0.1
+        - id: BrassDebrisHuge
+          prob: 0.03
+
+- type: spaceBiome
+  parent: BaseBiome
+  id: RainbowBiome
+  priority: 1
+  noiseRanges:
+    BiomeBase:
+      - 9,10
+  chunkComponents:
+    - type: DebrisFeaturePlacerController
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: BrassDebrisSmall
+          prob: .5
+        - id: ChromiteDebrisSmall
+        - id: IceDebrisSmall
+        - id: IronrockDebrisSmall
+        - id: BasaltDebrisSmall
+        - id: AndesiteDebrisSmall
+        - id: AsteroidDebrisSmall
+        - id: ConglomerateDebrisSmall

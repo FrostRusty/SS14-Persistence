@@ -4,8 +4,15 @@
     - type: WorldController
     - type: BiomeSelection
       biomes:
-        - VolcanicZone
-        - AndesiteZone
-        - ChromiteZone
-        - IronZone
+        - FrozenWasteBiome
+        - ColdstoneBiome
+        - RockBiome
+        - IronrockBiome
+        - RockyWastesBiome
+        - VolcanicRemnantsBiome
+        - GeoactiveBiome
+        - WeirdmetalBiome
+        - BrassmetalBiome
+        - RainbowBiome
+        - VoidBiome
         - BaseBiome

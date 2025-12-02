@@ -19,32 +19,21 @@
             orGroup: rock
           - id: WallRockCoal
             prob: 0.15
+            or: WallRockCoalCrab
             orGroup: rock
           - id: WallRockTin
-            prob: 0.15
-            orGroup: rock
-          - id: WallRockQuartz
             prob: 0.15
             orGroup: rock
           - id: WallRockSalt
             prob: 0.15
             orGroup: rock
-          - id: WallRockGold
-            prob: 0.05
-            orGroup: rock
           - id: WallRockDiamond
             prob: 0.005
-            orGroup: rock
-          - id: WallRockSilver
-            prob: 0.05
             orGroup: rock
           - id: WallRockPlasma
             prob: 0.05
             orGroup: rock
           - id: WallRockUranium
-            prob: 0.02
-            orGroup: rock
-          - id: WallRockBananium
             prob: 0.02
             orGroup: rock
           - id: WallRockArtifactFragment
@@ -57,7 +46,7 @@
 - type: entity
   id: AsteroidDebrisSmall
   parent: BaseAsteroidDebris
-  name: asteroid debris small
+  name: small asteroid debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -68,7 +57,7 @@
 - type: entity
   id: AsteroidDebrisMedium
   parent: BaseAsteroidDebris
-  name: asteroid debris medium
+  name: medium asteroid debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -79,7 +68,7 @@
 - type: entity
   id: AsteroidDebrisLarge
   parent: BaseAsteroidDebris
-  name: asteroid debris large
+  name: large asteroid debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -88,63 +77,15 @@
       floorPlacements: 120
 
 - type: entity
-  id: AsteroidDebrisLarger
+  id: AsteroidDebrisHuge
   parent: BaseAsteroidDebris
-  name: asteroid debris larger
+  name: huge asteroid debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
       radius: 60
       floorPlacements: 240
-
-- type: entity
-  id: AsteroidSalvageSmall
-  parent: BaseAsteroidDebris
-  name: salvage asteroid small
-  categories: [ HideSpawnMenu ]
-  components:
-    - type: MapGrid
-    - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 15
-      floorPlacements: 100
-
-- type: entity
-  id: AsteroidSalvageMedium
-  parent: BaseAsteroidDebris
-  name: salvage asteroid medium
-  categories: [ HideSpawnMenu ]
-  components:
-    - type: MapGrid
-    - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 17
-      floorPlacements: 150
-
-- type: entity
-  id: AsteroidSalvageLarge
-  parent: BaseAsteroidDebris
-  name: salvage asteroid large
-  categories: [ HideSpawnMenu ]
-  components:
-    - type: MapGrid
-    - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 20
-      floorPlacements: 200
-
-- type: entity
-  id: AsteroidSalvageHuge
-  parent: BaseAsteroidDebris
-  name: salvage asteroid huge
-  categories: [ HideSpawnMenu ]
-  components:
-    - type: MapGrid
-    - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 23
-      floorPlacements: 250
 
 - type: entity
   id: BaseIronrockDebris
@@ -178,7 +119,7 @@
             prob: 0.05
             orGroup: rock
           - id: IronRockDiamond
-            prob: 0.04
+            prob: 0.03
             orGroup: rock
           - id: IronRockUranium
             prob: 0.02
@@ -187,103 +128,235 @@
             prob: 0.02
             orGroup: rock
           - id: IronRockGibtonite
-            prob: 0.01
+            prob: 0.05
             orGroup: rock
     - type: IFF
       flags: HideLabel
       color: "#c72b0c"
 
 - type: entity
+  id: BaseIronrockDebrisBarren
+  parent: BaseIronrockDebris
+  name: barren ironrock debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAsteroidIronsand
+      blobDrawProb: 0.5
+      radius: 6
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAsteroidIronsand:
+          - id: IronRock
+            prob: 0.75
+            orGroup: rock
+          - id: IronRockIron
+            prob: 0.25
+            orGroup: rock
+          - id: IronRockCoal
+            prob: 0.15
+            orGroup: rock
+          - id: IronRockSalt
+            prob: 0.001
+            orGroup: rock
+          - id: IronRockGold
+            prob: 0.01
+            orGroup: rock
+          - id: IronRockDiamond
+            prob: 0.001
+            orGroup: rock
+          - id: IronRockUranium
+            prob: 0.01
+            orGroup: rock
+          - id: IronRockArtifactFragment
+            prob: 0.001
+            orGroup: rock
+          - id: IronRockGibtonite
+            prob: 0.05
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+
+- type: entity
+  id: BaseIronrockDebrisRich
+  parent: BaseIronrockDebris
+  name: rich ironrock debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAsteroidIronsand
+      blobDrawProb: 0.5
+      radius: 6
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAsteroidIronsand:
+          - id: IronRock
+            prob: 0.4
+            orGroup: rock
+          - id: IronRockIron
+            prob: 0.5
+            orGroup: rock
+          - id: IronRockCoal
+            prob: 0.3
+            orGroup: rock
+          - id: IronRockSalt
+            prob: 0.01
+            orGroup: rock
+          - id: IronRockGold
+            prob: 0.1
+            orGroup: rock
+          - id: IronRockDiamond
+            prob: 0.05
+            orGroup: rock
+          - id: IronRockUranium
+            prob: 0.04
+            orGroup: rock
+          - id: IronRockArtifactFragment
+            prob: 0.01
+            orGroup: rock
+          - id: IronRockGibtonite
+            prob: 0.15
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+
+- type: entity
   id: IronrockDebrisSmall
   parent: BaseIronrockDebris
-  name: ironrock debris small
+  name: small ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
       radius: 7
-      floorPlacements: 20
+      floorPlacements: 30
+
+- type: entity
+  id: IronrockDebrisSmallBarren
+  parent: BaseIronrockDebrisBarren
+  name: small barren ironrock debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      radius: 7
+      floorPlacements: 30
+
+- type: entity
+  id: IronrockDebrisSmallRich
+  parent: BaseIronrockDebrisRich
+  name: small rich ironrock debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      radius: 7
+      floorPlacements: 30
 
 - type: entity
   id: IronrockDebrisMedium
   parent: BaseIronrockDebris
-  name: ironrock debris medium
+  name: medium ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      radius: 10
-      floorPlacements: 30
+      radius: 15
+      floorPlacements: 50
+
+- type: entity
+  id: IronrockDebrisMediumBarren
+  parent: BaseIronrockDebrisBarren
+  name: medium barren ironrock debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      radius: 15
+      floorPlacements: 50
+
+- type: entity
+  id: IronrockDebrisMediumRich
+  parent: BaseIronrockDebrisRich
+  name: medium rich ironrock debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      radius: 15
+      floorPlacements: 50
 
 - type: entity
   id: IronrockDebrisLarge
   parent: BaseIronrockDebris
-  name: ironrock debris large
-  categories: [ HideSpawnMenu ]
-  components:
-    - type: MapGrid
-    - type: BlobFloorPlanBuilder
-      radius: 20
-      floorPlacements: 60
-
-- type: entity
-  id: IronrockDebrisLarger
-  parent: BaseIronrockDebris
-  name: ironrock debris larger
+  name: large ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
       radius: 30
-      floorPlacements: 90
+      floorPlacements: 250
 
 - type: entity
-  id: IronrockSalvageSmall
-  parent: BaseIronrockDebris
-  name: salvage ironrock small
+  id: IronrockDebrisLargeBarren
+  parent: BaseIronrockDebrisBarren
+  name: large barren ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 15
-      floorPlacements: 100
+      radius: 30
+      floorPlacements: 250
 
 - type: entity
-  id: IronrockSalvageMedium
-  parent: BaseIronrockDebris
-  name: salvage ironrock medium
+  id: IronrockDebrisLargeRich
+  parent: BaseIronrockDebrisRich
+  name: large rich ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 17
-      floorPlacements: 150
+      radius: 30
+      floorPlacements: 250
 
 - type: entity
-  id: IronrockSalvageLarge
+  id: IronrockDebrisHuge
   parent: BaseIronrockDebris
-  name: salvage ironrock large
+  name: huge ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 20
-      floorPlacements: 200
+      radius: 50
+      floorPlacements: 400
 
 - type: entity
-  id: IronrockSalvageHuge
-  parent: BaseIronrockDebris
-  name: salvage ironrock huge
+  id: IronrockDebrisHugeBarren
+  parent: BaseIronrockDebrisBarren
+  name: huge barren ironrock debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      blobDrawProb: 0.66
-      radius: 40
-      floorPlacements: 350
+      radius: 50
+      floorPlacements: 400
+
+- type: entity
+  id: IronrockDebrisHugeRich
+  parent: BaseIronrockDebrisRich
+  name: huge rich ironrock debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      radius: 50
+      floorPlacements: 400
 
 - type: entity
   id: BaseChromiteDebris
@@ -319,14 +392,121 @@
           - id: WallRockChromiteArtifactFragment
             prob: 0.2
             orGroup: rock
+          - id: WallRockChromiteGibtonite
+            prob: 0.05
+            orGroup: rock
     - type: IFF
       flags: HideLabel
       color: "#ae3dff"
 
 - type: entity
+  id: BaseChromiteDebrisBarren
+  parent: BaseChromiteDebris
+  name: barren chromite debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorChromite
+      blobDrawProb: 0.5
+      radius: 6
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorChromite:
+          - id: WallRockChromite
+            prob: 0.7
+            orGroup: rock
+          - id: WallRockChromiteQuartz
+            prob: 0.2
+            orGroup: rock
+          - id: WallRockChromiteSilver
+            prob: 0.04
+            orGroup: rock
+          - id: WallRockChromitePlasma
+            prob: 0.075
+            orGroup: rock
+          - id: WallRockChromiteBananium
+            prob: 0.02
+            orGroup: rock
+          - id: WallRockChromiteArtifactFragment
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockChromiteGibtonite
+            prob: 0.01
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#ae3dff"
+
+- type: entity
+  id: BaseChromiteDebrisRich
+  parent: BaseChromiteDebris
+  name: rich chromite debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorChromite
+      blobDrawProb: 0.5
+      radius: 6
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorChromite:
+          - id: WallRockChromite
+            prob: 0.5
+            orGroup: rock
+          - id: WallRockChromiteSilver
+            prob: 0.2
+            orGroup: rock
+          - id: WallRockChromitePlasma
+            prob: 0.3
+            orGroup: rock
+          - id: WallRockChromiteBananium
+            prob: 0.2
+            orGroup: rock
+          - id: WallRockChromiteArtifactFragment
+            prob: 0.2
+            orGroup: rock
+          - id: WallRockChromiteGibtonite
+            prob: 0.15
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#ae3dff"
+
+
+- type: entity
   id: ChromiteDebrisSmall
   parent: BaseChromiteDebris
   name: small chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 10
+      floorPlacements: 30
+
+- type: entity
+  id: ChromiteDebrisSmallBarren
+  parent: BaseChromiteDebrisBarren
+  name: small barren chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 10
+      floorPlacements: 30
+
+- type: entity
+  id: ChromiteDebrisSmallRich
+  parent: BaseChromiteDebrisRich
+  name: small rich chromite debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -348,9 +528,57 @@
       floorPlacements: 40
 
 - type: entity
+  id: ChromiteDebrisMediumBarren
+  parent: BaseChromiteDebrisBarren
+  name: medium barren chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 15
+      floorPlacements: 40
+
+- type: entity
+  id: ChromiteDebrisMediumRich
+  parent: BaseChromiteDebrisRich
+  name: medium rich chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 15
+      floorPlacements: 40
+
+- type: entity
   id: ChromiteDebrisLarge
   parent: BaseChromiteDebris
   name: large chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 35
+      floorPlacements: 90
+
+- type: entity
+  id: ChromiteDebrisLargeBarren
+  parent: BaseChromiteDebrisBarren
+  name: large barren chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 35
+      floorPlacements: 90
+
+- type: entity
+  id: ChromiteDebrisLargeRich
+  parent: BaseChromiteDebrisRich
+  name: large barren chromite debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -372,7 +600,31 @@
       floorPlacements: 150
 
 - type: entity
-  id: BaseVolcanicDebris
+  id: ChromiteDebrisHugeBarren
+  parent: BaseChromiteDebrisBarren
+  name: huge barren chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 50
+      floorPlacements: 150
+
+- type: entity
+  id: ChromiteDebrisHugeRich
+  parent: BaseChromiteDebrisRich
+  name: huge rich chromite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: 0.66
+      radius: 50
+      floorPlacements: 150
+
+- type: entity
+  id: BaseBasaltDebris
   parent: BaseDebris
   name: basalt debris
   abstract: true
@@ -388,13 +640,13 @@
       entries:
         FloorBasalt:
           - id: WallRockBasalt
-            prob: 0.6
+            prob: 0.7
             orGroup: rock
           - id: WallRockBasaltTin
             prob: 0.2
             orGroup: rock
           - id: WallRockBasaltUranium
-            prob: 0.2
+            prob: 0.15
             orGroup: rock
           - id: WallRockBasaltGold
             prob: 0.05
@@ -405,14 +657,99 @@
           - id: WallRockBasaltPlasma
             prob: 0.2
             orGroup: rock
+          - id: WallRockBasaltGibtonite
+            prob: 0.05
+            orGroup: rock
     - type: IFF
       flags: HideLabel
       color: "#a3a3a3"
 
 - type: entity
-  id: VolcanicDebrisSmall
-  parent: BaseVolcanicDebris
-  name: small volcanic debris
+  id: BaseBasaltDebrisBarren
+  parent: BaseBasaltDebris
+  name: barren basalt debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorBasalt
+      blobDrawProb: 0.5
+      radius: 6
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorBasalt:
+          - id: WallRockBasalt
+            prob: 0.8
+            orGroup: rock
+          - id: WallRockBasaltTin
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockBasaltUranium
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockBasaltGold
+            prob: 0.02
+            orGroup: rock
+          - id: WallRockBasaltSilver
+            prob: 0.02
+            orGroup: rock
+          - id: WallRockBasaltPlasma
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockBasaltGibtonite
+            prob: 0.02
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#a3a3a3"
+
+- type: entity
+  id: BaseBasaltDebrisRich
+  parent: BaseBasaltDebris
+  name: rich basalt debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorBasalt
+      blobDrawProb: 0.5
+      radius: 6
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorBasalt:
+          - id: WallRockBasalt
+            prob: 0.45
+            orGroup: rock
+          - id: WallRockBasaltTin
+            prob: 0.25
+            orGroup: rock
+          - id: WallRockBasaltUranium
+            prob: 0.25
+            orGroup: rock
+          - id: WallRockBasaltGold
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockBasaltSilver
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockBasaltPlasma
+            prob: 0.3
+            orGroup: rock
+          - id: WallRockBasaltGibtonite
+            prob: 0.1
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#a3a3a3"
+
+- type: entity
+  id: BasaltDebrisSmall
+  parent: BaseBasaltDebris
+  name: small basalt debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -422,8 +759,32 @@
       floorPlacements: 40
 
 - type: entity
-  id: VolcanicDebrisMedium
-  parent: BaseVolcanicDebris
+  id: BasaltDebrisSmallBarren
+  parent: BaseBasaltDebrisBarren
+  name: small barren basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: BasaltDebrisSmallRich
+  parent: BaseBasaltDebrisRich
+  name: small rich basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: BasaltDebrisMedium
+  parent: BaseBasaltDebris
   name: medium volcanic debris
   categories: [ HideSpawnMenu ]
   components:
@@ -434,9 +795,33 @@
       floorPlacements: 80
 
 - type: entity
-  id: VolcanicDebrisLarge
-  parent: BaseVolcanicDebris
-  name: large volcanic debris
+  id: BasaltDebrisMediumBarren
+  parent: BaseBasaltDebrisBarren
+  name: medium barren basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 20
+      floorPlacements: 80
+
+- type: entity
+  id: BasaltDebrisMediumRich
+  parent: BaseBasaltDebrisRich
+  name: medium rich basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 20
+      floorPlacements: 80
+
+- type: entity
+  id: BasaltDebrisLarge
+  parent: BaseBasaltDebris
+  name: large basalt debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -446,16 +831,64 @@
       floorPlacements: 100
 
 - type: entity
-  id: VolcanicDebrisHuge
-  parent: BaseVolcanicDebris
-  name: huge volcanic debris
+  id: BasaltDebrisLargeBarren
+  parent: BaseBasaltDebrisBarren
+  name: large barren basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 100
+
+- type: entity
+  id: BasaltDebrisLargeRich
+  parent: BaseBasaltDebrisRich
+  name: large rich basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 100
+
+- type: entity
+  id: BasaltDebrisHuge
+  parent: BaseBasaltDebris
+  name: huge basalt debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
       blobDrawProb: .66
       radius: 50
-      floorPlacements: 200
+      floorPlacements: 225
+
+- type: entity
+  id: BasaltDebrisHugeBarren
+  parent: BaseBasaltDebrisBarren
+  name: huge barren basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 50
+      floorPlacements: 225
+
+- type: entity
+  id: BasaltDebrisHugeRich
+  parent: BaseBasaltDebrisRich
+  name: huge rich basalt debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 50
+      floorPlacements: 225
 
 - type: entity
   id: BaseAndesiteDebris
@@ -488,6 +921,85 @@
           - id: WallRockAndesiteBananium
             prob: 0.03
             orGroup: rock
+          - id: WallRockAndesiteGibtonite
+            prob: 0.075
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#cfcfcf"
+
+- type: entity
+  id: BaseAndesiteDebrisBarren
+  parent: BaseAndesiteDebris
+  name: barren andesite debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorCave
+      blobDrawProb: 0.66
+      radius: 30
+      floorPlacements: 150
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorCave:
+          - id: WallRockAndesite
+            prob: 0.75
+            orGroup: rock
+          - id: WallRockAndesiteQuartz
+            prob: 0.3
+            orGroup: rock
+          - id: WallRockAndesiteGold
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockAndesiteSilver
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockAndesiteBananium
+            prob: 0.01
+            orGroup: rock
+          - id: WallRockAndesiteGibtonite
+            prob: 0.03
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#cfcfcf"
+
+- type: entity
+  id: BaseAndesiteDebrisRich
+  parent: BaseAndesiteDebris
+  name: rich andesite debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorCave
+      blobDrawProb: 0.66
+      radius: 30
+      floorPlacements: 150
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorCave:
+          - id: WallRockAndesite
+            prob: 0.45
+            orGroup: rock
+          - id: WallRockAndesiteQuartz
+            prob: 0.5
+            orGroup: rock
+          - id: WallRockAndesiteGold
+            prob: 0.35
+            orGroup: rock
+          - id: WallRockAndesiteSilver
+            prob: 0.35
+            orGroup: rock
+          - id: WallRockAndesiteBananium
+            prob: 0.075
+            orGroup: rock
+          - id: WallRockAndesiteGibtonite
+            prob: 0.125
+            orGroup: rock
     - type: IFF
       flags: HideLabel
       color: "#cfcfcf"
@@ -496,6 +1008,30 @@
   id: AndesiteDebrisSmall
   parent: BaseAndesiteDebris
   name: small andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: AndesiteDebrisSmallBarren
+  parent: BaseAndesiteDebrisBarren
+  name: small barren andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: AndesiteDebrisSmallRich
+  parent: BaseAndesiteDebrisRich
+  name: small rich andesite debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -517,9 +1053,57 @@
       floorPlacements: 80
 
 - type: entity
+  id: AndesiteDebrisMediumBarren
+  parent: BaseAndesiteDebrisBarren
+  name: medium barren andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 20
+      floorPlacements: 80
+
+- type: entity
+  id: AndesiteDebrisMediumRich
+  parent: BaseAndesiteDebrisRich
+  name: medium rich andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 20
+      floorPlacements: 80
+
+- type: entity
   id: AndesiteDebrisLarge
   parent: BaseAndesiteDebris
   name: large andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 100
+
+- type: entity
+  id: AndesiteDebrisLargeBarren
+  parent: BaseAndesiteDebrisBarren
+  name: large barren andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 100
+
+- type: entity
+  id: AndesiteDebrisLargeRich
+  parent: BaseAndesiteDebrisRich
+  name: large rich andesite debris
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid
@@ -539,3 +1123,594 @@
       blobDrawProb: .66
       radius: 50
       floorPlacements: 200
+
+- type: entity
+  id: AndesiteDebrisHugeBarren
+  parent: BaseAndesiteDebrisBarren
+  name: huge barren andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 50
+      floorPlacements: 200
+
+- type: entity
+  id: AndesiteDebrisHugeRich
+  parent: BaseAndesiteDebrisRich
+  name: huge rich andesite debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 50
+      floorPlacements: 200
+
+- type: entity
+  id: BaseIceDebris
+  parent: BaseDebris
+  name: ice debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAstroIceSpace
+      blobDrawProb: 0.66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAstroIceSpace:
+          - id: WallRockSnow
+            prob: 0.7
+            orGroup: rock
+          - id: WallRockSnowGibtonite
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockSnowBananium
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockSnowArtifactFragment
+            prob: 0.15
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#6bb6bb"
+
+- type: entity
+  id: BaseIceDebrisBarren
+  parent: BaseIceDebris
+  name: barren ice debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAstroIceSpace
+      blobDrawProb: 0.66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAstroIceSpace:
+          - id: WallRockSnow
+            prob: 0.9
+            orGroup: rock
+          - id: WallRockSnowGibtonite
+            prob: 0.02
+            orGroup: rock
+          - id: WallRockSnowBananium
+            prob: 0.04
+            orGroup: rock
+          - id: WallRockSnowArtifactFragment
+            prob: 0.1
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#6bb6bb"
+
+- type: entity
+  id: BaseIceDebrisRich
+  parent: BaseIceDebris
+  name: rich ice debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAstroIceSpace
+      blobDrawProb: 0.66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAstroIceSpace:
+          - id: WallRockSnow
+            prob: 0.5
+            orGroup: rock
+          - id: WallRockSnowGibtonite
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockSnowBananium
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockSnowArtifactFragment
+            prob: 0.3
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#6bb6bb"
+
+- type: entity
+  id: IceDebrisSmall
+  parent: BaseIceDebris
+  name: small ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: IceDebrisSmallBarren
+  parent: BaseIceDebrisBarren
+  name: small barren ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: IceDebrisSmallRich
+  parent: BaseIceDebrisRich
+  name: small rich ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 40
+
+- type: entity
+  id: IceDebrisMedium
+  parent: BaseIceDebris
+  name: medium ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 15
+      floorPlacements: 75
+
+- type: entity
+  id: IceDebrisMediumBarren
+  parent: BaseIceDebrisBarren
+  name: medium barren ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 15
+      floorPlacements: 75
+
+- type: entity
+  id: IceDebrisMediumRich
+  parent: BaseIceDebrisRich
+  name: medium rich ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 15
+      floorPlacements: 75
+
+- type: entity
+  id: IceDebrisLarge
+  parent: BaseIceDebris
+  name: large ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 125
+
+- type: entity
+  id: IceDebrisLargeBarren
+  parent: BaseIceDebrisBarren
+  name: large barren ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 125
+
+- type: entity
+  id: IceDebrisLargeRich
+  parent: BaseIceDebrisRich
+  name: large rich ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 125
+
+- type: entity
+  id: IceDebrisHuge
+  parent: BaseIceDebris
+  name: huge ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 30
+      floorPlacements: 175
+
+- type: entity
+  id: IceDebrisHugeBarren
+  parent: BaseIceDebrisBarren
+  name: huge barren ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 30
+      floorPlacements: 175
+
+- type: entity
+  id: IceDebrisHugeRich
+  parent: BaseIceDebrisRich
+  name: huge rich ice debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 30
+      floorPlacements: 175
+
+- type: entity
+  id: BaseConglomerateDebris
+  parent: BaseDebris
+  name: conglomerate debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAstroAsteroidSand
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAstroAsteroidSand:
+          - id: WallRockSand
+            prob: 0.7
+            orGroup: rock
+          - id: WallRockSandQuartz
+            prob: 0.4
+            orGroup: rock
+          - id: WallRockSandGold
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockSandTin
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockSandUranium
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockSandGibtonite
+            prob: 0.03
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#dbdea2"
+
+- type: entity
+  id: BaseConglomerateDebrisBarren
+  parent: BaseConglomerateDebris
+  name: barren conglomerate debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAstroAsteroidSand
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAstroAsteroidSand:
+          - id: WallRockSand
+            prob: 0.8
+            orGroup: rock
+          - id: WallRockSandQuartz
+            prob: 0.2
+            orGroup: rock
+          - id: WallRockSandGold
+            prob: 0.02
+            orGroup: rock
+          - id: WallRockSandTin
+            prob: 0.03
+            orGroup: rock
+          - id: WallRockSandUranium
+            prob: 0.03
+            orGroup: rock
+          - id: WallRockSandGibtonite
+            prob: 0.01
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#dbdea2"
+
+- type: entity
+  id: BaseConglomerateDebrisRich
+  parent: BaseConglomerateDebris
+  name: rich conglomerate debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorAstroAsteroidSand
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAstroAsteroidSand:
+          - id: WallRockSand
+            prob: 0.5
+            orGroup: rock
+          - id: WallRockSandQuartz
+            prob: 0.35
+            orGroup: rock
+          - id: WallRockSandGold
+            prob: 0.2
+            orGroup: rock
+          - id: WallRockSandTin
+            prob: 0.15
+            orGroup: rock
+          - id: WallRockSandUranium
+            prob: 0.15
+            orGroup: rock
+          - id: WallRockSandGibtonite
+            prob: 0.075
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#dbdea2"
+
+- type: entity
+  id: ConglomerateDebrisSmall
+  parent: BaseConglomerateDebris
+  name: small conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 40
+
+- type: entity
+  id: ConglomerateDebrisSmallBarren
+  parent: BaseConglomerateDebrisBarren
+  name: small barren conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 40
+
+- type: entity
+  id: ConglomerateDebrisSmallRich
+  parent: BaseConglomerateDebrisRich
+  name: small rich conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 40
+
+- type: entity
+  id: ConglomerateDebrisMedium
+  parent: BaseConglomerateDebris
+  name: medium conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 15
+      floorPlacements: 80
+
+- type: entity
+  id: ConglomerateDebrisMediumBarren
+  parent: BaseConglomerateDebrisBarren
+  name: medium barren conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 15
+      floorPlacements: 80
+
+- type: entity
+  id: ConglomerateDebrisMediumRich
+  parent: BaseConglomerateDebrisRich
+  name: medium rich conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 15
+      floorPlacements: 80
+
+- type: entity
+  id: ConglomerateDebrisLarge
+  parent: BaseConglomerateDebris
+  name: large conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 125
+
+- type: entity
+  id: ConglomerateDebrisLargeBarren
+  parent: BaseConglomerateDebrisBarren
+  name: large barren conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 125
+
+- type: entity
+  id: ConglomerateDebrisLargeRich
+  parent: BaseConglomerateDebrisRich
+  name: large conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 25
+      floorPlacements: 125
+
+- type: entity
+  id: ConglomerateDebrisHuge
+  parent: BaseConglomerateDebris
+  name: huge conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 35
+      floorPlacements: 225
+
+- type: entity
+  id: ConglomerateDebrisHugeBarren
+  parent: BaseConglomerateDebrisRich
+  name: huge barren conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 35
+      floorPlacements: 225
+
+- type: entity
+  id: ConglomerateDebrisHugeRich
+  parent: BaseConglomerateDebrisRich
+  name: huge rich conglomerate debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 35
+      floorPlacements: 225
+
+- type: entity
+  id: BaseBrassDebris
+  parent: BaseDebris
+  name: brass debris
+  abstract: true
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorBrassFilled
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorBrassFilled:
+          - id: WallClock
+    - type: IFF
+      flags: HideLabel
+      color: "#b5a642"
+
+- type: entity
+  id: BrassDebrisSmall
+  parent: BaseBrassDebris
+  name: small brass debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 7
+      floorPlacements: 40
+
+- type: entity
+  id: BrassDebrisMedium
+  parent: BaseBrassDebris
+  name: medium brass debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 10
+      floorPlacements: 55
+
+- type: entity
+  id: BrassDebrisLarge
+  parent: BaseBrassDebris
+  name: large brass debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 13
+      floorPlacements: 75
+
+- type: entity
+  id: BrassDebrisHuge
+  parent: BaseBrassDebris
+  name: huge brass debris
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      blobDrawProb: .66
+      radius: 16
+      floorPlacements: 90
