@@ -34,7 +34,7 @@
     sprite: Objects/Devices/flatpack.rsi
     state: base
   product: ComputerStationModificationFlatpack
-  cost: 1000
+  cost: 10000
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -65,6 +65,6 @@
     sprite: Objects/Misc/module.rsi
     state: cpu_command
   product: ComputerIFFCircuitboard
-  cost: 2500
+  cost: 7500
   category: cargoproduct-category-name-shuttle
   group: market

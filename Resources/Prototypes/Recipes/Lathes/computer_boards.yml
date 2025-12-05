@@ -52,14 +52,51 @@
 ## Recipes
 
 # Engineering
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringComputerRecipeCategory ]
+  id: AlertsComputerCircuitboard
+  result: AlertsComputerCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringComputerRecipeCategory ]
+  id: AtmosMonitoringComputerCircuitboard
+  result: AtmosMonitoringComputerCircuitboard
+
 - type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseEngineeringComputerRecipeCategory ]
   id: SolarControlComputerCircuitboard
   result: SolarControlComputerCircuitboard
 
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringComputerRecipeCategory ]
+  id: PowerComputerCircuitboard
+  result: PowerComputerCircuitboard
+
 # Medical
 
+  - type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseMedicalComputerRecipeCategory ]
+  id: CrewMonitoringComputerCircuitboard
+  result: CrewMonitoringComputerCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseMedicalComputerRecipeCategory ]
+  id: MedicalRecordsComputerCircuitboard
+  result: MedicalRecordsComputerCircuitboard
+
+  - type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseMedicalComputerRecipeCategory ]
+  id: BodyScannerComputerCircuitboard
+  result: BodyScannerComputerCircuitboard
+
+  - type: latheRecipe
+  parent: [ BaseSilverCircuitboardRecipe, BaseMedicalComputerRecipeCategory ]
+  id: CloningConsoleComputerCircuitboard
+  result: CloningConsoleComputerCircuitboard
+
 # Science
+
 - type: latheRecipe
   parent: [ BaseGoldCircuitboardRecipe, BaseResearchComputerRecipeCategory ]
   id: AnalysisComputerCircuitboard
@@ -70,7 +107,18 @@
   id: TechDiskComputerCircuitboard
   result: TechDiskComputerCircuitboard
 
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseResearchComputerRecipeCategory ]
+  id: RoboticsConsoleCircuitboard
+  result: RoboticsConsoleCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseSilverCircuitboardRecipe, BaseResearchComputerRecipeCategory ]
+  id: ResearchComputerCircuitboard
+  result: ResearchComputerCircuitboard
+
 # Cameras
+
 - type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseSecurityComputerRecipeCategory ]
   id: SurveillanceCameraMonitorCircuitboard
@@ -82,12 +130,24 @@
   result: SurveillanceWirelessCameraMonitorCircuitboard
 
 # Service
+
 - type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseServiceComputerRecipeCategory ]
   id: MassMediaCircuitboard
   result: ComputerMassMediaCircuitboard
 
+  - type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseServiceComputerRecipeCategory ]
+  id: BlockGameArcadeComputerCircuitboard
+  result: BlockGameArcadeComputerCircuitboard
+
+  - type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseServiceComputerRecipeCategory ]
+  id: SpaceVillainArcadeComputerCircuitboard
+  result: SpaceVillainArcadeComputerCircuitboard
+
 # Shuttle
+
 - type: latheRecipe
   parent: [ BaseGoldCircuitboardRecipe, BaseSupplyComputerRecipeCategory ]
   id: ShuttleConsoleCircuitboard
@@ -97,6 +157,16 @@
   parent: [ BaseCircuitboardRecipe, BaseSupplyComputerRecipeCategory ]
   id: RadarConsoleCircuitboard
   result: RadarConsoleCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseSupplyComputerRecipeCategory ]
+  id: SalvageJobBoardComputerCircuitboard
+  result: SalvageJobBoardComputerCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseSupplyComputerRecipeCategory ]
+  id: CargoBountyComputerCircuitboard
+  result: CargoBountyComputerCircuitboard
 
 # Civilian
 - type: latheRecipe

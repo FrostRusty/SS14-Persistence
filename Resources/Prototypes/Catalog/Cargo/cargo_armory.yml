@@ -77,3 +77,39 @@
   cost: 8000
   category: cargoproduct-category-name-armory
   group: market
+
+- type: cargoProduct
+  id: CommsComputerCircuitboard
+    sprite: Objects/Misc/module.rsi
+    state: cpu_command
+  product: CommsComputerCircuitboard
+  cost: 10000
+  category: cargoproduct-category-name-armory
+  group: market
+
+- type: cargoProduct
+  id: StationRecordsComputerCircuitboard
+    sprite: Objects/Misc/module.rsi
+    state: cpu_command
+  product: StationRecordsComputerCircuitboard
+  cost: 7500
+  category: cargoproduct-category-name-armory
+  group: market
+
+- type: cargoProduct
+  id: SecurityTechFabCircuitboard
+    sprite: Objects/Misc/module.rsi
+    state: cpu_security
+  product: SecurityTechFabCircuitboard
+  cost: 10000
+  category: cargoproduct-category-name-armory
+  group: market
+
+- type: cargoProduct
+  id: AmmoTechFabCircuitboard
+    sprite: Objects/Misc/module.rsi
+    state: cpu_security
+  product: AmmoTechFabCircuitboard
+  cost: 8000
+  category: cargoproduct-category-name-armory
+  group: market
