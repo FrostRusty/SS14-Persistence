@@ -85,12 +85,12 @@
   id: MedicalRecordsComputerCircuitboard
   result: MedicalRecordsComputerCircuitboard
 
-  - type: latheRecipe
+- type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseMedicalComputerRecipeCategory ]
   id: BodyScannerComputerCircuitboard
   result: BodyScannerComputerCircuitboard
 
-  - type: latheRecipe
+- type: latheRecipe
   parent: [ BaseSilverCircuitboardRecipe, BaseMedicalComputerRecipeCategory ]
   id: CloningConsoleComputerCircuitboard
   result: CloningConsoleComputerCircuitboard
@@ -136,12 +136,12 @@
   id: MassMediaCircuitboard
   result: ComputerMassMediaCircuitboard
 
-  - type: latheRecipe
+- type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseServiceComputerRecipeCategory ]
   id: BlockGameArcadeComputerCircuitboard
   result: BlockGameArcadeComputerCircuitboard
 
-  - type: latheRecipe
+- type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseServiceComputerRecipeCategory ]
   id: SpaceVillainArcadeComputerCircuitboard
   result: SpaceVillainArcadeComputerCircuitboard

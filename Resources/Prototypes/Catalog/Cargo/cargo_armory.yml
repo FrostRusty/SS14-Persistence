@@ -90,6 +90,7 @@
 
 - type: cargoProduct
   id: StationRecordsComputerCircuitboard
+  icon:
     sprite: Objects/Misc/module.rsi
     state: cpu_command
   product: StationRecordsComputerCircuitboard
@@ -99,6 +100,7 @@
 
 - type: cargoProduct
   id: SecurityTechFabCircuitboard
+  icon:
     sprite: Objects/Misc/module.rsi
     state: cpu_security
   product: SecurityTechFabCircuitboard
@@ -108,6 +110,7 @@
 
 - type: cargoProduct
   id: AmmoTechFabCircuitboard
+  icon:
     sprite: Objects/Misc/module.rsi
     state: cpu_security
   product: AmmoTechFabCircuitboard
