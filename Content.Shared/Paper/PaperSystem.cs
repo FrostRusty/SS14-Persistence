@@ -7,16 +7,11 @@ using Content.Shared.Interaction;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
-using Content.Shared.Verbs; // redacted lol
 using Robust.Shared.Player;
 using Robust.Shared.Audio.Systems;
 using static Content.Shared.Paper.PaperComponent;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Content.Shared.IdentityManagement;
-using Content.Shared.IdentityManagement.Components;
-using Content.Shared.Mind.Components;
-using Content.Shared.Roles;
 
 namespace Content.Shared.Paper;
 
@@ -32,7 +27,6 @@ public sealed class PaperSystem : EntitySystem
     [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IdentitySystem _identitySystem = default!;
 
     private static readonly ProtoId<TagPrototype> WriteIgnoreStampsTag = "WriteIgnoreStamps";
     private static readonly ProtoId<TagPrototype> WriteTag = "Write";
@@ -53,10 +47,6 @@ public sealed class PaperSystem : EntitySystem
         SubscribeLocalEvent<RandomPaperContentComponent, MapInitEvent>(OnRandomPaperContentMapInit);
 
         SubscribeLocalEvent<ActivateOnPaperOpenedComponent, PaperWriteEvent>(OnPaperWrite);
-
-        // what
-        SubscribeLocalEvent<PaperComponent, GetVerbsEvent<AlternativeVerb>>(AddSignVerb);
-        SubscribeLocalEvent<PaperComponent, PaperSignatureRequestMessage>(OnSignatureRequest);
 
         _paperQuery = GetEntityQuery<PaperComponent>();
     }
@@ -109,34 +99,14 @@ public sealed class PaperSystem : EntitySystem
 
             if (entity.Comp.StampedBy.Count > 0)
             {
-                // Uyeah
-                var stamps = entity.Comp.StampedBy.FindAll(s => s.Type == StampType.RubberStamp);
-                var signatures = entity.Comp.StampedBy.FindAll(s => s.Type == StampType.Signature);
-
-                // redacted
-                if (stamps.Count > 0)
-                {
-                    var joined = string.Join(", ", stamps.Select(s => Loc.GetString(s.StampedName)));
-                    args.PushMarkup(
-                        Loc.GetString(
-                            "paper-component-examine-detail-stamped-by",
-                            ("paper", entity),
-                            ("stamps", joined)
-                        )
-                    );
-                }
-
-                if (signatures.Count > 0)
-                {
-                    var joined = string.Join(", ", signatures.Select(s => s.StampedName));
-                    args.PushMarkup(
-                        Loc.GetString(
-                            "paper-component-examine-detail-signed-by",
-                            ("paper", entity),
-                            ("stamps", joined)
-                        )
-                    );
-                }
+                var commaSeparated =
+                    string.Join(", ", entity.Comp.StampedBy.Select(s => Loc.GetString(s.StampedName)));
+                args.PushMarkup(
+                    Loc.GetString(
+                        "paper-component-examine-detail-stamped-by",
+                        ("paper", entity),
+                        ("stamps", commaSeparated))
+                );
             }
         }
     }
@@ -280,11 +250,6 @@ public sealed class PaperSystem : EntitySystem
         if (!entity.Comp.StampedBy.Contains(stampInfo))
         {
             entity.Comp.StampedBy.Add(stampInfo);
-            
-            var cleanedContent = CleanUnfilledTags(entity.Comp.Content);
-            if (cleanedContent != entity.Comp.Content)
-                SetContent(entity, cleanedContent);
-            
             Dirty(entity);
             if (entity.Comp.StampState == null && TryComp<AppearanceComponent>(entity, out var appearance))
             {
@@ -294,81 +259,7 @@ public sealed class PaperSystem : EntitySystem
                 _appearance.SetData(entity, PaperVisuals.Stamp, entity.Comp.StampState, appearance);
             }
         }
-
         return true;
-    }
-
-    // Based on LockSystem.cs for alt-click behavior.
-    private void AddSignVerb(Entity<PaperComponent> uid, ref GetVerbsEvent<AlternativeVerb> args)
-    {
-        if (!args.CanAccess || !args.CanInteract)
-            return;
-
-        // Pens have a `Write` tag.
-        if (!args.Using.HasValue || !_tagSystem.HasTag(args.Using.Value, "Write"))
-            return;
-
-        EntityUid user = args.User;
-
-        AlternativeVerb verb = new()
-        {
-            Act = () =>
-            {
-                TrySign(uid, user);
-            },
-            Text = Loc.GetString("paper-component-verb-sign")
-            // Icon = Don't have an icon yet. Todo for later.
-        };
-        args.Verbs.Add(verb);
-    }
-
-    public bool TrySign(Entity<PaperComponent> paper, EntityUid signer)
-    {
-        // Generate display information.
-        StampDisplayInfo info = new StampDisplayInfo
-        {
-            StampedName = Name(signer),
-            StampedColor = Color.FromHex("#333333"),
-            Type = StampType.Signature,
-            Font = "/Fonts/Signature.ttf" //this isnt in use according to the code, might implement later
-        };
-
-        // Try stamp with the info, return false if failed.
-        if (TryStamp(paper, info, "paper_stamp-generic"))
-        {
-            _popupSystem.PopupClient(
-                Loc.GetString(
-                    "paper-component-action-signed-self",
-                    ("target", paper)
-                ),
-                signer,
-                signer
-            );
-
-            _popupSystem.PopupEntity(
-                Loc.GetString(
-                    "paper-component-action-signed-other",
-                    ("user", signer),
-                    ("target", paper)
-                ),
-                paper,
-                Filter.PvsExcept(signer, entityManager: EntityManager),
-                true
-            );
-
-            _audio.PlayPvs(paper.Comp.Sound, paper);
-
-            _adminLogger.Add(LogType.Verb,
-                LogImpact.Low,
-                $"{ToPrettyString(signer):player} has signed {ToPrettyString(paper):paper}.");
-
-            UpdateUserInterface(paper);
-            var eve = new PaperSignedEvent(signer);
-            RaiseLocalEvent(paper, ref eve);
-            return true;
-        }
-
-        return false;
     }
 
     /// <summary>
@@ -416,109 +307,6 @@ public sealed class PaperSystem : EntitySystem
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Mode));
-    }
-
-    private void OnSignatureRequest(Entity<PaperComponent> entity, ref PaperSignatureRequestMessage args)
-    {
-        var signature = GetPlayerSignature(args.Actor);
-        var newText = ReplaceNthSignatureTag(entity.Comp.Content, args.SignatureIndex, signature);
-        SetContent(entity, newText);
-
-        _adminLogger.Add(LogType.Chat, LogImpact.Low,
-            $"{ToPrettyString(args.Actor):player} signed {ToPrettyString(entity):entity} with signature: {signature}");
-    }
-
-    /// <summary>
-    /// Gets the player's signature using the identity system, including rank, name, and role.
-    /// </summary>
-    private string GetPlayerSignature(EntityUid player)
-    {
-        var name = string.Empty;
-        var rank = string.Empty;
-        var role = string.Empty;
-        
-        // Get the identity entity (ID card, etc.)
-        var identityEntity = player;
-        if (TryComp<IdentityComponent>(player, out var identity) &&
-            identity.IdentityEntitySlot?.ContainedEntity is { } idEntity) //null reference for some reason
-        {
-            identityEntity = idEntity;
-        }
-        
-        // Get name from identity or fallback to entity name
-        name = MetaData(identityEntity).EntityName;
-        
-        // Get role from mind system
-        if (TryComp<MindContainerComponent>(player, out var mindContainer) &&
-            mindContainer.Mind != null)
-        {
-            var roleSystem = EntityManager.System<SharedRoleSystem>();
-            var roleInfo = roleSystem.MindGetAllRoleInfo((mindContainer.Mind.Value, null));
-            if (roleInfo.Count > 0)
-            {
-                role = Loc.GetString(roleInfo[0].Name);
-            }
-        }
-        
-        // Format: "Rank Name, Role" or fallback combinations
-        var signature = string.Empty;
-        if (!string.IsNullOrEmpty(rank) && !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(role))
-        {
-            signature = $"{rank} {name}, {role}";
-        }
-        else if (!string.IsNullOrEmpty(rank) && !string.IsNullOrEmpty(name))
-        {
-            signature = $"{rank} {name}";
-        }
-        else if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(role))
-        {
-            signature = $"{name}, {role}";
-        }
-        else
-        {
-            signature = name;
-        }
-        
-        return signature;
-    }
-
-    /// <summary>
-    /// Replaces the nth occurrence of [signature] tag with replacement text.
-    /// </summary>
-    private static string ReplaceNthSignatureTag(string text, int index, string replacement)
-    {
-        const string signatureTag = "[signature]";
-        var currentIndex = 0;
-        var pos = 0;
-
-        while (pos < text.Length)
-        {
-            var foundPos = text.IndexOf(signatureTag, pos);
-            if (foundPos == -1) break;
-
-            if (currentIndex == index)
-            {
-                return text.Substring(0, foundPos) + replacement + text.Substring(foundPos + signatureTag.Length);
-            }
-
-            currentIndex++;
-            pos = foundPos + signatureTag.Length;
-        }
-
-        return text;
-    }
-
-    /// <summary>
-    /// Removes any unfilled [form] and [signature] tags, and converts [check] tags to ☐.
-    /// Called when the paper is stamped to finalize the document.
-    /// </summary>
-    /// <param name="text">The paper text to clean</param>
-    /// <returns>Text with unfilled tags cleaned</returns>
-    private static string CleanUnfilledTags(string text)
-    {
-        return text.Replace("[form]", string.Empty)
-                  .Replace("[signature]", string.Empty)
-                  .Replace("[check]", "☐");
     }
 }
 

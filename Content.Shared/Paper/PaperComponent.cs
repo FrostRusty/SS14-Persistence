@@ -59,17 +59,6 @@ public sealed partial class PaperComponent : Component
     }
 
     [Serializable, NetSerializable]
-    public sealed class PaperSignatureRequestMessage : BoundUserInterfaceMessage
-    {
-        public readonly int SignatureIndex;
-
-        public PaperSignatureRequestMessage(int signatureIndex)
-        {
-            SignatureIndex = signatureIndex;
-        }
-    }
-    // r
-    [Serializable, NetSerializable]
     public enum PaperUiKey
     {
         Key
@@ -96,6 +85,3 @@ public sealed partial class PaperComponent : Component
         Written
     }
 }
-
-[ByRefEvent]
-public record struct PaperSignedEvent(EntityUid Signer);

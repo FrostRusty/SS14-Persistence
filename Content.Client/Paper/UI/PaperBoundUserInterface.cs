@@ -23,7 +23,6 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
 
         _window = this.CreateWindow<PaperWindow>();
         _window.OnSaved += InputOnTextEntered;
-        _window.OnSignatureRequested += OnSignatureRequested;
 
         if (EntMan.TryGetComponent<PaperComponent>(Owner, out var paper))
         {
@@ -51,6 +50,4 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
             _window.Input.CursorPosition = new TextEdit.CursorPos(0, TextEdit.LineBreakBias.Top);
         }
     }
-
-    private void OnSignatureRequested(int signatureIndex) => SendMessage(new PaperSignatureRequestMessage(signatureIndex));
 }
