@@ -14,3 +14,6 @@ cargoproduct-category-name-science = Science
 cargoproduct-category-name-security = Security
 cargoproduct-category-name-service = Service
 cargoproduct-category-name-shuttle = Shuttle
+cargoproduct-category-name-syndicate = Syndicate
+cargoproduct-category-name-hunter = Hunter
+cargoproduct-category-name-explorer = Explorer

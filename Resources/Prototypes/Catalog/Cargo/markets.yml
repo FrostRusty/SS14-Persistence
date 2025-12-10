@@ -9,3 +9,18 @@
 
 - type: cargoMarket
   id: SalvageJobRewardMAX
+
+- type: cargoMarket
+  id: sciencemarket
+
+- type: cargoMarket
+  id: huntermarket
+
+- type: cargoMarket
+  id: explorermarket
+
+- type: cargoMarket
+  id: engineermarket
+
+- type: cargoMarket
+  id: syndicatemarket
