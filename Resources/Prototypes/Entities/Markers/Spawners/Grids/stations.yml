@@ -14,4 +14,26 @@
     stationGrid: True
     addComponents:
       - type: ProtectedGrid
+      - type: TradeStation        
+
+- type: entity
+  parent: MarkerBase
+  id: TradeStationSyndieSpawnerMarker
+  name: Grid Spawner
+  suffix: Syndie Trade Station
+  components:
+  - type: Sprite
+    layers:
+    - state: pink
+    - sprite: Objects/Materials/Scrap/generic.rsi
+      state: metal-1
+  - type: GridSpawner
+    gridPath: Maps/Shuttles/trading_outpost.yml
+    stationGrid: True
+    addComponents:
+      - type: ProtectedGrid
       - type: TradeStation
+        markets:
+        - syndicatemarket
+        
+

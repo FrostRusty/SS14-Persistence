@@ -16,6 +16,6 @@ public sealed partial class TradeStationComponent : Component
     [DataField]
     public List<ProtoId<CargoMarketPrototype>> Markets = new()
     {
-        "market",
+        "market"
     };
 }

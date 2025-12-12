@@ -59,6 +59,11 @@ public sealed partial class CargoPalletMenu : FancyWindow
     {
         CountLabel.Text = count.ToString();
     }
+
+    public void SetStation(string stationName)
+    {
+        StationLabel.Text = stationName;
+    }
     public void SetEnabled(bool enabled)
     {
         AppraiseButton.Disabled = !enabled;

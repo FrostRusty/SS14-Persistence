@@ -136,8 +136,8 @@ namespace Content.Client.Cargo.UI
                 {
                     var cargoPrototype = _protoManager.Index(cargoPrototypeId);
 
-                    if (!allowedGroups?.Contains(cargoPrototype.Group) ?? false)
-                        continue;
+ //                   if (!allowedGroups?.Contains(cargoPrototype.Group) ?? false)
+ //                       continue;
 
                     yield return cargoPrototype;
                 }
@@ -269,6 +269,7 @@ namespace Content.Client.Cargo.UI
                 Requests.AddChild(row);
             }
         }
+
 
         public void PopulateAccountActions()
         {

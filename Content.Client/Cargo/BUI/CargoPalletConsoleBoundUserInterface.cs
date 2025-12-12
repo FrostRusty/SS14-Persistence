@@ -46,7 +46,7 @@ public sealed class CargoPalletConsoleBoundUserInterface : BoundUserInterface
 
         if (state is not CargoPalletConsoleInterfaceState palletState)
             return;
-
+        _menu?.SetStation(palletState.StationName);
         _menu?.SetEnabled(palletState.Enabled);
         _menu?.SetAppraisal(palletState.Appraisal, palletState.Tax, palletState.CashMode);
         _menu?.SetCount(palletState.Count);

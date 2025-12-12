@@ -1,9 +1,15 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-            SetSize="500 170"
-            MinSize="500 170"
+            SetSize="500 200"
+            MinSize="500 200"
                       Title="{Loc 'cargo-pallet-console-menu-title'}">
     <BoxContainer Orientation="Vertical" Margin="5">
+        <BoxContainer Orientation="Horizontal">
+            <Label Text="Connected Station: "
+                   StyleClasses="LabelKeyText" />
+            <Label Name="StationLabel"
+                       Text="Not Connected" />
+        </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Label Text="Payment Type: "
                    StyleClasses="LabelKeyText" />

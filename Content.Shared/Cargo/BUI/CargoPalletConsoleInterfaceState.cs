@@ -23,12 +23,15 @@ public sealed class CargoPalletConsoleInterfaceState : BoundUserInterfaceState
     public bool CashMode;
 
     public int Tax;
-    public CargoPalletConsoleInterfaceState(int appraisal, int count, bool enabled, bool cashmode, int tax)
+
+    public string StationName;
+    public CargoPalletConsoleInterfaceState(int appraisal, int count, bool enabled, bool cashmode, int tax, string stationName)
     {
         Appraisal = appraisal;
         Count = count;
         Enabled = enabled;
         CashMode = cashmode;
         Tax = tax;
+        StationName = stationName;
     }
 }

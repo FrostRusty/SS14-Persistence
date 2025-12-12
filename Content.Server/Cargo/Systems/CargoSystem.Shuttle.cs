@@ -54,10 +54,17 @@ public sealed partial class CargoSystem
         {
             _uiSystem.SetUiState(uid,
                 CargoPalletConsoleUiKey.Sale,
-                new CargoPalletConsoleInterfaceState(0, 0, false, comp.CashMode, 0));
+                new CargoPalletConsoleInterfaceState(0, 0, false, comp.CashMode, 0, "Not Connected"));
             return;
         }
-        if (_station.GetOwningStation(uid) is not { } station ||
+        if (!TryComp<TradeStationComponent>(gridUid, out var tS) || tS == null)
+        {
+            _uiSystem.SetUiState(uid,
+                CargoPalletConsoleUiKey.Sale,
+                new CargoPalletConsoleInterfaceState(0, 0, false, comp.CashMode, 0, "Not Connected"));
+            return;
+        }
+        if (_station.GetOwningStation(uid, null,true) is not { } station ||
         !TryComp<StationDataComponent>(station, out var sD))
         {
             return;
@@ -69,7 +76,7 @@ public sealed partial class CargoSystem
 
         _uiSystem.SetUiState(uid,
             CargoPalletConsoleUiKey.Sale,
-            new CargoPalletConsoleInterfaceState((int) totalAmount, toSell.Count, true, comp.CashMode, tax));
+            new CargoPalletConsoleInterfaceState((int) totalAmount, toSell.Count, true, comp.CashMode, tax, sD.StationName));
     }
 
     private void OnPalletUIOpen(EntityUid uid, CargoPalletConsoleComponent component, BoundUIOpenedEvent args)
@@ -257,7 +264,7 @@ public sealed partial class CargoSystem
         {
             _uiSystem.SetUiState(uid,
                 CargoPalletConsoleUiKey.Sale,
-                new CargoPalletConsoleInterfaceState(0, 0, false, component.CashMode, 0));
+                new CargoPalletConsoleInterfaceState(0, 0, false, component.CashMode, 0, "Not Connected"));
             return;
         }
 

@@ -932,7 +932,7 @@ namespace Content.Server.Cargo.Systems
             var products = new List<ProtoId<CargoProductPrototype>>();
 
             // Note that a market must be both on the station and on the console to be available.
-            var markets = ent.Comp.AllowedGroups.Intersect(tradeComp.Markets).ToList();
+            var markets = tradeComp.Markets; //ent.Comp.AllowedGroups.Intersect(tradeComp.Markets).ToList();
             foreach (var product in _protoMan.EnumeratePrototypes<CargoProductPrototype>())
             {
                 if (!markets.Contains(product.Group))

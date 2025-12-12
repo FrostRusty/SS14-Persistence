@@ -61,13 +61,6 @@
             - type: TradeStation
           paths:
             - /Maps/Shuttles/trading_outpost.yml
-        trade2: !type:GridSpawnGroup
-          addComponents:
-            - type: ProtectedGrid
-            - type: TradeStation
-          paths:
-            - /Maps/Shuttles/trading_outpost.yml
-
         # Spawn last
         ruins: !type:GridSpawnGroup
           hide: true
