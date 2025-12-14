@@ -9,7 +9,7 @@ using Robust.Shared.Utility;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Server)]
-public sealed class PersistenceLoad : LocalizedEntityCommands
+public sealed class PersistenceLoadCommand : LocalizedEntityCommands
 {
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
@@ -30,30 +30,7 @@ public sealed class PersistenceLoad : LocalizedEntityCommands
         var path = args[0];
 
         var loadId = new ResPath(path);
-        bool save_stat = _mapLoader.TryLoadEntity(loadId, out var entity);
+        bool save_stat = _mapLoader.TryLoadMap(loadId, out var entity, out var grids);
         shell.WriteLine(Loc.GetString("Did the thing load? ") + $"{save_stat}" + $"{entity}");
-        var player = shell.Player;
-
-        if (player == null)
-        {
-            shell.WriteLine(Loc.GetString("shell-only-players-can-run-this-command"));
-            return;
-        }
-
-        if (player.AttachedEntity == null)
-        {
-            shell.WriteLine(Loc.GetString("shell-must-be-attached-to-entity"));
-            return;
-        }
-
-        EntityUid pe = player.AttachedEntity.Value;
-        var coords = _entManager.GetComponent<TransformComponent>(pe).Coordinates;
-        if (entity != null)
-        {
-            _transform.SetCoordinates(entity.Value, coords);
-        }
-
-        
-        
     }
 }
