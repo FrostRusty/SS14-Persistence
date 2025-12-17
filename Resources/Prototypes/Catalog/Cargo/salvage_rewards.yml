@@ -5,9 +5,9 @@
     sprite: Objects/Tanks/emergency_double.rsi
     state: icon
   product: CrateDoubleEmergencyTank
-  cost: 2400
+  cost: 4000
   category: cargoproduct-category-name-cargo
-  group: SalvageJobReward2
+  group: market2
 
 - type: cargoProduct
   id: CargoSeismicCharge
@@ -15,9 +15,9 @@
     sprite: Objects/Weapons/Bombs/seismic.rsi
     state: icon
   product: CrateSeismicCharge
-  cost: 1800
+  cost: 2500
   category: cargoproduct-category-name-cargo
-  group: SalvageJobReward2
+  group: market2
 
 - type: cargoProduct
   id: CargoCrusher
@@ -27,7 +27,7 @@
   product: CrateCrusher
   cost: 5000
   category: cargoproduct-category-name-cargo
-  group: SalvageJobReward2
+  group: market2
 
 - type: cargoProduct
   id: CargoSalvageHardsuit
@@ -48,7 +48,7 @@
   product: CrateFulton
   cost: 3000
   category: cargoproduct-category-name-cargo
-  group: SalvageJobReward3
+  group: market3
 
 - type: cargoProduct
   id: CargoVoidJetpack
@@ -58,7 +58,7 @@
   product: CrateVoidJetpack
   cost: 4000
   category: cargoproduct-category-name-cargo
-  group: SalvageJobReward3
+  group: market3
 
 - type: cargoProduct
   id: CargoCrusherGlaive
@@ -68,7 +68,7 @@
   product: CrateCrusherGlaive
   cost: 8000
   category: cargoproduct-category-name-cargo
-  group: SalvageJobReward3
+  group: market3
 
 # Max Rank
 
@@ -80,4 +80,4 @@
   product: CrateSupremeSalvagerCloak
   cost: 25000
   category: cargoproduct-category-name-cargo
-  group: SalvageJobRewardMAX
+  group: market4

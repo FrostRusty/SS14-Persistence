@@ -24,7 +24,7 @@
     sprite: Clothing/Mask/breath.rsi
     state: icon
   product: CrateEmergencyInternals
-  cost: 600
+  cost: 1000
   category: cargoproduct-category-name-emergency
   group: market
 
@@ -34,7 +34,7 @@
     sprite: Clothing/Mask/breath.rsi
     state: icon
   product: CrateEmergencyInternalsLarge
-  cost: 1200
+  cost: 2000
   category: cargoproduct-category-name-emergency
   group: market
 
@@ -44,7 +44,7 @@
     sprite: Structures/Wallmounts/signs.rsi
     state: radiation
   product: CrateEmergencyRadiation
-  cost: 1000
+  cost: 1500
   category: cargoproduct-category-name-emergency
   group: market
 
@@ -54,7 +54,7 @@
     sprite: Objects/Misc/inflatable_wall.rsi
     state: item_wall
   product: CrateEmergencyInflatablewall
-  cost: 500
+  cost: 750
   category: cargoproduct-category-name-emergency
   group: market
 
@@ -74,6 +74,18 @@
     sprite: Clothing/Head/Hoods/Bio/general.rsi
     state: icon
   product: CrateGenericBiosuit
-  cost: 800
+  cost: 100
   category: cargoproduct-category-name-emergency
   group: market
+
+## Engineermarket
+
+- type: cargoProduct
+  id: EmergencyInflatablewallETS
+  icon:
+    sprite: Objects/Misc/inflatable_wall.rsi
+    state: item_wall
+  product: CrateEmergencyInflatablewall
+  cost: 500
+  category: cargoproduct-category-name-emergency
+  group: engineermarket

@@ -6,7 +6,7 @@
   product: EnergySword
   cost: 15000
   category: cargoproduct-category-name-syndicate
-  group: syndicatemarket
+  group: syndicatemarket3
 
 - type: cargoProduct
   id: EnergyDagger
@@ -16,7 +16,7 @@
   product: EnergyDaggerBox
   cost: 7500
   category: cargoproduct-category-name-syndicate
-  group: syndicatemarket
+  group: syndicatemarket2
 
 - type: cargoProduct
   id: DoubleEnergySword
@@ -26,7 +26,7 @@
   product: EnergySwordDouble
   cost: 25000
   category: cargoproduct-category-name-syndicate
-  group: syndicatemarket
+  group: syndicatemarket4
 
 - type: cargoProduct
   id: EnergyShield
