@@ -54,7 +54,7 @@
   startNode: start
   targetNode: defibrillator_cabinet
   category: construction-category-furniture
-  description: A small wall mounted cabinet designed to hold a defibrillator.
+  description: recipes-defib-cabinet
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
@@ -67,7 +67,7 @@
   startNode: start
   targetNode: extinguisher_cabinet
   category: construction-category-furniture
-  description: A small wall mounted cabinet designed to hold a fire extinguisher.
+  description: recipes-extinguisher-cabinet
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
@@ -80,7 +80,7 @@
   startNode: start
   targetNode: fireaxe_cabinet
   category: construction-category-furniture
-  description: A lockable wallmounted cabinet for securing a fireaxe.
+  description: recipes-fireaxe-cabinet
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
@@ -93,7 +93,7 @@
   startNode: start
   targetNode: shotgun_cabinet
   category: construction-category-furniture
-  description: A lockable wallmounted cabinet for securing a kammerer.
+  description: recipes-shotgun-cabinet
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
