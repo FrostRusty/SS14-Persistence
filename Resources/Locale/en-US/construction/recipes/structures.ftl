@@ -1,4 +1,8 @@
+construction-recipe-diagonal-girder = girder (diagonal)
+construction-recipe-diagonal-reinforced-girder = reinforced girder (diagonal)
 construction-recipe-diagonal-shuttle-wall = shuttle wall (diagonal)
+construction-recipe-diagonal-solid-wall = solid wall (diagonal)
+construction-recipe-diagonal-reinforced-wall = reinforced wall (diagonal)
 construction-window-diagonal = window (diagonal)
 construction-recipe-reinforced-window-diagonal = reinforced window (diagonal)
 construction-recipe-clockwork-window-diagonal = clockwork window (diagonal)
@@ -25,3 +29,8 @@ construction-recipe-pinion-airlock-glass = glass clockwork airlock
 construction-recipe-airlock-glass-shuttle = glass shuttle airlock
 construction-recipe-plastic-flaps-clear = plastic flaps (clear)
 construction-recipe-plastic-flaps-opaque = plastic flaps (opaque)
+construction-recipe-button-frame-grey = button frame (grey)
+construction-recipe-button-frame-caution = button frame (caution)
+construction-recipe-button-frame-danger = button frame (danger)
+construction-recipe-button-frame-exit = button frame (exit)
+construction-recipe-button-frame-janitor = button frame (janitor)

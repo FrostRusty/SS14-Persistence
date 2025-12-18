@@ -128,6 +128,9 @@ construction-graph-tag-surveillance-camera-monitor-board = surveillance camera m
 construction-graph-tag-television-board = television board
 construction-graph-tag-freezer-electronics = freezer electronics
 construction-graph-tag-turret-control-electronics = sentry turret control panel electronics
+construction-graph-tag-morgue-electronics = morgue electronics
+construction-graph-tag-crematorium-electronics = crematorium electronics
+construction-graph-tag-bar-sign-electronics = bar sign electronics
 
 # crystals
 construction-graph-tag-cyan-crystal-shard = cyan crystal shard

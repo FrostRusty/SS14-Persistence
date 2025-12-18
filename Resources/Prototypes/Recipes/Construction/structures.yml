@@ -49,6 +49,48 @@
   canBuildInImpassable: false
   conditions:
     - !type:TileNotBlocked
+  
+- type: construction
+  id: GirderDiagonal
+  name: construction-recipe-diagonal-girder
+  graph: GirderDiagonal
+  startNode: start
+  targetNode: girder
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ReinforcedGirderDiagonal
+  name: construction-recipe-diagonal-reinforced-girder
+  graph: GirderDiagonal
+  startNode: start
+  targetNode: reinforcedGirder
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: DiagonalWall
+  name: construction-recipe-diagonal-solid-wall
+  graph: GirderDiagonal
+  startNode: start
+  targetNode: wallDiagonal
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
 
 - type: construction
   id: ReinforcedWall
@@ -59,6 +101,20 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: WallReinforcedDiagonal
+  name: construction-recipe-diagonal-reinforced-wall
+  graph: GirderDiagonal
+  startNode: start
+  targetNode: reinforcedWallDiagonal
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
   canBuildInImpassable: false
   conditions:
     - !type:TileNotBlocked
@@ -437,6 +493,20 @@
     - !type:NoWindowsInTile
   objectType: Structure
   placementMode: SnapgridCenter
+
+- type: construction
+  id: ShuttleWindowDiagonal
+  graph: WindowDiagonal
+  startNode: start
+  targetNode: shuttleWindowDiagonal
+  category: construction-category-structures
+  canBuildInImpassable: true
+  conditions:
+    - !type:EmptyOrWindowValidInTile
+    - !type:NoWindowsInTile
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
 
 - type: construction
   id: WindowDirectional
@@ -1328,3 +1398,40 @@
   canBuildInImpassable: false
   conditions:
     - !type:TileNotBlocked
+# Persistence14 stuff
+- type: construction
+  id: Morgue
+  graph: MorgueGraph
+  startNode: start
+  targetNode: morgue
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: Crematorium
+  graph: CrematoriumGraph
+  startNode: start
+  targetNode: crematorium
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: BarSignDefault
+  graph: BarSignGraph
+  startNode: start
+  targetNode: bar_sign
+  category: construction-category-furniture
+  description: A LED sign sure to catch the attention of any wayward spacers.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+    - !type:WallmountCondition

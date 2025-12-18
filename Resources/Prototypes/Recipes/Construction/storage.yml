@@ -48,6 +48,58 @@
   conditions:
     - !type:TileNotBlocked
 
+- type: construction
+  id: DefibrillatorCabinetOpen
+  graph: DefibrillatorCabinetGraph
+  startNode: start
+  targetNode: defibrillator_cabinet
+  category: construction-category-furniture
+  description: A small wall mounted cabinet designed to hold a defibrillator.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+    - !type:WallmountCondition
+
+- type: construction
+  id: ExtinguisherCabinetOpen
+  graph: ExtinguisherCabinetGraph
+  startNode: start
+  targetNode: extinguisher_cabinet
+  category: construction-category-furniture
+  description: A small wall mounted cabinet designed to hold a fire extinguisher.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+    - !type:WallmountCondition
+
+- type: construction
+  id: FireAxeCabinetOpen
+  graph: FireAxeCabinetGraph
+  startNode: start
+  targetNode: fireaxe_cabinet
+  category: construction-category-furniture
+  description: A lockable wallmounted cabinet for securing a fireaxe.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+    - !type:WallmountCondition
+
+- type: construction
+  id: ShotGunCabinetOpen
+  graph: ShotGunCabinetGraph
+  startNode: start
+  targetNode: shotgun_cabinet
+  category: construction-category-furniture
+  description: A lockable wallmounted cabinet for securing a kammerer.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+    - !type:WallmountCondition
+
 # Shelfs
 # Normals
 - type: construction

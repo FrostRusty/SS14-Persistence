@@ -48,6 +48,8 @@
   - CellRechargerCircuitboard
   - WeaponCapacitorRechargerCircuitboard
   - FreezerElectronics
+  - MorgueElectronics
+  - BarSignElectronics
 
 - type: latheRecipePack
   id: EngineeringBoardsStatic

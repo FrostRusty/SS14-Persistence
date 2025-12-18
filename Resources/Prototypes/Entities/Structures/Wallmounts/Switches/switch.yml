@@ -186,6 +186,9 @@
     - state: locked
       map: ["enum.LockVisualLayers.Lock"]
       shader: unshaded
+  - type: Construction
+    graph: LockableButtonDirectionalGraph
+    node: LockableButtonDirectionalNode
 
 - type: entity
   parent: LockableButton
@@ -468,6 +471,9 @@
     drawdepth: SmallObjects
     sprite: Structures/Wallmounts/switch_frame.rsi
     state: grey
+  - type: Construction
+    graph: ButtonFrameGreyGraph
+    node: grey
 
 - type: entity
   id: ButtonFrameCaution
@@ -478,6 +484,9 @@
     drawdepth: SmallObjects
     sprite: Structures/Wallmounts/switch_frame.rsi
     state: caution
+  - type: Construction
+    graph: ButtonFrameCautionGraph
+    node: caution
 
 - type: entity
   id: ButtonFrameCautionSecurity
@@ -488,6 +497,9 @@
     drawdepth: SmallObjects
     sprite: Structures/Wallmounts/switch_frame.rsi
     state: caution_security
+  - type: Construction
+    graph: ButtonFrameDangerGraph
+    node: danger
 
 - type: entity
   id: ButtonFrameExit
@@ -498,6 +510,9 @@
     drawdepth: SmallObjects
     sprite: Structures/Wallmounts/switch_frame.rsi
     state: exit
+  - type: Construction
+    graph: ButtonFrameExitGraph
+    node: exit
 
 - type: entity
   id: ButtonFrameJanitor
@@ -508,3 +523,6 @@
     drawdepth: SmallObjects
     sprite: Structures/Wallmounts/switch_frame.rsi
     state: janitor
+  - type: Construction
+    graph: ButtonFrameJanitorGraph
+    node: janitor

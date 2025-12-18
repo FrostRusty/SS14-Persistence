@@ -6,7 +6,6 @@
     mode: SnapgridCenter
   components:
   - type: Pullable
-  - type: Anchorable
   - type: Sprite
     sprite: Structures/Storage/morgue.rsi
     layers:
@@ -73,6 +72,47 @@
   - type: AntiRottingContainer
   - type: StaticPrice
     price: 200
+  - type: Construction
+    graph: MorgueGraph
+    node: morgue
+
+- type: entity
+  id: MorgueAssembly
+  name: morgue assembly
+  description: Used to store bodies once completed. 
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Pullable
+  - type: Rotatable
+  - type: Anchorable
+  - type: Sprite
+    sprite: Structures/Storage/morgue.rsi
+    layers:
+    - state: morgue_assembly
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - HalfWallLayer
+  - type: Appearance
+  - type: Transform
+    anchored: true
+  - type: StaticPrice
+    price: 200
+  - type: Construction
+    graph: MorgueGraph
+    node: cables
 
 - type: entity
   id: Crematorium
@@ -143,3 +183,44 @@
           False: { visible: false }
   - type: Transform
     anchored: true
+  - type: Construction
+    graph: CrematoriumGraph
+    node: crematorium
+
+- type: entity
+  id: CrematoriumAssembly
+  name: crematorium assembly
+  description: The assembly for an incinerator.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Pullable
+  - type: Rotatable
+  - type: Anchorable
+  - type: Sprite
+    sprite: Structures/Storage/morgue.rsi
+    layers:
+    - state: crema_assembly
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - HalfWallLayer
+  - type: Appearance
+  - type: Transform
+    anchored: true
+  - type: StaticPrice
+    price: 200
+  - type: Construction
+    graph: CrematoriumGraph
+    node: crematorelectronics

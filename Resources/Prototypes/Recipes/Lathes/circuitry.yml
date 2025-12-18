@@ -26,6 +26,21 @@
   id: MailingUnitElectronics
   result: MailingUnitElectronics
 
+- type: latheRecipe
+  parent: [ BaseCheapElectronicsRecipe, BaseCircuitryRecipeCategory ]
+  id: BarSignElectronics
+  result: BarSignElectronics
+
+- type: latheRecipe
+  parent: [ BaseElectronicsRecipe, BaseCircuitryRecipeCategory ]
+  id: MorgueElectronics
+  result: MorgueElectronics
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseCircuitryRecipeCategory ]
+  id: CrematoriumElectronics
+  result: CrematoriumElectronics
+
 # Airtight
 - type: latheRecipe
   parent: [ BaseCheapElectronicsRecipe, BaseCircuitryRecipeCategory ]

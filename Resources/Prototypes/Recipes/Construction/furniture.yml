@@ -481,6 +481,54 @@
   conditions:
     - !type:TileNotBlocked
 
+- type: construction
+  id: SinkEmpty
+  graph: SinkEmpty
+  startNode: start
+  targetNode: sinkempty
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: SinkWide
+  graph: SinkWide
+  startNode: start
+  targetNode: sinkwide
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: SinkStemless
+  graph: SinkStemless
+  startNode: start
+  targetNode: sinkstemless
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: FloorDrain
+  graph: FloorDrain
+  startNode: start
+  targetNode: drain
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
 #bedroom
 - type: construction
   id: Bed

@@ -41,6 +41,20 @@
     layoutId: BarSign
 
 - type: entity
+  id: BarSignAssembly
+  parent: [ BaseWallmountGlass, BaseWallmountMachine ]
+  name: bar sign assembly
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    sprite: Structures/Wallmounts/barsign.rsi
+    state: assembly
+  - type: Construction
+    graph: BarSignGraph
+    node: glass
+
+- type: entity
   parent: BaseBarSign
   id: BarSign
   name: bar sign
@@ -61,6 +75,18 @@
 #  - type: ApcPowerReceiver
 #  - type: ExtensionCableReceiver
 #  - type: BarSign
+
+- type: entity
+  parent: BaseBarSign
+  id: BarSignDefault
+  name: bar sign
+  description: The default, uncustomized state of a bar sign. It's urging you to pick a style.
+  components:
+  - type: BarSign
+    current: Default
+  - type: Construction
+    graph: BarSignGraph
+    node: bar_sign
 
 - type: entity
   parent: BaseBarSign

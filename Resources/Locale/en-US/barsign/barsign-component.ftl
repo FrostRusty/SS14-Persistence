@@ -107,5 +107,9 @@ barsign-prototype-description-whiskeyechoes = An elite bar for elite oper-wait, 
 ## EmpBarSign
 barsign-prototype-description-empbarsign = Something has gone very wrong.
 
+## Default
+barsign-prototype-name-default = Factory New
+barsign-prototype-description-default = The default state of most bar signs. Requires the owner to select their design of choice.
+
 ## SignOff
 barsign-prototype-description-sign-off = This sign doesn't seem to be on.

@@ -197,3 +197,11 @@
     sprite: Structures/Wallmounts/barsign.rsi
     state: whiskeyechoes
   description: barsign-prototype-description-whiskeyechoes
+
+- type: barSign
+  id: Default
+  name: barsign-prototype-name-default
+  icon:
+    sprite: Structures/Wallmounts/barsign.rsi
+    state: default
+  description: barsign-prototype-description-default

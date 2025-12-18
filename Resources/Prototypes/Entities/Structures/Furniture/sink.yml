@@ -1,6 +1,7 @@
 - type: entity
   name: sink
-  id: SinkEmpty
+  id: BaseSink
+  abstract: true
   suffix: Empty
   description: The faucets have been tightened to the maximum possible torque but are still known to drip.
   placement:
@@ -66,11 +67,19 @@
     sound:
       path: /Audio/Ambience/Objects/drain.ogg
 
+- type: entity
+  name: sink
+  id: SinkEmpty # Separated from BaseSink to prevent warnings
+  parent: BaseSink
+  components:
+  - type: Construction
+    graph: SinkEmpty
+    node: sinkempty
 
 - type: entity
   name: sink
   id: Sink
-  parent: SinkEmpty
+  parent: BaseSink
   suffix: Water
   components:
   - type: SolutionContainerManager
@@ -82,29 +91,56 @@
         - ReagentId: Water
           Quantity: 500
 
+#Wide sink
+
+- type: entity
+  name: wide sink
+  id: BaseSinkWide
+  parent: BaseSink
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/sink.rsi
+    layers:
+      - state: sink_wide
+      - map: [ "enum.SolutionContainerLayers.Fill" ]
+        state: sink_wide-fill-1
+        visible: false
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    fillBaseName: sink_wide-fill-
+    solutionName: drainBuffer
+
 - type: entity
   name: wide sink
   id: SinkWide
-  parent: Sink
+  parent: BaseSinkWide
   components:
-    - type: Sprite
-      sprite: Structures/Furniture/sink.rsi
-      layers:
-        - state: sink_wide
-        - map: [ "enum.SolutionContainerLayers.Fill" ]
-          state: sink_wide-fill-1
-          visible: false
-    - type: SolutionContainerVisuals
-      maxFillLevels: 1
-      fillBaseName: sink_wide-fill-
-      solutionName: drainBuffer
+  - type: Construction
+    graph: SinkWide
+    node: sinkwide
+
+- type: entity
+  name: wide sink
+  id: SinkWideWater
+  parent: BaseSinkWide
+  suffix: Water
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      drainBuffer:
+        maxVol: 100
+      tank:
+        reagents:
+        - ReagentId: Water
+          Quantity: 500
 
 #Stemless Sink
 
 - type: entity
   name: sink
-  id: SinkStemless
-  parent: SinkEmpty
+  id: BaseSinkStemless
+  parent: BaseSink
+  abstract: true
   components:
   - type: Sprite
     sprite: Structures/Furniture/sink.rsi
@@ -116,8 +152,17 @@
 
 - type: entity
   name: sink
+  id: SinkStemless
+  parent: BaseSinkStemless
+  components:
+  - type: Construction
+    graph: SinkStemless
+    node: sinkstemless
+
+- type: entity
+  name: sink
   id: SinkStemlessWater
-  parent: SinkStemless
+  parent: BaseSinkStemless
   suffix: Water
   components:
   - type: SolutionContainerManager

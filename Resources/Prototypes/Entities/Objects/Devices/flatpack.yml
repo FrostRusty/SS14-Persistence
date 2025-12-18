@@ -323,3 +323,27 @@
     guides:
     - Botany
     - Chemicals
+
+- type: entity
+  parent: BaseFlatpack
+  id: TinyFanFlatpack
+  name: tiny fan flatpack
+  description: A flatpack used for constructing a tiny fan. Useful for keeping gases in or out.
+  components:
+  - type: Flatpack
+    entity: AtmosDeviceFanTiny
+  - type: Sprite
+    layers:
+    - state: fan
+
+- type: entity
+  parent: BaseFlatpack
+  id: DirectionalFanFlatpack
+  name: directional fan flatpack
+  description: A flatpack used for constructing a directional fan. Useful for keeping gases in or out.
+  components:
+  - type: Flatpack
+    entity: AtmosDeviceFanDirectional
+  - type: Sprite
+    layers:
+    - state: fan

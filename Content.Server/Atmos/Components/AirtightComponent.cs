@@ -55,6 +55,9 @@ namespace Content.Server.Atmos.Components
         [DataField]
         public bool NoAirWhenFullyAirBlocked { get; set; } = true;
 
+        [DataField("requiresPower")]
+        public bool RequiresPower { get; set; } = false;
+
         /// <inheritdoc cref="CurrentAirBlockedDirection"/>
         [Access(Other = AccessPermissions.ReadWriteExecute)]
         public AtmosDirection AirBlockedDirection => (AtmosDirection)CurrentAirBlockedDirection;

@@ -1412,3 +1412,91 @@
   sprites:
   - sprite: Mobs/Customization/human_hair.rsi
     state: overeyepigtail
+# Persistence Additions
+- type: marking
+  id: HumanHairCIA2
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_cia2
+
+- type: marking
+  id: HumanHairCIA3
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_cia3
+
+- type: marking
+  id: HumanHairCIA5
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_cia5
+
+- type: marking
+  id: HumanHairIRS
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_irs
+
+- type: marking
+  id: HumanHairFlatPressed
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_flatpressed
+
+- type: marking
+  id: HumanHairWaver
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_waver
+
+- type: marking
+  id: HumanHairElegant
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_elegantbun
+
+- type: marking
+  id: HumanHairLowBun
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_low_bun
+
+- type: marking
+  id: HumanHairLowBunAlt
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_low_bun_alt
+
+- type: marking
+  id: HumanHairLowPonyTail
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_low_ponytail
+
+- type: marking
+  id: HumanHairLowPonyTailAlt
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair_persistence.rsi
+      state: hair_low_ponytail_alt

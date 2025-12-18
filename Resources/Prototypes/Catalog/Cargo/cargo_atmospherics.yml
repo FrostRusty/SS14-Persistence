@@ -241,3 +241,23 @@
   cost: 3000
   category: cargoproduct-category-name-engineering
   group: engineermarket
+
+- type: cargoProduct
+  id: TinyFanCargo
+  icon:
+    sprite: Objects/Devices/flatpack.rsi
+    state: fan
+  product: TinyFanFlatpack
+  cost: 4000
+  category: cargoproduct-category-name-engineering
+  group: market
+
+- type: cargoProduct
+  id: DirectionalFanCargo
+  icon:
+    sprite: Objects/Devices/flatpack.rsi
+    state: fan
+  product: DirectionalFanFlatpack
+  cost: 4000
+  category: cargoproduct-category-name-engineering
+  group: market

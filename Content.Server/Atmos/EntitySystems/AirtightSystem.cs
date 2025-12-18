@@ -1,6 +1,8 @@
 using Content.Server.Atmos.Components;
 using Content.Server.Explosion.EntitySystems;
+using Content.Server.Power.EntitySystems;
 using Content.Shared.Atmos;
+using Content.Shared.Power;
 using JetBrains.Annotations;
 using Robust.Shared.Map.Components;
 
@@ -13,6 +15,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private readonly ExplosionSystem _explosionSystem = default!;
         [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+        [Dependency] private readonly PowerReceiverSystem _powerReceiverSystem = default!;
 
         public override void Initialize()
         {
@@ -21,6 +24,7 @@ namespace Content.Server.Atmos.EntitySystems
             SubscribeLocalEvent<AirtightComponent, AnchorStateChangedEvent>(OnAirtightPositionChanged);
             SubscribeLocalEvent<AirtightComponent, ReAnchorEvent>(OnAirtightReAnchor);
             SubscribeLocalEvent<AirtightComponent, MoveEvent>(OnAirtightMoved);
+            SubscribeLocalEvent<AirtightComponent, PowerChangedEvent>(OnPowerChanged);
         }
 
         private void OnAirtightInit(Entity<AirtightComponent> airtight, ref ComponentInit args)
@@ -89,6 +93,23 @@ namespace Content.Server.Atmos.EntitySystems
             UpdatePosition(ent, ev.Component);
             var airtightEv = new AirtightChanged(owner, airtight, false, pos);
             RaiseLocalEvent(owner, ref airtightEv, true);
+        }
+        private void OnPowerChanged(Entity<AirtightComponent> airtight, ref PowerChangedEvent args)
+        {
+            var xform = Transform(airtight);
+
+            if (airtight.Comp.RequiresPower == false)
+                return;
+
+            if (!_powerReceiverSystem.IsPowered(airtight) && airtight.Comp.RequiresPower == true)
+            {
+                SetAirblocked(airtight, false, xform);
+            }
+            if (_powerReceiverSystem.IsPowered(airtight) && airtight.Comp.RequiresPower == true)
+            {
+                SetAirblocked(airtight, true, xform);
+            }
+
         }
 
         public void SetAirblocked(Entity<AirtightComponent> airtight, bool airblocked, TransformComponent? xform = null)

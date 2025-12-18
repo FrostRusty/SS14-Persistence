@@ -8,11 +8,28 @@
   components:
   - type: Transform
     anchored: true
+  - type: Anchorable
+  - type: Pullable
   - type: Physics
     bodyType: Static
+  - type: ApcPowerReceiver
+    powerLoad: 500
+  - type: ExtensionCableReceiver
+  - type: LightningTarget
+    priority: 1
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/tinyfan.rsi
-    state: icon
+    layers:
+    - state: fan-off
+    - state: fan-on
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: {visible: true}
+          False: {visible: false}
   - type: Fixtures
     fixtures:
       fix1:
@@ -21,6 +38,7 @@
             bounds: "-0.5,-0.5,0.5,0.5"
   - type: Airtight
     noAirWhenFullyAirBlocked: false
+    requiresPower: true
   - type: Clickable
   - type: Tag
     tags:
@@ -35,11 +53,29 @@
   components:
   - type: Transform
     anchored: true
+  - type: Anchorable
+  - type: Pullable
+  - type: Rotatable
   - type: Physics
     bodyType: Static
+  - type: ApcPowerReceiver
+    powerLoad: 500
+  - type: ExtensionCableReceiver
+  - type: LightningTarget
+    priority: 1
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/directionalfan.rsi
-    state: icon
+    layers:
+    - state: fan-off
+    - state: fan-on
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: {visible: true}
+          False: {visible: false}
   - type: Fixtures
     fixtures:
       fix1:
@@ -50,6 +86,7 @@
     noAirWhenFullyAirBlocked: false
     airBlockedDirection:
       - South
+    requiresPower: true
   - type: Clickable
   - type: Tag
     tags:
