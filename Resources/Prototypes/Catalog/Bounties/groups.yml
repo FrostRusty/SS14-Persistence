@@ -13,6 +13,18 @@
 - type: cargoBountyGroup
   id: HunterBounty
   name: Hunting
+
+- type: cargoBountyGroup
+  id: EngineeringBounty
+  name: Engineering
+
+- type: cargoBountyGroup
+  id: ScienceBounty
+  name: Science
+
+- type: cargoBountyGroup
+  id: CrimeBounty
+  name: ???
   
 - type: cargoBountyGroup
   id: SalvageJobTier1

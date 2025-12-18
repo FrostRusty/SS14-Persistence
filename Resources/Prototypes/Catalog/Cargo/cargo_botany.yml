@@ -4,9 +4,9 @@
     sprite: Objects/Specific/Hydroponics/banana.rsi
     state: seed
   product: CrateHydroponicsSeedsExotic
-  cost: 1000
+  cost: 5000
   category: cargoproduct-category-name-hydroponics
-  group: market
+  group: market3
 
 - type: cargoProduct
   id: HydroponicsSeedsMedicinal
@@ -14,9 +14,9 @@
     sprite: Objects/Specific/Hydroponics/galaxythistle.rsi
     state: seed
   product: CrateHydroponicsSeedsMedicinal
-  cost: 500
+  cost: 2500
   category: cargoproduct-category-name-hydroponics
-  group: market
+  group: market2
 
 - type: cargoProduct
   id: HydroponicsTools
@@ -24,7 +24,7 @@
     sprite: Objects/Tools/Hydroponics/hoe.rsi
     state: icon
   product: CrateHydroponicsTools
-  cost: 500
+  cost: 1000
   category: cargoproduct-category-name-hydroponics
   group: market
 
@@ -34,7 +34,7 @@
     sprite: Objects/Specific/Hydroponics/apple.rsi
     state: seed
   product: CrateHydroponicsSeeds
-  cost: 600
+  cost: 2000
   category: cargoproduct-category-name-hydroponics
   group: market
 
@@ -44,7 +44,7 @@
     sprite: Objects/Specific/Chemistry/jug.rsi
     state: jug
   product: CratePlantBGone
-  cost: 750
+  cost: 1500
   category: cargoproduct-category-name-hydroponics
   group: market
 
@@ -54,6 +54,6 @@
     sprite: Structures/Hydroponics/containers.rsi
     state: hydrotray3
   product: CrateHydroponicsTray
-  cost: 750
+  cost: 1250
   category: cargoproduct-category-name-hydroponics
   group: market

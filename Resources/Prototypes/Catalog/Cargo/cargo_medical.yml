@@ -166,7 +166,7 @@
   product: LockerChiefMedicalOfficerFilledHardsuit
   cost: 12500
   category: cargoproduct-category-name-medical
-  group: market
+  group: market2
 
 - type: cargoProduct
   id: MedicalTechFabCircuitboard
@@ -176,4 +176,4 @@
   product: MedicalTechFabCircuitboard
   cost: 7500
   category: cargoproduct-category-name-medical
-  group: market
+  group: market2

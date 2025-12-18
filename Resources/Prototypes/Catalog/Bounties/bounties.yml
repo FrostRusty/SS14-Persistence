@@ -8,6 +8,7 @@
     whitelist:
       components:
       - XenoArtifact
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyBaseballBat
@@ -84,6 +85,7 @@
     whitelist:
       tags:
       - Carp
+  group: HunterBounty
 
 - type: cargoBounty
   id: BountyClownCostume
@@ -100,6 +102,7 @@
     whitelist:
       tags:
       - ClownShoes
+  group: ExplorerBounty
 
 - type: cargoBounty
   id: BountyCorn
@@ -113,7 +116,6 @@
       - Corn
   group: ServiceBounty
 
-
 - type: cargoBounty
   id: BountyCrayon
   reward: 4000
@@ -124,6 +126,7 @@
     whitelist:
       tags:
       - Crayon
+  group: ExplorerBounty
 
 - type: cargoBounty
   id: BountyCubanCarp
@@ -136,6 +139,7 @@
     whitelist:
       tags:
       - CubanCarp
+  group: HunterBounty
 
 - type: cargoBounty
   id: BountyDonut
@@ -161,6 +165,7 @@
     whitelist:
       tags:
       - Figurine
+  group: ExplorerBounty
 
 - type: cargoBounty
   id: BountyFlower
@@ -207,6 +212,7 @@
     whitelist:
       components:
       - Instrument
+  group: ExplorerBounty
 
 - type: cargoBounty
   id: BountyKnife
@@ -292,6 +298,7 @@
     whitelist:
       tags:
       - Pancake
+  group: ServiceBounty
 
 - type: cargoBounty
   id: BountyPen
@@ -314,6 +321,7 @@
     whitelist:
       tags:
       - PercussionInstrument
+  group: ExplorerBounty
 
 - type: cargoBounty
   id: BountyPie
@@ -328,6 +336,7 @@
     blacklist:
       tags:
       - Slice
+  group: ServiceBounty
 
 - type: cargoBounty
   id: BountyPrisonUniform
@@ -422,6 +431,7 @@
     whitelist:
       components:
       - TechnologyDisk
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyToolbox
@@ -456,6 +466,7 @@
     whitelist:
       components:
       - AnomalyCore
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyBorgModule
@@ -467,6 +478,7 @@
     whitelist:
       components:
       - BorgModule
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyArtifactFragment
@@ -478,6 +490,7 @@
     whitelist:
       tags:
       - ArtifactFragment
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyOrgans
@@ -530,6 +543,7 @@
     whitelist:
       components:
       - Battery
+  group: EngineeringBounty
 
 - type: cargoBounty
   id: BountyLaserGun
@@ -662,6 +676,7 @@
     whitelist:
       tags:
       - Banana
+  group: ServiceBounty
 
 - type: cargoBounty
   id: BountyBeer
@@ -684,6 +699,7 @@
     whitelist:
       tags:
       - HiViz
+  group: EngineeringBounty
 
 - type: cargoBounty
   id: BountyTorch
@@ -761,6 +777,7 @@
     whitelist:
       components:
       - Flash
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyRing
@@ -783,6 +800,7 @@
       whitelist:
         tags:
         - Steel
+  group: EngineeringBounty
 
 - type: cargoBounty
   id: BountyGold
@@ -816,6 +834,7 @@
       whitelist:
         tags:
         - Brass
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyPlasteel
@@ -827,6 +846,7 @@
       whitelist:
         tags:
         - Plasteel
+  group: EngineeringBounty
 
 - type: cargoBounty
   id: BountyPlasma
@@ -860,6 +880,7 @@
       whitelist:
         tags:
         - Wood
+  group: ServiceBounty
 
 - type: cargoBounty
   id: BountyUranium
@@ -882,6 +903,7 @@
       whitelist:
         tags:
         - Bananium
+  group: ScienceBounty
 
 - type: cargoBounty
   id: BountyCoal
@@ -904,3 +926,60 @@
       whitelist:
         tags:
         - Diamond
+
+- type: cargoBounty
+  id: BountyRipley
+  reward: 12500
+  description: bounty-description-ripley
+  entries:
+    - name: bounty-item-ripleyleftleg
+      amount: 1
+      whitelist:
+        tags:
+        - RipleyLLeg
+    - name: bounty-item-ripleyleftarm
+      amount: 1
+      whitelist:
+        tags:
+        - RipleyLArm
+    - name: bounty-item-ripleyrightleg
+      amount: 1
+      whitelist:
+        tags:
+        - RipleyRLeg
+    - name: bounty-item-ripleyrightarm
+      amount: 1
+      whitelist:
+        tags:
+        - RipleyRArm
+    - name: bounty-item-ripleycentral
+      amount: 1
+      whitelist:
+        tags:
+        - RipleyCentralControlModule
+    - name: bounty-item-ripleyperipheral
+      amount: 1
+      whitelist:
+        tags:
+        - RipleyPeripheralsControlModule
+    - name: bounty-item-powercell
+      amount: 1
+      whitelist:
+        tags:
+        - PowerCell
+    - name: bounty-item-steel
+      amount: 5
+      whitelist:
+        tags:
+        - SheetSteel
+    - name: bounty-item-rod
+      amount: 10
+      whitelist:
+        tags:
+        - PartRodMetal
+    - name: bounty-item-lvcable
+      amount: 1
+      whitelist:
+        tags:
+        - CableCoil
+  group: ScienceBounty

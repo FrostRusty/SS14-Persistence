@@ -4,7 +4,7 @@
     sprite: Structures/Storage/canister.rsi
     state: grey
   product: AirCanister
-  cost: 600
+  cost: 2500
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -14,7 +14,7 @@
     sprite: Structures/Storage/canister.rsi
     state: blue
   product: OxygenCanister
-  cost: 600
+  cost: 2000
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -24,7 +24,7 @@
     sprite: Structures/Storage/canister.rsi
     state: blue
   product: LiquidOxygenCanister
-  cost: 1000
+  cost: 3000
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -34,7 +34,7 @@
     sprite: Structures/Storage/canister.rsi
     state: red
   product: NitrogenCanister
-  cost: 500
+  cost: 1500
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -44,7 +44,7 @@
     sprite: Structures/Storage/canister.rsi
     state: red
   product: LiquidNitrogenCanister
-  cost: 1000
+  cost: 2500
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -54,7 +54,7 @@
     sprite: Structures/Storage/canister.rsi
     state: black
   product: CarbonDioxideCanister
-  cost: 670 # even though it's poisonous, it comes locked and only damages you slowly even with high amounts (tested)
+  cost: 1000 # even though it's poisonous, it comes locked and only damages you slowly even with high amounts (tested)
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -64,7 +64,7 @@
     sprite: Structures/Storage/canister.rsi
     state: black
   product: LiquidCarbonDioxideCanister
-  cost: 1800 # much less deadly than the plasma can (this has been tested) even though this is cold+poison
+  cost: 2250 # much less deadly than the plasma can (this has been tested) even though this is cold+poison
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -74,7 +74,7 @@
     sprite: Structures/Storage/canister.rsi
     state: yellow
   product: StorageCanister
-  cost: 210 # No gases in it so it's cheaper
+  cost: 500 # No gases in it so it's cheaper
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -94,7 +94,7 @@
     sprite: Structures/Storage/canister.rsi
     state: orange
   product: PlasmaCanister
-  cost: 4200 # for reference, bagel's 3x1 roundstart plasma chamber contains ~16kmol for free, this is $4.2k for 2769 mol
+  cost: 7500 # for reference, bagel's 3x1 roundstart plasma chamber contains ~16kmol for free, this is $4.2k for 2769 mol
   category: cargoproduct-category-name-atmospherics
   group: market
 
@@ -118,3 +118,126 @@
   cost: 4000
   category: cargoproduct-category-name-engineering
   group: market
+
+## Engineer Tradestation Variants
+
+- type: cargoProduct
+  id: AtmosphericsAirETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: grey
+  product: AirCanister
+  cost: 1250
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsOxygenETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: blue
+  product: OxygenCanister
+  cost: 1000
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsLiquidOxygenETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: blue
+  product: LiquidOxygenCanister
+  cost: 1500
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsNitrogenETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: red
+  product: NitrogenCanister
+  cost: 750
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsLiquidNitrogenETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: red
+  product: LiquidNitrogenCanister
+  cost: 1250
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsCarbonDioxideETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: black
+  product: CarbonDioxideCanister
+  cost: 500 # even though it's poisonous, it comes locked and only damages you slowly even with high amounts (tested)
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsLiquidCarbonDioxideETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: black
+  product: LiquidCarbonDioxideCanister
+  cost: 1125 # much less deadly than the plasma can (this has been tested) even though this is cold+poison
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsStorageETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: yellow
+  product: StorageCanister
+  cost: 350 # No gases in it so it's cheaper
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket
+
+#- type: cargoProduct
+#  id: AtmosphericsWaterVaporETS
+#  icon:
+#    sprite: Structures/Storage/canister.rsi
+#    state: water_vapor
+#  product: WaterVaporCanister
+#  cost: 1300
+#  category: cargoproduct-category-name-atmospherics
+#  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosphericsPlasmaETS
+  icon:
+    sprite: Structures/Storage/canister.rsi
+    state: orange
+  product: PlasmaCanister
+  cost: 5000 # for reference, bagel's 3x1 roundstart plasma chamber contains ~16kmol for free, this is $4.2k for 2769 mol
+  category: cargoproduct-category-name-atmospherics
+  group: engineermarket2
+
+#- type: cargoProduct
+#  id: AtmosphericsTritiumETS
+#  icon:
+#    sprite: Structures/Storage/canister.rsi
+#    state: green
+#  product: TritiumCanister
+#  cost: 15000
+#  category: cargoproduct-category-name-atmospherics
+#  group: engineermarket4
+
+
+- type: cargoProduct
+  id: LockerAtmosphericsETS
+  icon:
+    sprite: Clothing/Head/Hardsuits/atmospherics.rsi
+    state: icon
+  product: LockerAtmosphericsFilledHardsuit
+  cost: 3000
+  category: cargoproduct-category-name-engineering
+  group: engineermarket

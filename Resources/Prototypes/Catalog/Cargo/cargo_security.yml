@@ -107,7 +107,7 @@
   product: LockerBrigmedicFilled
   cost: 5000
   category: cargoproduct-category-name-security
-  group: market
+  group: market2
 
 - type: cargoProduct
   id: FilledWardenLocker
@@ -117,7 +117,7 @@
   product: LockerWardenFilledHardsuit
   cost: 9000
   category: cargoproduct-category-name-security
-  group: market
+  group: market2
 
 - type: cargoProduct
   id: FilledHoSLocker
@@ -127,4 +127,4 @@
   product: LockerHeadOfSecurityFilledHardsuitNoGun
   cost: 12500
   category: cargoproduct-category-name-security
-  group: market
+  group: market2
