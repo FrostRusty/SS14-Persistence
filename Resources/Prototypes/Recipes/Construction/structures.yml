@@ -506,7 +506,7 @@
     - !type:NoWindowsInTile
   objectType: Structure
   placementMode: SnapgridCenter
-  canRotate: false
+  canRotate: true
 
 - type: construction
   id: WindowDirectional
