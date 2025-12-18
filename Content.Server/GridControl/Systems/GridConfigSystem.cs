@@ -1,3 +1,4 @@
+using Content.Server.Cargo.Components;
 using Content.Server.Construction.Completions;
 using Content.Server.Popups;
 using Content.Server.Station.Systems;
@@ -53,6 +54,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly MapSystem _mapSystem = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IPrototypeManager _protoMan = default!;
 
     public override void Initialize()
     {
@@ -165,10 +167,16 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         var privilegedName = string.Empty;
         bool idPresent = false;
 
-
+        var targetGrid = _transform.GetGrid(uid);
+        bool tradeStationGrid = false;
+        if(TryComp<TradeStationComponent>(targetGrid, out var tradeStation))
+        {
+            tradeStationGrid = true;
+        }
+        
         if (component.PersonalMode)
         {
-            var targetGrid = _transform.GetGrid(uid);
+            if (tradeStationGrid) return false;
             if (targetGrid.HasValue && TryComp<MapGridComponent>(targetGrid, out var targetGridComp))
             {
                 var tiles = _mapSystem.GetAllTiles(targetGrid.Value, targetGridComp);
@@ -212,6 +220,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         {
             if (TryComp<StationDataComponent>(owningStation, out var owningSD) && owningSD != null)
             {
+
                 if (owningSD.Owners.Contains(privilegedName))
                 {
                     isOwner = true;
@@ -257,6 +266,22 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             if (targetStation == null) return false;
             if (TryComp<StationDataComponent>(targetStation, out var owningSD) && owningSD != null)
             {
+                _protoMan.Resolve(owningSD.Level, out var levelProto);
+                if (levelProto != null)
+                {
+                    if (!levelProto.TradestationClaim)
+                    {
+                        return false;
+                    }
+                    if (targetGrid.HasValue && TryComp<MapGridComponent>(targetGrid, out var targetGridComp))
+                    {
+                        var tiles = _mapSystem.GetAllTiles(targetGrid.Value, targetGridComp);
+                        if (tiles.Count() > levelProto.TileLimit))
+                            return false;
+                    }
+                    else
+                        return false;
+                }
                 if (owningSD.Owners.Contains(privilegedName))
                 {
                     isAuth = true;
@@ -569,16 +594,37 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
 
         GridConfigBoundUserInterfaceState newState;
         bool allowed = true;
-
+        string? errMsg = null;
         int gridTileCount = 0;
         if (TryComp<MapGridComponent>(grid, out var targetGridComp))
             gridTileCount = _mapSystem.GetAllTiles(grid.Value, targetGridComp).Count();
-
+        int tileLimit = _cfg.GetCVar(CCVars.GridClaimPersonalMaxTiles);
+        if (TryComp<TradeStationComponent>(grid, out var tradeStation) && tradeStation != null)
+        {
+            if(component.PersonalMode)
+            {
+                errMsg = "Trade stations cannot be claimed by individuals";
+            }
+            else
+            {
+                if (TryComp<StationDataComponent>(station, out var SD) && SD != null)
+                {
+                    _protoMan.Resolve(SD.Level, out var levelProto);
+                    if (levelProto != null)
+                    {
+                        if(!levelProto.TradestationClaim)
+                        {
+                            errMsg = "This faction cannot claim a trade station yet.";
+                        }
+                        tileLimit = levelProto.TileLimit;
+                    }
+                }
+            }
+        }
         newState = new GridConfigBoundUserInterfaceState(
             idPresent, isOwner, isAuth, component.PersonalMode, possibleStations,
             targetName, owningPerson, gridName, privilegedIdName, targetStation,
-            gridTileCount, _cfg.GetCVar(CCVars.GridClaimPersonalMaxTiles)
-        );
+            gridTileCount, tileLimit, errMsg);
 
         _userInterface.SetUiState(uid, GridConfigUiKey.Key, newState);
     }

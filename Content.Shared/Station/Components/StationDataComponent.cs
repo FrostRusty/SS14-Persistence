@@ -1,5 +1,7 @@
+using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.CrewAssignments.Systems;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Station.Components;
 
@@ -41,6 +43,9 @@ public sealed partial class StationDataComponent : Component
 
     [DataField, AutoNetworkedField]
     public int SalesTax = 0;
+
+    [DataField]
+    public ProtoId<FactionLevelPrototype> Level = "FactionLevel1";
 
     public bool IsOwner(string owner)
     {

@@ -15,7 +15,7 @@
             <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="15 5 15 10">
                 <Control MinHeight="5"/>
                 <BoxContainer Orientation="Horizontal">
-                    <Label Text="New Station Name:"
+                    <Label Text="Change Faction Name:"
                       StyleClasses="LabelKeyText" />
                     <Control MinWidth="20"/>
                     <LineEdit Name="StationNameField"
@@ -28,7 +28,7 @@
                 </BoxContainer>
                 <Control MinHeight="15"/>
                 <BoxContainer Orientation="Horizontal" MinHeight="80">
-                    <Label Text="Current Station Owners:"
+                    <Label Text="Current Faction Owners:"
                       StyleClasses="LabelKeyText" />
                     <Control MinWidth="20"/>
                     <PanelContainer VerticalExpand="True"
@@ -206,8 +206,57 @@
                     </BoxContainer>
                     
             </BoxContainer>
+            <!-- Upgrade Management -->
+            <BoxContainer Orientation="Vertical" Margin="15">
+                <Control MinHeight="5"/>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="Current Faction Level:"
+                      StyleClasses="LabelKeyText" />
+                    <Control MinWidth="20"/>
+                    <Label Name="CurrentFactionLevelLabel" Text="Small Faction" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" MinHeight="100">
+                    <PanelContainer VerticalExpand="True"
+                                    HorizontalExpand="True"
+                               SizeFlagsStretchRatio="1"
+                               Name="CurrentLevelDescPC">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#000000" />
+                        </PanelContainer.PanelOverride>
+                        <RichTextLabel Name="CurrentBenefitsLabel" VerticalExpand="True" HorizontalExpand="True" MinHeight="100"/>
+                    </PanelContainer>
+                    
+                </BoxContainer>
+                <Control MinHeight="20" />
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="Next Faction Level:"
+                      StyleClasses="LabelKeyText" />
+                    <Control MinWidth="20"/>
+                    <Label Name="NextFactionLevelLabel" Text="Standard Faction" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" MinHeight="100">
+                    <PanelContainer VerticalExpand="True"
+                                    HorizontalExpand="True"
+                               SizeFlagsStretchRatio="1"
+                               Name="NextLevelDescPC">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#000000" />
+                        </PanelContainer.PanelOverride>
+                        <RichTextLabel Name="NextBenefitsLabel"  VerticalExpand="True" HorizontalExpand="True"  MinHeight="100"/>
+                    </PanelContainer>
+                </BoxContainer>
                 
-                
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="Faction Account:"
+                      StyleClasses="LabelKeyText" />
+                    <Label Name="AccountBalanceLabel" Text="" />
+                    <Control HorizontalExpand="True" />
+                    <Label Text="Purchase Upgrade:"
+                      StyleClasses="LabelKeyText" />
+                    <Button Name="LevelPurchaseButton" Access="Public" />
+                </BoxContainer>
+            </BoxContainer>
+
         </TabContainer>
     </BoxContainer>
 </controls:FancyWindow>

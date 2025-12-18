@@ -61,6 +61,7 @@ public sealed partial class CrewAssignmentSystem : SharedCrewAssignmentSystem
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly StationSystem _station2 = default!;
+    [Dependency] private readonly CargoSystem _cargo = default!;
 
 
     private ISawmill _log = default!;

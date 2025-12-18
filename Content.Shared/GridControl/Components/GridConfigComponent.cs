@@ -46,12 +46,12 @@ public sealed partial class GridConfigComponent : Component
         public int GridTileCount = 0;
         public int MaxPersonalClaimTileCount = 0;
 
-
+        public string? ErrorMessage = null;
         public GridConfigBoundUserInterfaceState(
             bool idpresent, bool isowner, bool isauth, bool personalmode,
             Dictionary<int,string>? possiblestations, string? targetname,
             string? ownername, string? gridname, string? idname, int? targetStation,
-            int gridTileCount, int maxPersonalClaimTileCount
+            int gridTileCount, int maxPersonalClaimTileCount, string? errorMessage
         )
         {
             IdPresent = idpresent;
@@ -66,6 +66,7 @@ public sealed partial class GridConfigComponent : Component
             this.targetStation = targetStation;
             GridTileCount = gridTileCount;
             MaxPersonalClaimTileCount = maxPersonalClaimTileCount;
+            ErrorMessage = errorMessage;
         }
     }
 

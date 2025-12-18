@@ -7,6 +7,7 @@ using Content.Shared.Cargo.Events;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.CrewAccesses.Components;
 using Content.Shared.CrewAssignments.Components;
+using Content.Shared.CrewAssignments.Events;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Station.Components;
 using Robust.Client.GameObjects;
@@ -75,6 +76,7 @@ public sealed class StationModificationConsoleBoundUserInterface : BoundUserInte
         _menu.ITaxConfirm.OnPressed += ChangeITax;
         _menu.ETaxConfirm.OnPressed += ChangeETax;
         _menu.STaxConfirm.OnPressed += ChangeSTax;
+        _menu.LevelPurchaseButton.OnPressed += PurchaseUpgrade;
         _menu.OpenCentered();
     }
 
@@ -96,6 +98,7 @@ public sealed class StationModificationConsoleBoundUserInterface : BoundUserInte
         _menu?.UpdateStation(station, cState.Name);
         _menu?.UpdateAccesses(Accesses);
         _menu?.UpdateAssignments(Assignments);
+        _menu?.UpdateUpgrades(cState.Level, cState.AccountBalance);
         if(_menu != null)
         {
             _menu.ETaxSpinBox.Value = cState.ExportTax;
@@ -115,6 +118,11 @@ public sealed class StationModificationConsoleBoundUserInterface : BoundUserInte
         _menu?.Dispose();
     }
 
+    private void PurchaseUpgrade(ButtonEventArgs args)
+    {
+        if (_menu == null) return;
+        SendMessage(new StationModificationPurchaseUpgrade());
+    }
     private void RemoveOwner(ButtonEventArgs args)
     {
         if (args.Button is not StationOwnerButton row)
