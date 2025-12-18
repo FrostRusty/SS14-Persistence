@@ -1429,7 +1429,7 @@
   startNode: start
   targetNode: bar_sign
   category: construction-category-furniture
-  description: A LED sign sure to catch the attention of any wayward spacers.
+  description: recipes-bar-sign
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true

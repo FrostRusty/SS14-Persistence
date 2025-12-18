@@ -50,7 +50,6 @@
             icon:
               sprite: "Objects/Misc/module.rsi"
               state: "door_electronics"
-        doAfter: 2
       - to: cables
         completed:
         - !type:GivePrototype

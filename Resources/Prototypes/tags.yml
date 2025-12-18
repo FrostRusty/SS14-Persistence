@@ -60,6 +60,9 @@
   id: Bandana # CargoBounty: BountyBandana
 
 - type: Tag
+  id: BarSignElectronics # 
+
+- type: Tag
   id: BaseballBat # CargoBounty: BountyBaseballBat
 
 - type: Tag
