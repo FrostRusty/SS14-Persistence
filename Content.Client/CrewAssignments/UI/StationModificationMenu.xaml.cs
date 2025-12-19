@@ -110,7 +110,11 @@ namespace Content.Client.CrewAssignments.UI
         {
             _protoManager.Resolve(level, out var levelProto);
             if (levelProto == null) return;
-            _protoManager.Resolve(levelProto.Next, out var nextLevelProto);
+            FactionLevelPrototype? nextLevelProto = null;
+
+            if(levelProto.Next != string.Empty)
+                _protoManager.Resolve(levelProto.Next, out nextLevelProto);
+
             CurrentFactionLevelLabel.Text = levelProto.Name;
             string levelDesc = $"Owned Tile Limit:[color=yellow]{levelProto.TileLimit}[/color]";
             if (levelProto.TradestationClaim)
