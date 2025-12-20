@@ -129,7 +129,7 @@
   requiredXP: 200
   name: Burgeoning Hunter's Haven (2)
   markets:
-    - huntermarketengineer
+    - huntermarket
     - huntermarket2
   groups:
     HunterBounty : 6

@@ -326,6 +326,14 @@
 
 - type: entity
   parent: BaseFlatpack
+  id: CargoBountyComputerFlatpack
+  name: cargo bounty computer flatpack
+  description: A flatpack used for constructing a cargo bounty console.
+  components:
+  - type: Flatpack
+    entity: ComputerCargoBounty
+    
+- type: entity
   id: TinyFanFlatpack
   name: tiny fan flatpack
   description: A flatpack used for constructing a tiny fan. Useful for keeping gases in or out.

@@ -82,9 +82,19 @@
 - type: cargoProduct
   id: CargoMailCart
   icon:
-      sprite: Objects/Specific/Cargo/mailcart.rsi
-      state: icon
+    sprite: Objects/Specific/Cargo/mailcart.rsi
+    state: icon
   product: MailCart
   cost: 300
   category: cargoproduct-category-name-cargo
   group: market
+
+- type: cargoProduct
+  id: BusinessStartingKitCrate
+  icon:
+    sprite: Objects\Misc\bureaucracy.rsi
+    state: acquisition_form_words
+  product: BusinessStartingKit
+  cost: 12500
+  category: cargoproduct-category-name-cargo
+  group: market2
