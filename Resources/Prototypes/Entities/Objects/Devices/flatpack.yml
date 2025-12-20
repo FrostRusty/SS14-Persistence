@@ -323,3 +323,12 @@
     guides:
     - Botany
     - Chemicals
+
+- type: entity
+  parent: BaseFlatpack
+  id: CargoBountyComputerFlatpack
+  name: cargo bounty computer flatpack
+  description: A flatpack used for constructing a cargo bounty console.
+  components:
+  - type: Flatpack
+    entity: ComputerCargoBounty

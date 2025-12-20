@@ -450,7 +450,7 @@
   group: explorermarket
 
 - type: cargoProduct
-  id: MaterialWaterTank
+  id: MaterialWaterTankExTS
   icon:
     sprite: Structures/Storage/tanks.rsi
     state: watertank

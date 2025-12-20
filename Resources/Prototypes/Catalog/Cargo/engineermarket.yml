@@ -389,16 +389,6 @@
   group: engineermarket
 
 - type: cargoProduct
-  id: MaterialWaterTankETS
-  icon:
-    sprite: Structures/Storage/tanks.rsi
-    state: watertank
-  product: WaterTankFull
-  cost: 2000
-  category: cargoproduct-category-name-materials
-  group: engineermarket
-
-- type: cargoProduct
   id: FoodSoftdrinksETS
   icon:
     sprite: Objects/Consumable/Drinks/cola.rsi
@@ -426,4 +416,14 @@
   product: CrateFoodHappyHonkBigBite
   cost: 3500
   category: cargoproduct-category-name-food
+  group: engineermarket
+
+- type: cargoProduct
+  id: AtmosFireAxeETS
+  icon:
+    sprite: Objects/Weapons/Melee/fireaxe.rsi
+    state: icon
+  product: FireAxe
+  cost: 2500
+  category: cargoproduct-category-name-atmospherics
   group: engineermarket

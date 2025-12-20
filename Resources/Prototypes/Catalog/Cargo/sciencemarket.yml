@@ -66,7 +66,7 @@
   product: CrateScienceBiosuit
   cost: 2000
   category: cargoproduct-category-name-science
-  group: market
+  group: sciencemarket
 
 - type: cargoProduct
   id: CrewMonitoringSTS
@@ -76,7 +76,7 @@
   product: CrateCrewMonitoring
   cost: 4000
   category: cargoproduct-category-name-science
-  group: market
+  group: sciencemarket
 
 #- type: cargoProduct
 #  id: StationAiCoreSTS

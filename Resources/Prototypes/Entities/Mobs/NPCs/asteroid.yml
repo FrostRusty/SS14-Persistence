@@ -320,7 +320,7 @@
   - type: Item
     size: Normal
   - type: Perishable
-    rotAfter: 120 # rot after 2 minutes
+    rotAfter: 600 # rot after 10 minutes
     molsPerSecondPerUnitMass: 0
     forceRotProgression: true
   - type: RotInto

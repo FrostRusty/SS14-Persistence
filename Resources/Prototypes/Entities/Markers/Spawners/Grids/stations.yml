@@ -73,7 +73,7 @@
         - sciencemarket
       - type: StationCargoBountyDatabase
         groups:
-          ScienceBounty : 3
+          ScienceBounty : 2
           StationBounty : 1
           ServiceBounty : 1
 

@@ -118,4 +118,13 @@
   cost: 4000
   category: cargoproduct-category-name-engineering
   group: market
-  
+
+- type: cargoProduct
+  id: AtmosFireAxe
+  icon:
+    sprite: Objects/Weapons/Melee/fireaxe.rsi
+    state: icon
+  product: FireAxe
+  cost: 5000
+  category: cargoproduct-category-name-atmospherics
+  group: market
