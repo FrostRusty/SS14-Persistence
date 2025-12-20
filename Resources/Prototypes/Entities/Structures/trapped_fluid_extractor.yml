@@ -1,5 +1,92 @@
 - type: entity
-  parent: GasUnaryBase
+  id: GasUnaryBaseNoItem
+  parent: BaseMachine
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+    # All this to remove a single component..
+    # GasPipeSansLayers
+    - type: Visibility
+      layer: 1
+    # - type: CollideOnAnchor
+    - type: Anchorable
+    - type: Rotatable
+    - type: Destructible
+      thresholds:
+      - trigger: # for nukes
+          !type:DamageTrigger
+          damage: 200
+        behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+      - trigger: # regular damage trigger (replace with broken pipe)
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+            params:
+              volume: -8
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            GasPipeBroken:
+              min: 1
+              max: 1
+          offset: 0
+        - !type:DoActsBehavior
+          acts: ["Breakage"]
+    - type: Sprite
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      drawdepth: ThinPipe
+      visible: false
+    - type: Appearance
+    - type: PipeAppearance
+    - type: PipeColorVisuals
+    - type: PipeRestrictOverlap
+    - type: AtmosUnsafeUnanchor
+    - type: AtmosPipeColor
+    - type: AtmosMonitoringConsoleDevice
+
+    # GasPipeBase
+    - type: AtmosPipeLayers
+      spriteLayersRsiPaths:
+        enum.PipeVisualLayers.Pipe:
+          Primary: Structures/Piping/Atmospherics/pipe.rsi
+          Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+          Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+    # Unary
+    - type: AtmosDevice
+    - type: Tag
+      tags:
+        - Unstackable
+    - type: SubFloorHide
+      blockInteractions: false
+      blockAmbience: false
+    - type: NodeContainer
+      nodes:
+        pipe:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: south-facing
+
+    # Extra
+    - type: Clickable
+    - type: InteractionOutline
+    - type: LightningTarget
+      priority: 1
+    - type: Damageable
+      damageContainer: StructuralInorganic
+      damageModifierSet: StructuralMetallic
+
+    - type: Transform
+      noRot: false
+      anchored: true
+
+- type: entity
+  parent: GasUnaryBaseNoItem
   id: TrappedFluidExtractor
   name: gas miner
   description: Has a valve and pump attached to it.
@@ -9,6 +96,8 @@
     - type: Tag
       tags:
         - Unstackable
+        - Structure
+
     - type: SubFloorHide
       visibleLayers:
       - enum.SubfloorLayers.FirstLayer
@@ -28,7 +117,6 @@
         - map: [ "enum.GasVolumePumpVisualLayers.PowerIndicator" ]
         - map: [ "enum.GasVolumePumpVisualLayers.PowerIndicator", "active" ]
     - type: Appearance
-    - type: PipeColorVisuals
     - type: GenericVisualizer
       visuals:
         enum.TrappedFluidExtractorVisuals.State:

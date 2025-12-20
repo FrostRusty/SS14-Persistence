@@ -51,10 +51,11 @@
   id: MCTNodeMachine
   name: Multi-Channel Transfer Node
   components:
+  - type: CollideOnAnchor
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/miners.rsi
     state: miner
-    drawdepth: Overdoors
+    drawdepth: FloorObjects
