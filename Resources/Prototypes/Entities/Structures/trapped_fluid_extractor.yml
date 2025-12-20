@@ -1,0 +1,79 @@
+- type: entity
+  parent: GasUnaryBase
+  id: TrappedFluidExtractor
+  name: gas miner
+  description: Has a valve and pump attached to it.
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Tag
+      tags:
+        - Unstackable
+    - type: SubFloorHide
+      visibleLayers:
+      - enum.SubfloorLayers.FirstLayer
+    - type: Sprite
+      drawdepth: FloorObjects
+      sprite: _NF/Objects/Specific/Atmospherics/extractor.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe.rsi
+          state: pipeUnaryConnectors
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: 'base'
+          map: [ "enum.GasVolumePumpVisualLayers.Base" ]
+
+        - state: 'drill-off'
+          map: [ "enum.GasVolumePumpVisualLayers.Drill" ]
+
+        - map: [ "enum.GasVolumePumpVisualLayers.PowerIndicator" ]
+        - map: [ "enum.GasVolumePumpVisualLayers.PowerIndicator", "active" ]
+    - type: Appearance
+    - type: PipeColorVisuals
+    - type: GenericVisualizer
+      visuals:
+        enum.TrappedFluidExtractorVisuals.State:
+          enum.GasVolumePumpVisualLayers.Drill:
+            Off: { state: 'drill-off' }
+            On: { state: drill }
+          enum.GasVolumePumpVisualLayers.PowerIndicator:
+            Off: { state: 'base' }
+            On: { state: 'base-powered' }
+          active:
+            Off: { state: 'base', visible: False }
+            On: { state: 'drill-on-unlit' }
+
+    # - type: GenericVisualizer
+    #   visuals:
+    #     enum.GasVolumePumpVisuals.State:
+    #       enabled:
+    #         On: { state: pumpVolumeOn }
+    #         Off: { state: pumpVolume }
+    #         Blocked: { state: pumpVolumeBlocked }
+
+    - type: AtmosDevice
+    - type: TrappedFluidExtractor
+
+    - type: AmbientSound
+      enabled: true
+      volume: -12
+      range: 5
+      sound:
+        path: /Audio/Ambience/Objects/gas_pump.ogg
+
+    # - type: ApcPowerReceiver
+    #   powerDisabled: True
+    - type: PowerSwitch
+    - type: PowerConsumer
+      voltage: Medium
+      drawRate: 500
+
+    - type: NodeContainer
+      examinable: true
+      nodes:
+        input:
+          !type:CableDeviceNode
+          nodeGroupID: MVPower
+        pipe:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: South

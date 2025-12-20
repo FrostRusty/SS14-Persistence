@@ -1,10 +1,12 @@
 using System.Linq;
 using Content.Server.Atmos.Components;
+using Content.Server.MiningFluid.Components;
 using Content.Server.NodeContainer;
 using Content.Server.NodeContainer.Nodes;
 using Content.Server.Popups;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Coordinates;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.NodeContainer;
@@ -22,6 +24,7 @@ public sealed class GasAnalyzerSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _xform = default!;
 
     /// <summary>
     /// Minimum moles of a gas to be sent to the client.
@@ -230,14 +233,33 @@ public sealed class GasAnalyzerSystem : EntitySystem
             }
         }
 
+        var deviceName = component.Target != null ? Name(component.Target.Value) : string.Empty;
+        var deviceUid = GetNetEntity(component.Target) ?? NetEntity.Invalid;
+
+        if (component.Target == null)
+        {
+            // Fetch potential underground/trapped atmosphere
+            var gridUid = _xform.GetGrid(uid.ToCoordinates());
+            if (TryComp<TrappedFluidComponent>(gridUid, out var trappedFluid) && trappedFluid.Seeded)
+            {
+                var trappedMix = trappedFluid.Air;
+                gasMixList.Add(
+                    new GasMixEntry(Loc.GetString("gas-analyzer-window-trapped-tab-label"),
+                    trappedMix.Volume, trappedMix.Pressure, trappedMix.Temperature,
+                    GenerateGasEntryArray(trappedMix)));
+                deviceName = Comp<MetaDataComponent>(gridUid.Value).EntityName;
+                deviceUid = GetNetEntity(gridUid.Value);
+            }
+        }
+
         // Don't bother sending a UI message with no content, and stop updating I guess?
         if (gasMixList.Count == 0)
             return false;
 
         _userInterface.ServerSendUiMessage(uid, GasAnalyzerUiKey.Key,
             new GasAnalyzerUserMessage(gasMixList.ToArray(),
-                component.Target != null ? Name(component.Target.Value) : string.Empty,
-                GetNetEntity(component.Target) ?? NetEntity.Invalid,
+                deviceName,
+                deviceUid,
                 deviceFlipped));
         return true;
     }
