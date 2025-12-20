@@ -4,3 +4,17 @@
   components:
     - type: OwnedDebris
     - type: LocalityLoader
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Tritium: 512
+          Nitrogen: 50
+      variableMixture:
+        Oxygen:
+          moles: 999
+          prob: 0.5
+
+
