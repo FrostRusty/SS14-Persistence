@@ -207,7 +207,7 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
                                         possibleAccesses = crewAssignment.AccessIDs;
                                     }
                                 }
-                                    
+
                             }
                         }
 
@@ -235,7 +235,7 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
             }
         }
 
-        
+
         AccessOverriderBoundUserInterfaceState newState;
         bool allowed = true;
         if (accessReaderEnt != null)
@@ -349,7 +349,7 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
         if (!Resolve(uid, ref component) || component.TargetAccessReaderId is not { Valid: true })
             return;
 
-        
+
 
         if (!_interactionSystem.InRangeUnobstructed(player, component.TargetAccessReaderId))
         {
@@ -382,7 +382,7 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
         if (!Resolve(uid, ref component) || component.TargetAccessReaderId is not { Valid: true })
             return;
 
-        
+
 
         if (!_interactionSystem.InRangeUnobstructed(player, component.TargetAccessReaderId))
         {
@@ -477,7 +477,7 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
     {
         if (!Resolve(uid, ref component) || readerComponent == null)
             return true;
-        
+
         var privilegedId = component.PrivilegedIdSlot.Item;
         return privilegedId != null && _accessReader.IsAllowed(privilegedId.Value, readerComponent.Value);
     }

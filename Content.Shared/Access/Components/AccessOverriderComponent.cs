@@ -13,6 +13,12 @@ public sealed partial class AccessOverriderComponent : Component
 {
     public static string PrivilegedIdCardSlotId = "AccessOverrider-privilegedId";
 
+    /// <summary>
+    /// If the Access Overrider UI will show info about the privileged ID
+    /// </summary>
+    [DataField]
+    public bool ShowPrivilegedId = true;
+
     [DataField]
     public ItemSlot PrivilegedIdSlot = new();
 

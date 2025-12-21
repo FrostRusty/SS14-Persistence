@@ -118,7 +118,7 @@
 
 - type: cargoBounty
   id: BountyCrayon
-  reward: 4000
+  reward: 1500
   description: bounty-description-crayon
   entries:
   - name: bounty-item-crayon
@@ -547,7 +547,7 @@
 
 - type: cargoBounty
   id: BountyLaserGun
-  reward: 10000
+  reward: 9600
   description: bounty-description-lasergun
   idPrefix: IV
   entries:
@@ -624,11 +624,10 @@
 
 - type: cargoBounty
   id: BountyRollerskates
-  reward: 3500
+  reward: 900
   description: bounty-description-rollerskates
   entries:
   - name: bounty-item-rollerskates
-    amount: 2
     whitelist:
       components:
       - Skates
@@ -736,7 +735,7 @@
 
 - type: cargoBounty
   id: BountyWine
-  reward: 3000
+  reward: 1500
   description: bounty-description-wine
   entries:
   - name: bounty-item-wine
