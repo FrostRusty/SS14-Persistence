@@ -49,8 +49,21 @@ public sealed partial class HeadsetMenuWindow : DefaultWindow
             PossibleInputs.AddItem(kv.Value, kv.Key);
             PossibleOutputs.AddItem(kv.Value, kv.Key);
         }
-        PossibleInputs.SelectId(state.RecieveFrom);
-        PossibleOutputs.SelectId(state.TransmitTo);
+        if (state.RecieveFrom != 0 && !PossibleInputs.TrySelectId(state.RecieveFrom))
+        {
+            if (BUI != null)
+            {
+                BUI.SendMessage(new HeadsetMenuInputSelect(0));
+            }
+        }
+        if(state.TransmitTo != 0 && !PossibleOutputs.TrySelectId(state.TransmitTo))
+        {
+            if (BUI != null)
+            {
+                BUI.SendMessage(new HeadsetMenuOutputSelect(0));
+            }
+        }
+
 
     }
 

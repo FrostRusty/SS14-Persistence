@@ -140,7 +140,16 @@ public sealed class RadioSystem : EntitySystem
                 }
                 var station = _station.GetStationByID(encryptionID);
                 if (station == null) continue;
-                if (!_headset.HasChannelAccess(receiver, station.Value, channel))
+                var parent = Transform(receiver).ParentUid;
+
+                if (parent.IsValid())
+                {
+                    if (!_headset.HasChannelAccess(parent, station.Value, channel))
+                    {
+                        continue;
+                    }
+                }
+                else
                 {
                     continue;
                 }
