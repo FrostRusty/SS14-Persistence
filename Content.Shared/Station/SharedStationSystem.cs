@@ -141,6 +141,29 @@ public abstract partial class SharedStationSystem : EntitySystem
 
         return CompOrNull<PersonalMemberComponent>(xform.GridUid)?.OwnerName;
     }
+
+    /// <summary>
+    /// Return the owning Station and/or person for the specified entity.
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="owningStation"></param>
+    /// <param name="owningPerson"></param>
+    public void GetOwning(EntityUid uid, out EntityUid? owningStation, out string? owningPerson)
+    {
+        owningStation = GetOwningStation(uid);
+        owningPerson = null;
+        if (owningStation == null)
+        {
+            owningPerson = GetOwningStationPersonal(uid);
+        }
+        else
+        {
+            if (TryComp<StationDataComponent>(owningStation, out var oSD) && oSD != null)
+            {
+                owningPerson = oSD.StationName;
+            }
+        }
+    }
     public List<EntityUid> GetStations()
     {
         var stations = new List<EntityUid>();

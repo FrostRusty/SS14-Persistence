@@ -10,6 +10,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CrewAccesses.Components;
 using Content.Shared.CrewAssignments.Components;
+using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.CrewRecords.Components;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -68,7 +69,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         SubscribeLocalEvent<GridConfigComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<StationCreatorComponent, EntInsertedIntoContainerMessage>(UpdateUserInterface);
         SubscribeLocalEvent<StationCreatorComponent, EntRemovedFromContainerMessage>(OnRemoved);
-        
+
 
         SubscribeLocalEvent<StationTaggerComponent, StationTaggerDoAfterEvent>(OnDoAfter);
         SubscribeLocalEvent<StationTaggerComponent, AfterInteractEvent>(AfterInteractOn);
@@ -113,7 +114,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
     private void OnUnlink(EntityUid uid, StationTaggerComponent component, EntityEventArgs args)
     {
         if (component.TargetAccessReaderId == EntityUid.Invalid) return;
-        if(TryComp<StationTrackerComponent>(component.TargetAccessReaderId, out var comp) && comp != null)
+        if (TryComp<StationTrackerComponent>(component.TargetAccessReaderId, out var comp) && comp != null)
         {
             EntityManager.RemoveComponent(component.TargetAccessReaderId, comp);
         }
@@ -180,7 +181,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
 
         var targetGrid = _transform.GetGrid(uid);
         bool tradeStationGrid = false;
-        if(TryComp<TradeStationComponent>(targetGrid, out var tradeStation))
+        if (TryComp<TradeStationComponent>(targetGrid, out var tradeStation))
         {
             tradeStationGrid = true;
         }
@@ -201,14 +202,14 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             {
                 var tiles = _mapSystem.GetAllTiles(targetGrid.Value, targetGridComp);
                 var currentTiles = _station.GetPersonalTileCount(privilegedName);
-                if (tiles.Count()+currentTiles > _cfg.GetCVar(CCVars.GridClaimPersonalMaxTiles))
+                if (tiles.Count() + currentTiles > _cfg.GetCVar(CCVars.GridClaimPersonalMaxTiles))
                     return false;
             }
             else
                 return false;
         }
 
-        
+
         if (!idPresent) return false;
         if (owningStation == null)
         {
@@ -269,7 +270,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         }
         if (!owningPersonal && owningStation == null) isAuth = true;
         if (!requireTarget) return isAuth;
-        if(isAuth)
+        if (isAuth)
         {
             isAuth = false;
             if (component.PersonalMode) return true;
@@ -324,7 +325,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
     }
     private void OnChangeName(EntityUid uid, GridConfigComponent component, GridConfigChangeName args)
     {
-        if(Validate(uid, component, false))
+        if (Validate(uid, component, false))
         {
             var grid = _transform.GetGrid(uid);
             if (grid != null)
@@ -332,14 +333,14 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
                 _metaData.SetEntityName(grid.Value, args.Name);
             }
         }
-            UpdateUserInterface(uid, component, args);
+        UpdateUserInterface(uid, component, args);
     }
     private void OnConnect(EntityUid uid, GridConfigComponent component, GridConfigConnect args)
     {
         if (Validate(uid, component))
         {
             var grid = _transform.GetGrid(uid);
-            if(TryComp<TradeStationComponent>(grid, out _))
+            if (TryComp<TradeStationComponent>(grid, out _))
             {
                 if (component.PersonalMode) return;
                 if (component.ConnectedStation == null) return;
@@ -364,7 +365,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
 
                     }
                 }
-                else if(component.ConnectedStation != null)
+                else if (component.ConnectedStation != null)
                 {
                     var station = _station.GetStationByID(component.ConnectedStation.Value);
                     if (station != null)
@@ -386,7 +387,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             idCard = idc;
             if (TryComp<IdCardComponent>(idCard, out var id) && id.FullName != null)
             {
-               realName = id.FullName;
+                realName = id.FullName;
             }
 
         }
@@ -395,7 +396,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         StationConfig config = new();
         config.StationPrototype = "StandardNanotrasenStation";
         _station.InitializeNewStation(config, null, args.StationName, realName);
-        if(idCard != null)
+        if (idCard != null)
         {
             _popupSystem.PopupEntity($"The station {args.StationName} was created.", idCard.Value);
             _itemSlots.TryEjectToHands(idCard.Value, component.PrivilegedIdSlot, args.Actor);
@@ -411,14 +412,14 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         {
             if (IsGridControlled(grid.Value)) return;
             var station = _station.GetOwningStation(grid.Value);
-            if(station != null)
+            if (station != null)
             {
                 _station.RemoveGridFromStation(station.Value, grid.Value);
             }
             else
             {
                 var ownername = _station.GetOwningStationPersonal(grid.Value);
-                if(ownername != null)
+                if (ownername != null)
                 {
                     _station.RemoveGridFromPerson(grid.Value);
                 }
@@ -433,7 +434,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         if (args.Target == null || !TryComp(args.Target, out AccessReaderComponent? accessReader))
             return;
 
-        if (!_interactionSystem.InRangeUnobstructed(args.User, (EntityUid) args.Target))
+        if (!_interactionSystem.InRangeUnobstructed(args.User, (EntityUid)args.Target))
             return;
 
         var doAfterEventArgs = new DoAfterArgs(EntityManager, args.User, component.DoAfter, new StationTaggerDoAfterEvent(), uid, target: args.Target, used: uid)
@@ -554,7 +555,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             }
             else
             {
-                if(grid != null)
+                if (grid != null)
                 {
                     isOwner = true;
                     isAuth = true;
@@ -562,10 +563,22 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             }
 
         }
-        
+
+        int tileLimit = _cfg.GetCVar(CCVars.GridClaimPersonalMaxTiles);
         String? targetName = null;
         int? targetStation = null;
         Dictionary<int, string>? possibleStations = null;
+
+        FactionLevelPrototype? factionLevel = null;
+        if (TryComp<StationDataComponent>(station, out var SD) && SD != null)
+        {
+            targetName = SD.StationName;
+            targetStation = SD.UID;
+            _protoMan.Resolve(SD.Level, out var levelProto);
+            factionLevel = levelProto;
+            tileLimit = factionLevel?.TileLimit ?? tileLimit;
+        }
+
         if (component.PersonalMode)
         {
             targetName = privilegedName;
@@ -573,11 +586,6 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         }
         else
         {
-            if (TryComp<StationDataComponent>(station, out var SD) && SD != null)
-            {
-                targetName = SD.StationName;
-                targetStation = SD.UID;
-            }
             var stations = _station.GetStations();
             possibleStations = new Dictionary<int, string>();
             foreach (var iStation in stations)
@@ -633,31 +641,24 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         int gridTileCount = 0;
         if (TryComp<MapGridComponent>(grid, out var targetGridComp))
             gridTileCount = _mapSystem.GetAllTiles(grid.Value, targetGridComp).Count();
-        int tileLimit = _cfg.GetCVar(CCVars.GridClaimPersonalMaxTiles);
+
+
         if (TryComp<TradeStationComponent>(grid, out var tradeStation) && tradeStation != null)
         {
-            if(component.PersonalMode)
+            if (!component.PersonalMode && factionLevel != null && station.HasValue)
             {
-                errMsg = "Trade stations cannot be claimed by individuals";
+                if (!factionLevel.TradestationClaim)
+                {
+                    errMsg = "This faction cannot claim a trade station yet.";
+                }
+                else if (_station.GetStationTradeStation(station.Value) != null && _station.GetOwningStation(grid) != station)
+                {
+                    errMsg = "This faction already controls a trade station.";
+                }
             }
             else
             {
-                if (TryComp<StationDataComponent>(station, out var SD) && SD != null)
-                {
-                    _protoMan.Resolve(SD.Level, out var levelProto);
-                    if (levelProto != null)
-                    {
-                        if(!levelProto.TradestationClaim)
-                        {
-                            errMsg = "This faction cannot claim a trade station yet.";
-                        }
-                        else if(_station.GetStationTradeStation(station.Value) != null && _station.GetOwningStation(grid) != station)
-                        {
-                            errMsg = "This faction already controls a trade station.";
-                        }
-                            tileLimit = levelProto.TileLimit;
-                    }
-                }
+                errMsg = "Trade stations cannot be claimed by individuals";
             }
         }
         newState = new GridConfigBoundUserInterfaceState(
@@ -718,7 +719,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         String? targetName = null;
         int? targetStation = null;
         Dictionary<int, string>? possibleStations = null;
-        
+
         if (TryComp<StationDataComponent>(station, out var SD) && SD != null)
         {
             targetName = SD.StationName;
@@ -766,7 +767,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             }
 
         }
-        
+
         var targetLabel = Loc.GetString("access-overrider-window-no-target");
         var targetLabelColor = Color.Red;
         Entity<AccessReaderComponent>? accessReaderEnt = null;
@@ -775,10 +776,10 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         int taggedStationUID = 0;
         if (component.TargetAccessReaderId is { Valid: true } accessReader)
         {
-            if(TryComp<StationTrackerComponent>(accessReader, out var stationTracker) && stationTracker != null)
-            { 
+            if (TryComp<StationTrackerComponent>(accessReader, out var stationTracker) && stationTracker != null)
+            {
                 var taggedStation = stationTracker.Station;
-                if(TryComp<StationDataComponent>(taggedStation, out var taggedSD) && taggedSD != null)
+                if (TryComp<StationDataComponent>(taggedStation, out var taggedSD) && taggedSD != null)
                 {
                     taggedFaction = taggedSD.StationName;
                     taggedStationUID = taggedSD.UID;
@@ -793,7 +794,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         }
         StationTaggerBoundUserInterfaceState newState;
 
-        newState = new StationTaggerBoundUserInterfaceState(idPresent,allowed,privilegedIdName,targetLabel,targetLabelColor,taggedFaction,possibleStations,component.ConnectedStation, taggedStationUID);
+        newState = new StationTaggerBoundUserInterfaceState(idPresent, allowed, privilegedIdName, targetLabel, targetLabelColor, taggedFaction, possibleStations, component.ConnectedStation, taggedStationUID);
 
         _userInterface.SetUiState(uid, StationTaggerUiKey.Key, newState);
 
@@ -813,7 +814,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
     {
         if (!component.Initialized)
             return;
-      
+
         GridControlConsoleBoundUserInterfaceState newState;
 
         newState = new GridControlConsoleBoundUserInterfaceState(component.Active);
@@ -846,7 +847,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
             if (comp.Active)
             {
                 var targetGrid = _transform.GetGrid(uid);
-                if(targetGrid == entityUid)
+                if (targetGrid == entityUid)
                 {
                     return true;
                 }
