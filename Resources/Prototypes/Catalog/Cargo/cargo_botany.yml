@@ -57,3 +57,13 @@
   cost: 1250
   category: cargoproduct-category-name-hydroponics
   group: market
+
+- type: cargoProduct
+  id: BotanistLocker
+  icon:
+    sprite: Clothing/Head/Bandanas/botany.rsi
+    state: icon
+  product: LockerBotanistFilled
+  cost: 3000
+  category: cargoproduct-category-name-hydroponics
+  group: market

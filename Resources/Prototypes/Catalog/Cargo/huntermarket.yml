@@ -101,7 +101,7 @@
 - type: cargoProduct
   id: GunSafeShotgunKammererHTS
   icon:
-    sprite: Objects/Weapons/Guns/Shotguns/kammerer.rsi
+    sprite: Objects/Weapons/Guns/Shotguns/pump.rsi
     state: icon
   product: GunSafeShotgunKammerer
   cost: 9000

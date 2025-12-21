@@ -117,7 +117,7 @@
   product: LockerAtmosphericsFilledHardsuit
   cost: 4000
   category: cargoproduct-category-name-engineering
-  group: engineermarket
+  group: market
 
 - type: cargoProduct
   id: AtmosFireAxe
@@ -127,7 +127,7 @@
   product: FireAxe
   cost: 5000
   category: cargoproduct-category-name-engineering
-  group: engineermarket
+  group: market
  
 - type: cargoProduct
   id: TinyFanCargo

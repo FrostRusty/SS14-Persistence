@@ -58,12 +58,32 @@
 #  category: cargoproduct-category-name-science
 #  group: market
 
+#- type: cargoProduct
+#  id: RDLocker
+#  icon:
+#    sprite: Clothing/Head/Hardsuits/rd.rsi
+#    state: icon
+#  product: LockerResearchDirectorFilledHardsuitNoTP
+#  cost: 12500
+#  category: cargoproduct-category-name-science
+#  group: market
+
 - type: cargoProduct
-  id: RDLocker
+  id: ScientistLocker
   icon:
-    sprite: Clothing/Head/Hardsuits/rd.rsi
+    sprite: Clothing/OuterClothing/Coats/labcoat_sci.rsi
     state: icon
-  product: LockerResearchDirectorFilledHardsuitNoTP
-  cost: 12500
+  product: LockerScienceFilled
+  cost: 3000
   category: cargoproduct-category-name-science
   group: market
+
+- type: cargoProduct
+  id: ScientistLockerSTS
+  icon:
+    sprite: Clothing/OuterClothing/Coats/labcoat_sci.rsi
+    state: icon
+  product: LockerScienceFilled
+  cost: 1500
+  category: cargoproduct-category-name-science
+  group: sciencemarket
