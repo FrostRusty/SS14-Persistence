@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Systems;
 using Content.Server.Power.Components;
+using Content.Server.Station.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Radio;
@@ -27,7 +28,8 @@ public sealed class RadioSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
-
+    [Dependency] private readonly HeadsetSystem _headset = default!;
+    [Dependency] private readonly StationSystem _station = default!;
     // set used to prevent radio feedback loops.
     private readonly HashSet<string> _messages = new();
 
@@ -121,14 +123,46 @@ public sealed class RadioSystem : EntitySystem
         var sourceServerExempt = _exemptQuery.HasComp(radioSource);
 
         var radioQuery = EntityQueryEnumerator<ActiveRadioComponent, TransformComponent>();
+        int encryptionID = 0;
+        if(TryComp<HeadsetComponent>(radioSource, out var headset) && headset != null)
+        {
+            encryptionID = headset.TransmitTo;
+        }
         while (canSend && radioQuery.MoveNext(out var receiver, out var radio, out var transform))
         {
-            if (!radio.ReceiveAllChannels)
+            if (encryptionID == 0 && !channel.Encrypted) ;
+
+            else if (TryComp<HeadsetComponent>(receiver, out var targetHeadset) && targetHeadset != null)
+            {
+                if (targetHeadset.RecieveFrom != 0 && targetHeadset.RecieveFrom != encryptionID)
+                {
+                    continue;
+                }
+                var station = _station.GetStationByID(encryptionID);
+                if (station == null) continue;
+                var parent = Transform(receiver).ParentUid;
+
+                if (parent.IsValid())
+                {
+                    if (!_headset.HasChannelAccess(parent, station.Value, channel))
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+             
+            }
+            else if (!radio.ReceiveAllChannels)
             {
                 if (!radio.Channels.Contains(channel.ID) || (TryComp<IntercomComponent>(receiver, out var intercom) &&
                                                              !intercom.SupportedChannels.Contains(channel.ID)))
                     continue;
             }
+
+
 
             if (!channel.LongRange && transform.MapID != sourceMapId && !radio.GlobalReceive)
                 continue;

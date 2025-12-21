@@ -10,4 +10,6 @@ public sealed partial class CargoPalletConsoleComponent : Component
 {
     [DataField]
     public bool CashMode = false;
+    [DataField]
+    public int SelectedStation = 0;
 }

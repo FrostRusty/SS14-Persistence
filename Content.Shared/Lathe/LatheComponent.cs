@@ -92,7 +92,7 @@ namespace Content.Shared.Lathe
 
         public bool GetUnavailable;
 
-        public HashSet<ProtoId<LatheRecipePrototype>> Recipes = new();
+        public Dictionary<ProtoId<LatheRecipePrototype>, int> Recipes = new();
 
         public LatheGetRecipesEvent(Entity<LatheComponent> lathe, bool forced)
         {

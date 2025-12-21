@@ -168,15 +168,15 @@
   category: cargoproduct-category-name-engineering
   group: market
 
-- type: cargoProduct
-  id: LockerCE
-  icon:
-    sprite: Clothing/Head/Hardsuits/engineering-white.rsi
-    state: icon
-  product: LockerChiefEngineerFilledHardsuit
-  cost: 12500
-  category: cargoproduct-category-name-engineering
-  group: market
+#- type: cargoProduct
+#  id: LockerCE
+#  icon:
+#    sprite: Clothing/Head/Hardsuits/engineering-white.rsi
+#    state: icon
+#  product: LockerChiefEngineerFilledHardsuit
+#  cost: 12500
+#  category: cargoproduct-category-name-engineering
+#  group: market
 
 ## Engineering market discounts
 

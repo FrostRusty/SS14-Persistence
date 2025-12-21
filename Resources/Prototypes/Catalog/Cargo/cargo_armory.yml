@@ -117,3 +117,23 @@
   cost: 8000
   category: cargoproduct-category-name-armory
   group: huntermarket2
+
+- type: cargoProduct
+  id: CaptainLocker
+  icon:
+    sprite: Clothing/Head/Hardsuits/capspace.rsi
+    state: icon
+  product: LockerCaptainFilledHardsuit
+  cost: 17500
+  category: cargoproduct-category-name-armory
+  group: market4
+
+- type: cargoProduct
+  id: HoPLocker
+  icon:
+    sprite: Clothing/Head/Hats/hopcap.rsi
+    state: icon
+  product: LockerHeadOfPersonnelFilled
+  cost: 12500
+  category: cargoproduct-category-name-armory
+  group: market3

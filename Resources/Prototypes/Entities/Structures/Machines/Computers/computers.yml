@@ -624,7 +624,7 @@
       IdCardConsole-privilegedId: !type:ContainerSlot
       IdCardConsole-targetId: !type:ContainerSlot
   - type: AccessReader
-      access: []
+    access: []
 
 - type: entity
   parent: BaseComputerAiAccess
@@ -856,7 +856,42 @@
     energy: 4.0
     color: "#e6e227"
 
-  
+- type: entity
+  id: ComputerGridControl
+  parent: BaseComputerAiAccess
+  name: grid control computer
+  description: Used to prevent a grid from being unclaimed.
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: comm_syndie
+    - map: ["computerLayerKeys"]
+      state: syndie_key
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      state: generic_panel_open
+  - type: Computer
+    board: GridControlComputerCircuitboard
+  - type: PointLight
+    radius: 1.5
+    energy: 4.0
+    color: "#f71713"
+  - type: AccessReader
+    access: []
+  - type: GridControlConsole
+  - type: ActivatableUI
+    key: enum.GridControlConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.GridControlConsoleUiKey.Key:
+        type: GridControlConsoleBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+
 - type: entity
   id: ComputerStationModification
   parent: BaseComputerAiAccess

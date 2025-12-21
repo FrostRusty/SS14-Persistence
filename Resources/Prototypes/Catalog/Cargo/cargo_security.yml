@@ -128,3 +128,10 @@
   cost: 12500
   category: cargoproduct-category-name-security
   group: market2
+
+- type: cargoProduct
+  id: FilledSecLocker
+  icon:
+    sprite: Clothing/Head/Hats/beret_security.rsi
+    state: icon
+  product: LockerSecurityFilled

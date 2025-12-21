@@ -1,8 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using Content.Server.Database;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Research.Components;
 using Robust.Shared.Utility;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Content.Server.Research.Systems;
 
@@ -10,6 +11,7 @@ public sealed partial class ResearchSystem
 {
     private void InitializeClient()
     {
+        SubscribeLocalEvent<ResearchClientComponent, ComponentInit>(OnClientCompInit);
         SubscribeLocalEvent<ResearchClientComponent, MapInitEvent>(OnClientMapInit);
         SubscribeLocalEvent<ResearchClientComponent, ComponentShutdown>(OnClientShutdown);
         SubscribeLocalEvent<ResearchClientComponent, BoundUIOpenedEvent>(OnClientUIOpen);
@@ -67,6 +69,13 @@ public sealed partial class ResearchSystem
             RegisterClient(uid, server, component, server);
     }
 
+    private void OnClientCompInit(EntityUid uid, ResearchClientComponent component, ComponentInit args)
+    {
+        if(component.Server != null)
+        {
+            RegisterClient(uid, component.Server.Value);
+        }
+    }
     private void OnClientShutdown(EntityUid uid, ResearchClientComponent component, ComponentShutdown args)
     {
         UnregisterClient(uid, component);

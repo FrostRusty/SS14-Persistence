@@ -8,13 +8,13 @@ namespace Content.Shared.Lathe;
 [Serializable, NetSerializable]
 public sealed class LatheUpdateState : BoundUserInterfaceState
 {
-    public List<ProtoId<LatheRecipePrototype>> Recipes;
+    public Dictionary<ProtoId<LatheRecipePrototype>, int> Recipes;
 
     public LatheRecipeBatch[] Queue;
 
     public ProtoId<LatheRecipePrototype>? CurrentlyProducing;
 
-    public LatheUpdateState(List<ProtoId<LatheRecipePrototype>> recipes, LatheRecipeBatch[] queue, ProtoId<LatheRecipePrototype>? currentlyProducing = null)
+    public LatheUpdateState(Dictionary<ProtoId<LatheRecipePrototype>, int> recipes, LatheRecipeBatch[] queue, ProtoId<LatheRecipePrototype>? currentlyProducing = null)
     {
         Recipes = recipes;
         Queue = queue;

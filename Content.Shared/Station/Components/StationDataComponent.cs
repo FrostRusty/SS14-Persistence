@@ -1,5 +1,9 @@
+using Content.Shared.Atmos.Piping.Components;
+using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.CrewAssignments.Systems;
+using Content.Shared.Radio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Station.Components;
 
@@ -31,7 +35,7 @@ public sealed partial class StationDataComponent : Component
     public int UID = 0;
 
     [DataField, AutoNetworkedField]
-    public string StationName = "unnamed station";
+    public string? StationName;
 
     [DataField, AutoNetworkedField]
     public int ImportTax = 0;
@@ -41,6 +45,22 @@ public sealed partial class StationDataComponent : Component
 
     [DataField, AutoNetworkedField]
     public int SalesTax = 0;
+
+    [DataField]
+    public ProtoId<FactionLevelPrototype> Level = "FactionLevel1";
+
+    [DataField]
+    public Dictionary<ProtoId<RadioChannelPrototype>, FactionRadioData> RadioData = new()
+    {
+        { "Common", new FactionRadioData(true) },
+        { "Command", new FactionRadioData() },
+        { "Engineering", new FactionRadioData() },
+        { "Medical", new FactionRadioData() },
+        { "Science", new FactionRadioData() },
+        { "Security", new FactionRadioData() },
+        { "Service", new FactionRadioData() },
+        { "Supply", new FactionRadioData() }
+    };
 
     public bool IsOwner(string owner)
     {
@@ -58,5 +78,21 @@ public sealed partial class StationDataComponent : Component
         if (Owners.Contains(owner)) return;
         Owners.Add(owner);
         Dirty();
+    }
+}
+
+[DataDefinition]
+[Serializable]
+public partial class FactionRadioData
+{
+    [DataField("_enabled")]
+    public bool Enabled = false;
+    [DataField("_access")]
+    public List<string> Access = new();
+
+
+    public FactionRadioData(bool enabled = false)
+    {
+        Enabled = enabled;
     }
 }

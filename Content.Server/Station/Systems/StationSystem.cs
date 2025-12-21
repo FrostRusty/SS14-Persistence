@@ -1,4 +1,4 @@
-using System.Linq;
+using Content.Server.Cargo.Components;
 using Content.Server.Chat.Systems;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.GameTicking;
@@ -8,7 +8,9 @@ using Content.Server.Worldgen.Components.Debris;
 using Content.Shared.GridControl.Components;
 using Content.Shared.Station;
 using Content.Shared.Station.Components;
+using Content.Shared.Warps;
 using JetBrains.Annotations;
+using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
 using Robust.Server.Player;
 using Robust.Shared.Collections;
@@ -17,6 +19,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using System.Linq;
 
 namespace Content.Server.Station.Systems;
 
@@ -30,13 +33,14 @@ public sealed partial class StationSystem : SharedStationSystem
 {
     [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly PvsOverrideSystem _pvsOverride = default!;
     [Dependency] private readonly EntityManager _entMan = default!;
     [Dependency] private readonly CrewMetaRecordsSystem _metaRecords = default!;
-
+    [Dependency] private readonly MapSystem _mapSystem = default!;
     private ISawmill _sawmill = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
@@ -66,6 +70,53 @@ public sealed partial class StationSystem : SharedStationSystem
         SubscribeLocalEvent<StationGridRemovedEvent>(OnStationGridRemoved);
 
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
+    }
+
+
+    public int GetPersonalTileCount(string realName)
+    {
+        var count = 0;
+        var query = _entManager.AllEntityQueryEnumerator<PersonalMemberComponent, MapGridComponent>();
+        while (query.MoveNext(out var gridUid, out var member, out var mapgrid))
+        {
+            if (member.OwnerName == realName)
+            {
+                var tiles = _mapSystem.GetAllTiles(gridUid, mapgrid).Count();
+                count += tiles;
+            }
+
+        }
+        return count;
+    }
+
+    public int GetStationTileCount(EntityUid uid)
+    {
+        var count = 0;
+        var query = _entManager.AllEntityQueryEnumerator<StationMemberComponent, MapGridComponent>();
+        while (query.MoveNext(out var gridUid, out var member, out var mapgrid))
+        {
+            if(member.Station == uid)
+            {
+                var tiles = _mapSystem.GetAllTiles(gridUid, mapgrid).Count();
+                count += tiles;
+            }
+            
+        }
+        return count;
+    }
+    public EntityUid? GetStationTradeStation(EntityUid uid)
+    {
+        var count = 0;
+        var query = _entManager.AllEntityQueryEnumerator<StationMemberComponent, TradeStationComponent>();
+        while (query.MoveNext(out var gridUid, out var member, out var mapgrid))
+        {
+            if (member.Station == uid)
+            {
+                return gridUid;
+            }
+
+        }
+        return null;
     }
 
     private void OnStationSplitEvent(EntityUid uid, StationMemberComponent component, ref PostGridSplitEvent args)

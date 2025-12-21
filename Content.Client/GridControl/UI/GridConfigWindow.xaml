@@ -33,8 +33,8 @@
         <BoxContainer Orientation="Horizontal">
             <Label Text="Grid Name: " />
             <Label Name="GridNameLabel" Text="Grid" />
-            <Control MinWidth="200"/>
-            <LineEdit Name="GridNameLineEdit" HorizontalExpand="True" Access="Public"/>
+            <Control MinWidth="10"/>
+            <LineEdit Name="GridNameLineEdit" HorizontalExpand="True" Access="Public" PlaceHolder="New Grid Name"/>
             <Button Name="GridNameBtn" Text="Save" Access="Public" />
         </BoxContainer>        
     </BoxContainer>

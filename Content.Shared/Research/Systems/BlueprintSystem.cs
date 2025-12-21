@@ -42,7 +42,7 @@ public sealed class BlueprintSystem : EntitySystem
         var recipes = GetBlueprintRecipes(ent);
         foreach (var recipe in recipes)
         {
-            args.Recipes.Add(recipe);
+            args.Recipes.Add(recipe, -404);
         }
     }
 

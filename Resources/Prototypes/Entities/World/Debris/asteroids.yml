@@ -42,6 +42,19 @@
     - type: IFF
       flags: HideLabel
       color: "#b5855b"
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 212
+          Nitrogen: 248
+      variableMixture:
+        Oxygen:
+          moles: 155
+          prob: 0.5
+
 
 - type: entity
   id: AsteroidDebrisSmall
@@ -133,6 +146,22 @@
     - type: IFF
       flags: HideLabel
       color: "#c72b0c"
+    - type: TrappedFluid
+      seedUpperBound: 0.8 # These can be set at default of 1
+      seedLowerBound: 0.4
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 512
+          Oxygen: 120
+      variableMixture:
+        Oxygen:
+          moles: 40
+          prob: 0.1
+        Plasma:
+          moles: 60
+          prob: 0.5
+
 
 - type: entity
   id: BaseIronrockDebrisBarren
@@ -179,6 +208,18 @@
             orGroup: rock
     - type: IFF
       flags: HideLabel
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 512
+          Oxygen: 120
+      variableMixture:
+        Plasma:
+          moles: 60
+          prob: 0.3
 
 - type: entity
   id: BaseIronrockDebrisRich
@@ -225,6 +266,21 @@
             orGroup: rock
     - type: IFF
       flags: HideLabel
+    - type: TrappedFluid
+      seedUpperBound: 1 # These can be set at default of 1
+      seedLowerBound: 0.6
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 512
+          Oxygen: 120
+      variableMixture:
+        Oxygen:
+          moles: 60
+          prob: 0.3
+        Plasma:
+          moles: 60
+          prob: 0.7
 
 - type: entity
   id: IronrockDebrisSmall
@@ -398,6 +454,21 @@
     - type: IFF
       flags: HideLabel
       color: "#ae3dff"
+    - type: TrappedFluid
+      seedUpperBound: 0.8 # These can be set at default of 1
+      seedLowerBound: 0.4
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Plasma: 240
+          CarbonDioxide: 100
+      variableMixture:
+        Nitrogen:
+          moles: 60
+          prob: 0.1
+        Plasma:
+          moles: 100
+          prob: 0.5
 
 - type: entity
   id: BaseChromiteDebrisBarren
@@ -439,6 +510,21 @@
     - type: IFF
       flags: HideLabel
       color: "#ae3dff"
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Plasma: 240
+          CarbonDioxide: 100
+      variableMixture:
+        Nitrogen:
+          moles: 60
+          prob: 0.1
+        Plasma:
+          moles: 100
+          prob: 0.5
 
 - type: entity
   id: BaseChromiteDebrisRich
@@ -477,6 +563,24 @@
     - type: IFF
       flags: HideLabel
       color: "#ae3dff"
+    - type: TrappedFluid
+      seedUpperBound: 1 # These can be set at default of 1
+      seedLowerBound: 0.6
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Plasma: 240
+          CarbonDioxide: 100
+      variableMixture:
+        Nitrogen:
+          moles: 60
+          prob: 0.5
+        Plasma:
+          moles: 100
+          prob: 0.8
+        Tritium:
+          moles: 20
+          prob: 0.3
 
 
 - type: entity
@@ -663,6 +767,18 @@
     - type: IFF
       flags: HideLabel
       color: "#a3a3a3"
+    - type: TrappedFluid
+      seedUpperBound: 0.8 # These can be set at default of 1
+      seedLowerBound: 0.4
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 125 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 420
+          Plasma: 60
+      variableMixture:
+        Plasma:
+          moles: 160
+          prob: 0.5
 
 - type: entity
   id: BaseBasaltDebrisBarren
@@ -704,6 +820,18 @@
     - type: IFF
       flags: HideLabel
       color: "#a3a3a3"
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 125 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 420
+          Plasma: 40
+      variableMixture:
+        Plasma:
+          moles: 160
+          prob: 0.3
 
 - type: entity
   id: BaseBasaltDebrisRich
@@ -745,6 +873,18 @@
     - type: IFF
       flags: HideLabel
       color: "#a3a3a3"
+    - type: TrappedFluid
+      seedUpperBound: 1 # These can be set at default of 1
+      seedLowerBound: 0.6
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 125 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          CarbonDioxide: 320
+          Plasma: 100
+      variableMixture:
+        Plasma:
+          moles: 180
+          prob: 0.7
 
 - type: entity
   id: BasaltDebrisSmall
@@ -927,6 +1067,20 @@
     - type: IFF
       flags: HideLabel
       color: "#cfcfcf"
+    - type: TrappedFluid
+      seedUpperBound: 0.8 # These can be set at default of 1
+      seedLowerBound: 0.4
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 165 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Nitrogen: 164
+      variableMixture:
+        Plasma:
+          moles: 160
+          prob: 0.5
+        Oxygen:
+          moles: 110
+          prob: 0.3
 
 - type: entity
   id: BaseAndesiteDebrisBarren
@@ -965,6 +1119,20 @@
     - type: IFF
       flags: HideLabel
       color: "#cfcfcf"
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 165 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Nitrogen: 140
+      variableMixture:
+        Plasma:
+          moles: 160
+          prob: 0.3
+        Oxygen:
+          moles: 110
+          prob: 0.1
 
 - type: entity
   id: BaseAndesiteDebrisRich
@@ -1003,6 +1171,20 @@
     - type: IFF
       flags: HideLabel
       color: "#cfcfcf"
+    - type: TrappedFluid
+      seedUpperBound: 0.1 # These can be set at default of 1
+      seedLowerBound: 0.6
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 165 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Nitrogen: 164
+      variableMixture:
+        Plasma:
+          moles: 160
+          prob: 0.7
+        Oxygen:
+          moles: 180
+          prob: 0.7
 
 - type: entity
   id: AndesiteDebrisSmall
@@ -1179,6 +1361,21 @@
     - type: IFF
       flags: HideLabel
       color: "#6bb6bb"
+    - type: TrappedFluid
+      seedUpperBound: 0.8 # These can be set at default of 1
+      seedLowerBound: 0.4
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 30 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Oxygen: 164
+          Frezon: 5
+      variableMixture:
+        Plasma:
+          moles: 110
+          prob: 0.5
+        Oxygen:
+          moles: 110
+          prob: 0.3
 
 - type: entity
   id: BaseIceDebrisBarren
@@ -1211,6 +1408,21 @@
     - type: IFF
       flags: HideLabel
       color: "#6bb6bb"
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 30 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Oxygen: 140
+          Frezon: 5
+      variableMixture:
+        Plasma:
+          moles: 90
+          prob: 0.3
+        Oxygen:
+          moles: 90
+          prob: 0.1
 
 - type: entity
   id: BaseIceDebrisRich
@@ -1243,6 +1455,24 @@
     - type: IFF
       flags: HideLabel
       color: "#6bb6bb"
+    - type: TrappedFluid
+      seedUpperBound: 1 # These can be set at default of 1
+      seedLowerBound: 0.6
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 30 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Oxygen: 164
+          Frezon: 5
+      variableMixture:
+        Plasma:
+          moles: 110
+          prob: 0.7
+        Oxygen:
+          moles: 110
+          prob: 0.5
+        Tritium:
+          moles: 10
+          prob: 0.3
 
 - type: entity
   id: IceDebrisSmall
@@ -1425,6 +1655,26 @@
     - type: IFF
       flags: HideLabel
       color: "#dbdea2"
+    - type: TrappedFluid
+      seedUpperBound: 0.8 # These can be set at default of 1
+      seedLowerBound: 0.4
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Oxygen: 364
+          Nitrogen: 120
+          CarbonDioxide: 234
+      variableMixture:
+        CarbonDioxide:
+          moles: 110
+          prob: 0.2
+        Oxygen:
+          moles: 120
+          prob: 0.1
+        Nitrogen:
+          moles: 250
+          prob: 0.2
+
 
 - type: entity
   id: BaseConglomerateDebrisBarren
@@ -1463,6 +1713,22 @@
     - type: IFF
       flags: HideLabel
       color: "#dbdea2"
+    - type: TrappedFluid
+      seedUpperBound: 0.6 # These can be set at default of 1
+      seedLowerBound: 0.2
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Oxygen: 250
+          Nitrogen: 120
+          CarbonDioxide: 200
+      variableMixture:
+        CarbonDioxide:
+          moles: 110
+          prob: 0.1
+        Nitrogen:
+          moles: 250
+          prob: 0.1
 
 - type: entity
   id: BaseConglomerateDebrisRich
@@ -1501,6 +1767,25 @@
     - type: IFF
       flags: HideLabel
       color: "#dbdea2"
+    - type: TrappedFluid
+      seedUpperBound: 1 # These can be set at default of 1
+      seedLowerBound: 0.6
+      staticMixture: # IMPORTANT: Use *Mixture instead of air!!
+        temperature: 60 # Yall come up with temperature that makes sense
+        moles: # Maximum Moles per TILE, factors such as seed upper/lower bound also apply.
+          Oxygen: 364
+          Nitrogen: 120
+          CarbonDioxide: 234
+      variableMixture:
+        CarbonDioxide:
+          moles: 110
+          prob: 0.3
+        Oxygen:
+          moles: 120
+          prob: 0.4
+        Nitrogen:
+          moles: 250
+          prob: 0.4
 
 - type: entity
   id: ConglomerateDebrisSmall

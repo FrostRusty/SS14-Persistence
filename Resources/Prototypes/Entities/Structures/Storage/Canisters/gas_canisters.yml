@@ -116,12 +116,18 @@
       - GasCanisters
     - type: Paintable
       group: Canisters
+    - type: Construction
+      graph: StorageCanisterGraph
+      node: canister
 
 - type: entity
   parent: GasCanister
   id: StorageCanister
   name: storage canister
   components:
+    - type: Icon
+      sprite: Structures/Storage/canister.rsi
+      state: "yellow"
     - type: Sprite
       layers:
         - state: yellow

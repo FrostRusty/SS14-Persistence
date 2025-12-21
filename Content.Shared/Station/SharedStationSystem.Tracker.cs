@@ -85,9 +85,10 @@ public abstract partial class SharedStationSystem
     [PublicAPI]
     public void SetStation(Entity<StationTrackerComponent?> ent, EntityUid? station)
     {
+        
         if (!Resolve(ent, ref ent.Comp))
             return;
-
+        if (ent.Comp.locked) return;
         if (ent.Comp.Station == station)
             return;
 

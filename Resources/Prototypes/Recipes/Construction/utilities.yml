@@ -263,6 +263,20 @@
   placementMode: SnapgridCenter
   objectType: Structure
   canRotate: true
+  
+- type: construction
+  id: StorageCanisterConstruction
+  name: construction-recipe-storagecanister
+  graph: StorageCanisterGraph
+  startNode: start
+  targetNode: canister
+  category: construction-category-utilities
+  placementMode: PlaceFree
+  objectType: Structure
+  canRotate: false
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
 
 - type: construction
   id: GasPipeSensor

@@ -1022,6 +1022,36 @@
         Steel: 6
 
 - type: entity
+  id: MCTNMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: multi-channel transfer node machine board
+  components:
+    - type: Sprite
+      state: engineering
+    - type: MachineBoard
+      prototype: MCTNodeMachine
+      stackRequirements:
+        Cable: 5
+        CableMV: 5
+        CableHV: 5
+        Manipulator: 2
+        Steel: 10
+        
+- type: entity
+  id: TrappedFluidExtractorMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: gas miner machine board
+  components:
+    - type: Sprite
+      state: engineering
+    - type: MachineBoard
+      prototype: TrappedFluidExtractor
+      stackRequirements:
+        CableMV: 5
+        Manipulator: 2
+        Plasteel: 5
+
+- type: entity
   parent: BaseMachineCircuitboard
   id: OreProcessorIndustrialMachineCircuitboard
   name: industrial ore processor machine board

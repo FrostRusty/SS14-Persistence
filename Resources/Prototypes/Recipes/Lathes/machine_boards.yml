@@ -144,6 +144,16 @@
   parent: [ BaseCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
   id: GasRecyclerMachineCircuitboard
   result: GasRecyclerMachineCircuitboard
+  
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  id: MCTNMachineCircuitboard
+  result: MCTNMachineCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  id: TrappedFluidExtractorMachineCircuitboard
+  result: TrappedFluidExtractorMachineCircuitboard
 
 # Power
 - type: latheRecipe

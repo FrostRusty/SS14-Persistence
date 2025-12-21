@@ -25,7 +25,7 @@ public sealed partial class ResearchServerComponent : Component
     /// A unique numeric id representing the server
     /// </summary>
     [AutoNetworkedField]
-    [ViewVariables(VVAccess.ReadOnly)]
+    [DataField]
     public int Id;
 
     /// <summary>

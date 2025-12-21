@@ -10,3 +10,15 @@ public sealed class CargoPalletAppraiseMessage : BoundUserInterfaceMessage
 {
 
 }
+
+
+[Serializable, NetSerializable]
+public sealed class CargoPalletStationSelectMessage : BoundUserInterfaceMessage
+{
+    public int Target;
+    public CargoPalletStationSelectMessage(int target)
+    {
+        Target = target;
+    }
+
+}

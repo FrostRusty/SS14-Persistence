@@ -137,7 +137,7 @@ namespace Content.Server.Lathe
             var recipes = GetAvailableRecipes(uid, component, true);
             foreach (var id in recipes)
             {
-                if (!_proto.Resolve(id, out var proto))
+                if (!_proto.Resolve(id.Key, out var proto))
                     continue;
                 foreach (var (mat, _) in proto.Materials)
                 {
@@ -153,7 +153,7 @@ namespace Content.Server.Lathe
         }
 
         [PublicAPI]
-        public bool TryGetAvailableRecipes(EntityUid uid, [NotNullWhen(true)] out List<ProtoId<LatheRecipePrototype>>? recipes, [NotNullWhen(true)] LatheComponent? component = null, bool getUnavailable = false)
+        public bool TryGetAvailableRecipes(EntityUid uid, [NotNullWhen(true)] out Dictionary<ProtoId<LatheRecipePrototype>, int>? recipes, [NotNullWhen(true)] LatheComponent? component = null, bool getUnavailable = false)
         {
             recipes = null;
             if (!Resolve(uid, ref component))
@@ -162,14 +162,24 @@ namespace Content.Server.Lathe
             return true;
         }
 
-        public List<ProtoId<LatheRecipePrototype>> GetAvailableRecipes(EntityUid uid, LatheComponent component, bool getUnavailable = false)
+        public Dictionary<ProtoId<LatheRecipePrototype>, int> GetAvailableRecipes(EntityUid uid, LatheComponent component, bool getUnavailable = false)
         {
             var ev = new LatheGetRecipesEvent((uid, component), getUnavailable);
             AddRecipesFromPacks(ev.Recipes, component.StaticPacks);
             RaiseLocalEvent(uid, ev);
-            return ev.Recipes.ToList();
+            return ev.Recipes;
         }
 
+        public void TakeRecipeUses(EntityUid uid, LatheRecipePrototype recipe, TechnologyDatabaseComponent component, int uses)
+        {
+            if (component.UnlockedRecipes.ContainsKey(recipe.ID))
+            {
+                component.UnlockedRecipes[recipe.ID] = int.Max(component.UnlockedRecipes[recipe.ID] - uses, 0);
+            }
+            Dirty(uid, component);
+            var ev = new TechnologyDatabaseModifiedEvent();
+            RaiseLocalEvent(uid, ref ev);
+        }
         public bool TryAddToQueue(EntityUid uid, LatheRecipePrototype recipe, int quantity, LatheComponent? component = null)
         {
             if (!Resolve(uid, ref component))
@@ -178,7 +188,24 @@ namespace Content.Server.Lathe
             if (quantity <= 0)
                 return false;
             quantity = int.Min(quantity, MaxItemsPerRequest);
+            if (TryComp<ResearchClientComponent>(uid, out var researchClient))
+            {
+                if(researchClient.Server != null)
+                {
+                    if(TryComp<TechnologyDatabaseComponent>(researchClient.Server, out var database))
+                    {
+                        if(database.UnlockedRecipes.ContainsKey(recipe.ID))
+                        {
+                            quantity = int.Min(quantity, database.UnlockedRecipes[recipe.ID]);
+                            TakeRecipeUses(researchClient.Server.Value, recipe, database, quantity);
+                        }
+                    }
+                }
+            }
 
+
+            if (quantity <= 0)
+                return false;
             if (!CanProduce(uid, recipe, quantity, component))
                 return false;
 
@@ -241,6 +268,7 @@ namespace Content.Server.Lathe
 
             if (comp.CurrentRecipe != null)
             {
+
                 var currentRecipe = _proto.Index(comp.CurrentRecipe.Value);
                 if (currentRecipe.Result is { } resultProto)
                 {
@@ -303,8 +331,22 @@ namespace Content.Server.Lathe
                 var pack = _proto.Index(id);
                 foreach (var recipe in pack.Recipes)
                 {
-                    if (args.GetUnavailable || database.UnlockedRecipes.Contains(recipe))
-                        args.Recipes.Add(recipe);
+                    var uses = -404;
+                    if (args.GetUnavailable || database.UnlockedRecipes.ContainsKey(recipe))
+                    {
+                        if(args.Recipes.ContainsKey(recipe)) continue;
+                        if(database.UnlockedRecipes.ContainsKey(recipe))
+                        {
+                            args.Recipes.Add(recipe, database.UnlockedRecipes[recipe]);
+                        }
+                        else
+                        {
+                            args.Recipes.Add(recipe, -404);
+                        }
+
+                    }
+
+                        
                 }
             }
         }
@@ -388,7 +430,7 @@ namespace Content.Server.Lathe
             var recipeNames = new List<string>();
             foreach (var recipeId in args.NewlyUnlockedRecipes)
             {
-                if (!potentialRecipes.Contains(new(recipeId)))
+                if (!potentialRecipes.ContainsKey(new(recipeId)))
                     continue;
 
                 if (!_proto.TryIndex(recipeId, out LatheRecipePrototype? recipe))
@@ -426,7 +468,7 @@ namespace Content.Server.Lathe
 
         protected override bool HasRecipe(EntityUid uid, LatheRecipePrototype recipe, LatheComponent component)
         {
-            return GetAvailableRecipes(uid, component).Contains(recipe.ID);
+            return GetAvailableRecipes(uid, component).ContainsKey(recipe.ID);
         }
 
         public void AbortProduction(EntityUid uid, LatheComponent? component = null)
@@ -472,7 +514,6 @@ namespace Content.Server.Lathe
                 }
             }
             TryStartProducing(uid, component);
-            UpdateUserInterfaceState(uid, component);
         }
 
         private void OnLatheSyncRequestMessage(EntityUid uid, LatheComponent component, LatheSyncRequestMessage args)

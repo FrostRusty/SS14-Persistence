@@ -1,3 +1,5 @@
+using Content.Shared.Radio;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Cargo.Events;
@@ -27,6 +29,27 @@ public sealed class StationModificationToggleClaim : BoundUserInterfaceMessage
     }
 }
 
+[Serializable, NetSerializable]
+public sealed class StationModificationEnableChannel : BoundUserInterfaceMessage
+{
+    public ProtoId<RadioChannelPrototype> ChannelID;
+
+    public StationModificationEnableChannel(ProtoId<RadioChannelPrototype> id)
+    {
+        ChannelID = id;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class StationModificationDisableChannel : BoundUserInterfaceMessage
+{
+    public ProtoId<RadioChannelPrototype> ChannelID;
+
+    public StationModificationDisableChannel(ProtoId<RadioChannelPrototype> id)
+    {
+        ChannelID = id;
+    }
+}
 
 [Serializable, NetSerializable]
 public sealed class StationModificationToggleAssign : BoundUserInterfaceMessage

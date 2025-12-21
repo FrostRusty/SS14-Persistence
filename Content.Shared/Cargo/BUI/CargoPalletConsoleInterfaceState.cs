@@ -24,14 +24,29 @@ public sealed class CargoPalletConsoleInterfaceState : BoundUserInterfaceState
 
     public int Tax;
 
-    public string StationName;
-    public CargoPalletConsoleInterfaceState(int appraisal, int count, bool enabled, bool cashmode, int tax, string stationName)
+    public int TaxingStation;
+
+    public string TaxingName;
+
+    public Dictionary<int, string> FormattedStations;
+
+    public int SelectedStation;
+
+    public string SelectedName;
+
+    
+
+    public CargoPalletConsoleInterfaceState(int appraisal, int count, bool enabled, bool cashmode, int tax, int taxingStation, string taxingName, Dictionary<int, string> formattedStations, int selectedFaction, string selectedName)
     {
         Appraisal = appraisal;
         Count = count;
         Enabled = enabled;
         CashMode = cashmode;
         Tax = tax;
-        StationName = stationName;
+        TaxingStation = taxingStation;
+        FormattedStations = formattedStations;
+        SelectedStation = selectedFaction;
+        TaxingName = taxingName;
+        SelectedName = selectedName;
     }
 }

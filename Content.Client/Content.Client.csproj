@@ -32,6 +32,12 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Update="Radio\Ui\HeadsetMenuWindow.xaml.cs">
+      <DependentUpon>HeadsetMenuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="GridControl\UI\GridControlConsoleWindow.xaml.cs">
+      <DependentUpon>GridControlConsoleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Update="CrewAssignments\UI\JobNetMenu.xaml.cs">
       <DependentUpon>JobNetMenu.xaml</DependentUpon>
     </Compile>

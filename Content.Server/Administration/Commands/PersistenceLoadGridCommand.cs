@@ -1,24 +1,17 @@
 using Content.Shared.Administration;
-using Content.Shared.CCVar;
-using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
-using Robust.Shared.EntitySerialization.Systems;
-using Robust.Shared.Utility;
 using System.Numerics;
 using Robust.Shared.EntitySerialization;
+using Content.Server.Persistence.Systems;
 
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Server)]
 public sealed class PersistenceLoadGridCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IEntitySystemManager _system = default!;
+    [Dependency] private readonly PersistenceSystem _persistence = default!;
 
     public override string Command => "persistenceloadgrid";
 
@@ -94,12 +87,15 @@ public sealed class PersistenceLoadGridCommand : LocalizedEntityCommands
             opts.StoreYamlUids = storeUids;
         }
 
-        var path = new ResPath(args[1]);
-        if (!_system.GetEntitySystem<MapLoaderSystem>().TryLoadGrid(mapId, path, out var grid, opts, offset, rot))
+        if (!_persistence.LoadGrid(args[1], mapId, offset, rot, out var errorMessage, out var grid, opts))
         {
-            shell.WriteError($"Could not load the grid! Check console perhaps...");
-            return;
+            shell.WriteError("There was a problem while loading the grid.");
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+                shell.WriteError(errorMessage);
         }
-        _transform.SetLocalPositionRotation(grid.Value, offset, rot);
+        else
+        {
+            shell.WriteLine($"Grid successfuly loaded with id '{grid}' on Map {mapId} {offset} ({rot.Degrees}º) ");
+        }
     }
 }

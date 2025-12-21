@@ -1,9 +1,9 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: ClothingHeadset
   id: ClothingHeadsetAlt
   name: headset
-  description: An updated, modular intercom that fits over the head. Takes encryption keys.
+  description: An updated, modular intercom that fits over the head. Channel access is determined by the faction you target.
   components:
   - type: Sprite
     state: icon_alt

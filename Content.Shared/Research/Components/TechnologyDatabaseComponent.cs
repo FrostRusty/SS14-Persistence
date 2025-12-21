@@ -42,7 +42,7 @@ public sealed partial class TechnologyDatabaseComponent : Component
     /// todo: if you unlock all the recipes in a tech, it doesn't count as unlocking the tech. sadge
     [AutoNetworkedField]
     [DataField]
-    public List<ProtoId<LatheRecipePrototype>> UnlockedRecipes = new();
+    public Dictionary<ProtoId<LatheRecipePrototype>, int> UnlockedRecipes = new();
 }
 
 /// <summary>

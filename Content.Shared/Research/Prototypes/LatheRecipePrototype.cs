@@ -69,5 +69,11 @@ namespace Content.Shared.Research.Prototypes
         /// </summary>
         [DataField]
         public List<ProtoId<LatheCategoryPrototype>> Categories = new();
+
+        /// <summary>
+        /// How many uses to add when this tech is unlocked.
+        /// </summary>
+        [DataField]
+        public int UnlockUses = 1;
     }
 }

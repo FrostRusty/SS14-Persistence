@@ -227,6 +227,34 @@ public sealed class AccessReaderSystem : EntitySystem
             args.HasAccess |= LockTypes.Access;
     }
 
+
+    public string? GetIdName(EntityUid user)
+    {
+        string? actorName = null;
+        var accessSources = FindPotentialAccessItems(user);
+        foreach (var source in accessSources)
+        {
+            if (TryComp<IdCardComponent>(source, out var idComp))
+            {
+                if (idComp.FullName != null && idComp.FullName.Length > 0)
+                    actorName = idComp.FullName;
+            }
+            else if (TryComp<PdaComponent>(source, out var pdaComp))
+            {
+                if (pdaComp != null && pdaComp.ContainedId != null)
+                {
+                    if (TryComp<IdCardComponent>(pdaComp.ContainedId, out var idComp2))
+                    {
+                        if (idComp2.FullName != null && idComp2.FullName.Length > 0)
+                            actorName = idComp2.FullName;
+                    }
+                }
+            }
+        }
+        return actorName;
+    }
+
+
     /// <summary>
     /// Searches the source for access tags
     /// then compares it with the all targets accesses to see if it is allowed.

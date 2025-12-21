@@ -41,7 +41,7 @@ public sealed class MobStateActionsSystem : EntitySystem
 
         foreach (var act in component.GrantedActions)
         {
-            Del(act);
+            QueueDel(act);
         }
         component.GrantedActions.Clear();
 

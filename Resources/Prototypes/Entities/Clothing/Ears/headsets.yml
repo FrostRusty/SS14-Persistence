@@ -3,34 +3,36 @@
   parent: Clothing
   id: ClothingHeadset
   name: headset
-  description: An updated, modular intercom that fits over the head. Takes encryption keys.
+  description: An updated, modular intercom that fits over the head. Channel access is determined by the faction you target.
   components:
-  - type: ContainerContainer
-    containers:
-      key_slots: !type:Container
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - EncryptionKeyCommon
   - type: Headset
-  - type: EncryptionKeyHolder
-    keySlots: 4
   - type: Sprite
     state: icon
   - type: Item
     size: Small
   - type: Clothing
+    quickEquip: false
     slots:
     - ears
     sprite: Clothing/Ears/Headsets/base.rsi
   - type: GuideHelp
     guides:
     - Radio
+  - type: UserInterface
+    interfaces:
+      enum.HeadsetMenuUiKey.Key:
+        type: HeadsetMenuBoundUserInterface
+  - type: ActivatableUI
+    key: enum.HeadsetMenuUiKey.Key
+    requiresComplex: true
+    requireActiveHand: false
+    singleUser: true
+    inHandsOnly: true
 
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetGrey
-  name: passenger headset
+  name: general headset
   components:
   - type: Sprite
     sprite: Clothing/Ears/Headsets/base.rsi

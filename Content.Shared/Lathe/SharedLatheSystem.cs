@@ -66,6 +66,21 @@ public abstract class SharedLatheSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Add every recipe in the list of recipe packs to a single hashset.
+    /// </summary>
+    public void AddRecipesFromPacks(Dictionary<ProtoId<LatheRecipePrototype>, int> recipes, IEnumerable<ProtoId<LatheRecipePackPrototype>> packs)
+    {
+        foreach (var id in packs)
+        {
+            var pack = _proto.Index(id);
+            foreach(var recipe in pack.Recipes)
+            {
+                recipes.Add(recipe, -404);
+            }
+        }
+    }
+
     private void OnExamined(Entity<LatheComponent> ent, ref ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)

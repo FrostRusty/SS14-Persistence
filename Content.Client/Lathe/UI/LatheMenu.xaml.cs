@@ -32,7 +32,7 @@ public sealed partial class LatheMenu : DefaultWindow
     public event Action<int>? QueueMoveDownAction;
     public event Action? DeleteFabricatingAction;
 
-    public List<ProtoId<LatheRecipePrototype>> Recipes = new();
+    public Dictionary<ProtoId<LatheRecipePrototype>, int> Recipes = new();
 
     public List<ProtoId<LatheCategoryPrototype>>? Categories;
 
@@ -94,10 +94,10 @@ public sealed partial class LatheMenu : DefaultWindow
     /// </summary>
     public void PopulateRecipes()
     {
-        var recipesToShow = new List<LatheRecipePrototype>();
+        var recipesToShow = new Dictionary<LatheRecipePrototype, int>();
         foreach (var recipe in Recipes)
         {
-            if (!_prototypeManager.Resolve(recipe, out var proto))
+            if (!_prototypeManager.Resolve(recipe.Key, out var proto))
                 continue;
 
             // Category filtering
@@ -114,12 +114,12 @@ public sealed partial class LatheMenu : DefaultWindow
 
             if (SearchBar.Text.Trim().Length != 0)
             {
-                if (_lathe.GetRecipeName(recipe).ToLowerInvariant().Contains(SearchBar.Text.Trim().ToLowerInvariant()))
-                    recipesToShow.Add(proto);
+                if (_lathe.GetRecipeName(recipe.Key).ToLowerInvariant().Contains(SearchBar.Text.Trim().ToLowerInvariant()))
+                    recipesToShow.Add(proto, recipe.Value);
             }
             else
             {
-                recipesToShow.Add(proto);
+                recipesToShow.Add(proto, recipe.Value);
             }
         }
 
@@ -128,7 +128,7 @@ public sealed partial class LatheMenu : DefaultWindow
 
         RecipeCount.Text = Loc.GetString("lathe-menu-recipe-count", ("count", recipesToShow.Count));
 
-        var sortedRecipesToShow = recipesToShow.OrderBy(_lathe.GetRecipeName);
+        var sortedRecipesToShow = recipesToShow;//.OrderBy(_lathe.GetRecipeName);
 
         // Get the existing list of queue controls
         var oldChildCount = RecipeList.ChildCount;
@@ -137,12 +137,13 @@ public sealed partial class LatheMenu : DefaultWindow
         int idx = 0;
         foreach (var prototype in sortedRecipesToShow)
         {
-            var canProduce = _lathe.CanProduce(Entity, prototype, quantity, component: lathe);
-            var tooltipFunction = () => GenerateTooltipText(prototype);
+            var canProduce = _lathe.CanProduce(Entity, prototype.Key, quantity, component: lathe);
+            if (prototype.Value <= 0 && prototype.Value != -404) canProduce = false;
+            var tooltipFunction = () => GenerateTooltipText(prototype.Key);
 
             if (idx >= oldChildCount)
             {
-                var control = new RecipeControl(_lathe, prototype, tooltipFunction, canProduce, GetRecipeDisplayControl(prototype));
+                var control = new RecipeControl(_lathe, prototype.Key, tooltipFunction, canProduce, GetRecipeDisplayControl(prototype.Key), prototype.Value);
                 control.OnButtonPressed += s =>
                 {
                     if (!int.TryParse(AmountLineEdit.Text, out var amount) || amount <= 0)
@@ -160,11 +161,11 @@ public sealed partial class LatheMenu : DefaultWindow
                     DebugTools.Assert($"Lathe menu recipe control at {idx} is not of type RecipeControl"); // Something's gone terribly wrong.
                     continue;
                 }
-
-                child.SetRecipe(prototype);
+                
+                child.SetRecipe(prototype.Key, prototype.Value);
                 child.SetTooltipSupplier(tooltipFunction);
                 child.SetCanProduce(canProduce);
-                child.SetDisplayControl(GetRecipeDisplayControl(prototype));
+                child.SetDisplayControl(GetRecipeDisplayControl(prototype.Key));
             }
             idx++;
         }
@@ -229,7 +230,7 @@ public sealed partial class LatheMenu : DefaultWindow
         var currentCategories = new List<ProtoId<LatheCategoryPrototype>>();
         foreach (var recipeId in Recipes)
         {
-            var recipe = _prototypeManager.Index(recipeId);
+            var recipe = _prototypeManager.Index(recipeId.Key);
 
             if (recipe.Categories.Count <= 0)
                 continue;

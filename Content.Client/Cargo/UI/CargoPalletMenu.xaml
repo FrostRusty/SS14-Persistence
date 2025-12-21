@@ -1,14 +1,16 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-            SetSize="500 200"
-            MinSize="500 200"
+            SetSize="600 200"
+            MinSize="600 200"
                       Title="{Loc 'cargo-pallet-console-menu-title'}">
     <BoxContainer Orientation="Vertical" Margin="5">
-        <BoxContainer Orientation="Horizontal">
+        <BoxContainer Orientation="Horizontal" Name="ConnectedBC">
             <Label Text="Connected Station: "
                    StyleClasses="LabelKeyText" />
             <Label Name="StationLabel"
                        Text="Not Connected" />
+            <Control HorizontalExpand="True"/>
+            <OptionButton Name="PossibleStations" Access="Public"/>
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Label Text="Payment Type: "
@@ -42,10 +44,10 @@
             <Label Name="CountLabel"
                    Text="{Loc 'cargo-pallet-menu-no-goods-text'}" />
         </BoxContainer>
+        <Control VerticalExpand="True"></Control>
         <Button Name="AppraiseButton"
                 Text="{Loc 'cargo-pallet-appraise-button'}"/>
         <Button Name="SellButton"
                 Text="{Loc 'cargo-pallet-sell-button'}"/>
-        <TextureButton VerticalExpand="True" />
     </BoxContainer>
 </controls:FancyWindow>

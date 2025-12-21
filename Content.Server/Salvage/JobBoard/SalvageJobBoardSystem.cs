@@ -51,12 +51,12 @@ public sealed class SalvageJobBoardSystem : EntitySystem
     {
         if (!TryComp<SalvageJobsDataComponent>(args.Station, out var salvageJobsData))
             return;
-
+        if (args.Station == null) return;
         foreach (var sold in args.Sold)
         {
-            if (!FulfillsSalvageJob(sold, (args.Station, salvageJobsData), out var jobId))
+            if (!FulfillsSalvageJob(sold, (args.Station.Value, salvageJobsData), out var jobId))
                 continue;
-            TryCompleteSalvageJob((args.Station, salvageJobsData), jobId.Value);
+            TryCompleteSalvageJob((args.Station.Value, salvageJobsData), jobId.Value);
         }
     }
 

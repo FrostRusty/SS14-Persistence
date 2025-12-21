@@ -1,4 +1,5 @@
 using Content.Shared.Database;
+using Content.Shared.Materials;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
 using JetBrains.Annotations;
@@ -118,14 +119,21 @@ public sealed partial class ResearchSystem
             if (generic.PurchaseEvent != null)
                 RaiseLocalEvent(generic.PurchaseEvent);
         }
-
-        component.UnlockedTechnologies.Add(technology.ID);
+        if(!component.UnlockedTechnologies.Contains(technology.ID))
+            component.UnlockedTechnologies.Add(technology.ID);
         var addedRecipes = new List<string>();
         foreach (var unlock in technology.RecipeUnlocks)
         {
-            if (component.UnlockedRecipes.Contains(unlock))
-                continue;
-            component.UnlockedRecipes.Add(unlock);
+            PrototypeManager.Resolve(unlock, out var recipeProto);
+            if (recipeProto == null) continue;
+            if (component.UnlockedRecipes.ContainsKey(unlock))
+            {
+                component.UnlockedRecipes[unlock] = component.UnlockedRecipes[unlock] + recipeProto.UnlockUses;
+            }
+            else
+            {
+                component.UnlockedRecipes.Add(unlock, recipeProto.UnlockUses);
+            }
             addedRecipes.Add(unlock);
         }
         Dirty(uid, component);
@@ -168,7 +176,7 @@ public sealed partial class ResearchSystem
         component.CurrentTechnologyCards = new List<string>();
         component.SupportedDisciplines = new List<ProtoId<TechDisciplinePrototype>>();
         component.UnlockedTechnologies = new List<ProtoId<TechnologyPrototype>>();
-        component.UnlockedRecipes = new List<ProtoId<LatheRecipePrototype>>();
+        component.UnlockedRecipes = new Dictionary<ProtoId<LatheRecipePrototype>, int>();
         Dirty(uid, component);
     }
 }

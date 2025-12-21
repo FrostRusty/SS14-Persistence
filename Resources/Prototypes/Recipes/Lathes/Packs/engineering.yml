@@ -59,6 +59,8 @@
   - AtmosMonitoringComputerCircuitboard
   - SolarControlComputerCircuitboard
   - PowerComputerCircuitboard
+  - MCTNMachineCircuitboard
+  - TrappedFluidExtractorMachineCircuitboard
 
 ## Dynamic
 

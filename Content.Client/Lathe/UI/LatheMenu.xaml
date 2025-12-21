@@ -5,7 +5,7 @@
     xmlns:ui="clr-namespace:Content.Client.Materials.UI"
     Title="{Loc 'lathe-menu-title'}"
     MinSize="550 450"
-    SetSize="750 500">
+    SetSize="850 500">
     <BoxContainer
         Orientation="Horizontal"
         VerticalExpand="True"

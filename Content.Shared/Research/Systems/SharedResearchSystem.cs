@@ -38,11 +38,15 @@ public abstract class SharedResearchSystem : EntitySystem
         component.CurrentTechnologyCards.Clear();
         foreach (var discipline in component.SupportedDisciplines)
         {
-            var selected = availableTechnology.FirstOrDefault(p => p.Discipline == discipline);
-            if (selected == null)
-                continue;
-
-            component.CurrentTechnologyCards.Add(selected.ID);
+            for(var i = 0; i<3; i++)
+            {
+                var selected = availableTechnology.FirstOrDefault(p => p.Discipline == discipline);
+                if (selected == null)
+                    continue;
+                component.CurrentTechnologyCards.Add(selected.ID);
+                availableTechnology.Remove(selected);
+                _random.Shuffle(availableTechnology);
+            }
         }
         Dirty(uid, component);
     }
@@ -76,8 +80,8 @@ public abstract class SharedResearchSystem : EntitySystem
         if (tech.Tier > disciplineTiers[tech.Discipline])
             return false;
 
-        if (component.UnlockedTechnologies.Contains(tech.ID))
-            return false;
+ //       if (component.UnlockedTechnologies.Contains(tech.ID))
+ //           return false;
 
         foreach (var prereq in tech.TechnologyPrerequisites)
         {
@@ -225,6 +229,7 @@ public abstract class SharedResearchSystem : EntitySystem
         var discipline = PrototypeManager.Index(prototype.Discipline);
         if (prototype.Tier < discipline.LockoutTier)
             return;
+        return;
         component.MainDiscipline = prototype.Discipline;
         Dirty(uid, component);
 
@@ -295,10 +300,18 @@ public abstract class SharedResearchSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
-        if (component.UnlockedRecipes.Contains(recipe))
-            return;
+        var uses = 1;
+        PrototypeManager.Resolve<LatheRecipePrototype>(recipe, out var recipeProto);
 
-        component.UnlockedRecipes.Add(recipe);
+        if(recipeProto != null)
+        {
+            uses = recipeProto.UnlockUses;
+        }
+        if (component.UnlockedRecipes.ContainsKey(recipe))
+        {
+            component.UnlockedRecipes[recipe] = component.UnlockedRecipes[recipe] + uses;
+        }
+        else component.UnlockedRecipes.Add(recipe, uses);
         Dirty(uid, component);
 
         var ev = new TechnologyDatabaseModifiedEvent(new List<string> { recipe });
