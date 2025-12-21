@@ -132,25 +132,19 @@ public sealed class RadioSystem : EntitySystem
         {
             if (encryptionID == 0 && !channel.Encrypted) ;
 
-            else if (TryComp<WearingHeadsetComponent>(receiver, out var subTargetHeadset) && subTargetHeadset != null)
+            else if (TryComp<HeadsetComponent>(receiver, out var targetHeadset) && targetHeadset != null)
             {
-                if (TryComp<HeadsetComponent>(subTargetHeadset.Headset, out var targetHeadset))
-                {
-                    if (targetHeadset.RecieveFrom != 0 && targetHeadset.RecieveFrom != encryptionID)
-                    {
-                        continue;
-                    }
-                    var station = _station.GetStationByID(encryptionID);
-                    if (station == null) continue;
-                    if (!_headset.HasChannelAccess(receiver, station.Value, channel))
-                    {
-                        continue;
-                    }
-                }
-                else
+                if (targetHeadset.RecieveFrom != 0 && targetHeadset.RecieveFrom != encryptionID)
                 {
                     continue;
                 }
+                var station = _station.GetStationByID(encryptionID);
+                if (station == null) continue;
+                if (!_headset.HasChannelAccess(receiver, station.Value, channel))
+                {
+                    continue;
+                }
+             
             }
             else if (!radio.ReceiveAllChannels)
             {

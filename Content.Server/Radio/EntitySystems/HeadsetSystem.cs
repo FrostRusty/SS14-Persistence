@@ -112,7 +112,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
     {
 
         if (TryComp<StationDataComponent>(faction, out var sD) && sD != null)
-        {
             if (sD.RadioData.ContainsKey(channel.ID))
             {
                 if (sD.RadioData.TryGetValue(channel.ID, out var data) && data != null)
@@ -120,6 +119,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
                     if (!data.Enabled) return false;
                     if (data.Access.Count <= 0) return true;
                     var name = _accessReader.GetIdName(player);
+                    if (sD.Owners.Contains(name)) return true;
                     if (name != null)
                     {
                         if (TryComp<CrewRecordsComponent>(faction, out var crewRecords) && crewRecords != null)
