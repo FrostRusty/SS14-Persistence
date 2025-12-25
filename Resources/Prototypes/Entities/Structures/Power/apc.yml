@@ -85,6 +85,7 @@
   - type: PowerProvider
     voltage: Apc
   - type: Apc
+    maxLoad: 50000
     voltage: Apc
   - type: ExtensionCableProvider
   - type: UserInterface
@@ -210,6 +211,8 @@
   id: APCBasic
   suffix: Basic, 50kJ
   components:
+  - type: Apc
+    maxLoad: 50000
   - type: Battery
     maxCharge: 50000
     startingCharge: 50000
@@ -219,6 +222,8 @@
   id: APCHighCapacity
   suffix: High Capacity, 100kJ
   components:
+  - type: Apc
+    maxLoad: 100000
   - type: Battery
     maxCharge: 100000
     startingCharge: 100000
@@ -228,6 +233,8 @@
   id: APCSuperCapacity
   suffix: Super Capacity, 150kJ
   components:
+  - type: Apc
+    maxLoad: 150000
   - type: Battery
     maxCharge: 150000
     startingCharge: 150000
@@ -237,6 +244,8 @@
   id: APCHyperCapacity
   suffix: Hyper Capacity, 200kJ
   components:
+  - type: Apc
+    maxLoad: 200000
   - type: Battery
     maxCharge: 200000
     startingCharge: 200000
