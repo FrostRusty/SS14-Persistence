@@ -8,7 +8,6 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Serilog;
 
 namespace Content.Client.CrewAssignments.UI;
 

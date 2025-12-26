@@ -10,7 +10,6 @@ using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;

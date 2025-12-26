@@ -22,7 +22,6 @@ using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Serilog.Parsing;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;

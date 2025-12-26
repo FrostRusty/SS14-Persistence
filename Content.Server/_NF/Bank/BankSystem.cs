@@ -6,7 +6,6 @@ using Content.Shared._NF.Bank.Events;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Robust.Shared.Player;
-using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;

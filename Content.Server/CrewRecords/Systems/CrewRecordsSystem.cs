@@ -4,7 +4,6 @@ using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.CrewRecords.Systems;
 using Robust.Shared.Player;
-using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;

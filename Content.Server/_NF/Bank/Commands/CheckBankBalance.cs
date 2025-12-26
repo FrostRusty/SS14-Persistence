@@ -6,7 +6,6 @@ using Content.Shared.Administration;
 using Content.Shared.Preferences;
 using Robust.Server.Player;
 using Robust.Shared.Console;
-using Serilog;
 using System.Linq;
 
 namespace Content.Server._NF.Bank.Commands;
