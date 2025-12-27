@@ -334,6 +334,7 @@
     entity: ComputerCargoBounty
     
 - type: entity
+  parent: BaseFlatpack
   id: TinyFanFlatpack
   name: tiny fan flatpack
   description: A flatpack used for constructing a tiny fan. Useful for keeping gases in or out.
