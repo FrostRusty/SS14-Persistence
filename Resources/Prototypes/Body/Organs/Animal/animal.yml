@@ -3,6 +3,7 @@
   parent: BaseItem
   abstract: true
   components:
+  - type: Produce
   - type: Organ
   - type: Edible
   - type: Sprite
@@ -60,6 +61,8 @@
         reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 5
+        - ReagentId: Nutriment
+          Quantity: 5
   - type: Item
     size: Small
     heldPrefix: lungs
@@ -81,6 +84,8 @@
         maxVol: 5
         reagents:
         - ReagentId: UncookedAnimalProteins
+          Quantity: 5
+        - ReagentId: Nutriment
           Quantity: 5
   - type: Stomach
   - type: Metabolizer
@@ -120,6 +125,14 @@
   - type: Sprite
     state: liver
   - type: Organ
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: UncookedAnimalProteins
+          Quantity: 5
+        - ReagentId: Nutriment
+          Quantity: 5
   - type: Metabolizer
     maxReagents: 1
     metabolizerTypes: [ Animal ]
@@ -138,6 +151,14 @@
   - type: Sprite
     state: heart-on
   - type: Organ
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: UncookedAnimalProteins
+          Quantity: 5
+        - ReagentId: Nutriment
+          Quantity: 5
   - type: Metabolizer
     maxReagents: 2
     metabolizerTypes: [ Animal ]
@@ -160,6 +181,14 @@
     - state: kidney-l
     - state: kidney-r
   - type: Organ
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: UncookedAnimalProteins
+          Quantity: 5
+        - ReagentId: Nutriment
+          Quantity: 5
   - type: Metabolizer
     maxReagents: 5
     metabolizerTypes: [ Animal ]
