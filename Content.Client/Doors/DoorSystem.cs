@@ -119,7 +119,7 @@ public sealed class DoorSystem : SharedDoorSystem
                 }
 
                 return;
-            case DoorState.Opening or DoorState.boltingOpen:
+            case DoorState.Opening:
                 if (entity.Comp.OpeningAnimationTime == TimeSpan.Zero)
                     return;
 
