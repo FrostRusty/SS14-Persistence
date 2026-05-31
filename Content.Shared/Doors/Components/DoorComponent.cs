@@ -25,10 +25,6 @@ public sealed partial class DoorComponent : Component
     [DataField, AutoNetworkedField]
     [Access(typeof(SharedDoorSystem))]
     public DoorState State = DoorState.Closed;
-    // There isn't an easy safe way to shut and bolt the door in one go.
-    // Collisions and shit make it unrealistic, unlike bolting open, which is infallible.
-    // Our best alternative is to just have the door "want" to be bolted when it's closed.
-    public bool BoltingOnShut = false;
 
     #region Timing
     // if you want do dynamically adjust these times, you need to add networking for them. So for now, they are all
@@ -311,8 +307,7 @@ public enum DoorState : byte
     Opening,
     Welded,
     Denying,
-    Emagging,
-    boltingOpen
+    Emagging
 }
 
 [Serializable, NetSerializable]
