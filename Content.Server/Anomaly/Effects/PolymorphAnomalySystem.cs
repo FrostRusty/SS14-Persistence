@@ -179,7 +179,6 @@ public sealed class PolymorphAnomalySystem : EntitySystem
         var biasedT = MathF.Pow(t, exponent);
 
         var seconds = MathHelper.Lerp((float)option.MinDuration.TotalSeconds, (float)option.MaxDuration.TotalSeconds, biasedT);
-        //return TimeSpan.FromSeconds(seconds);
-        return TimeSpan.FromSeconds(6000);
+        return TimeSpan.FromSeconds(seconds);
     }
 }
