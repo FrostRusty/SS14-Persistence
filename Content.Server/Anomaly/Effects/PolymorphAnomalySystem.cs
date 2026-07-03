@@ -118,8 +118,6 @@ public sealed class PolymorphAnomalySystem : EntitySystem
                 Duration = permanent ? null : (int)RollDuration(option, severity).TotalSeconds,
             };
 
-            Log.Info($"PolymorphAnomaly: {ToPrettyString(target)} -> {option.Polymorph} | sourceHasInventory={sourceHasInventory} destHasInventory={destHasInventory} | Inventory={config.Inventory}");
-
             var child = _polymorph.PolymorphEntity(target, config);
             if (child != null)
                 EnsureCanDieOrCrit(child.Value);
@@ -140,8 +138,6 @@ public sealed class PolymorphAnomalySystem : EntitySystem
     {
         if (_mobThreshold.TryGetDeadThreshold(child, out _))
             return;
-
-        Log.Warning($"PolymorphAnomaly: {ToPrettyString(child)} has no MobThresholds configured - it would never be able to die or crit. Applying fallback thresholds so revert-on-death/crit still works. Consider adding real MobState/MobThresholds to this prototype.");
 
         EnsureComp<MobStateComponent>(child);
         EnsureComp<MobThresholdsComponent>(child);

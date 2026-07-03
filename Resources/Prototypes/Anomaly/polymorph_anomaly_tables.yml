@@ -1,5 +1,5 @@
 # To add a new possible polymorph outcome for the Polymorph anomaly, just add another
-# entry below - no code changes required. `polymorph` must point at a `polymorph` prototype
+# entry below. `polymorph` must point at a `polymorph` prototype
 # (see Resources/Prototypes/Polymorphs/anomaly_polymorphs.yml and polymorph.yml), `weight`
 # controls how often it's picked relative to the other entries, and minDuration/maxDuration
 # control how long a victim stays transformed if this entry is rolled (higher anomaly severity
@@ -8,26 +8,22 @@
 # Deliberately excluded from this table: silicon/robot mobs (borgs, hivebots, etc.) and any
 # playable species (human, lizard-person, moth, etc.) - only animals and non-playable monsters
 # are eligible outcomes.
-#
-# Roughly tiered by threat/rarity: common critters are common and brief, apex predators are
-# rare and long-lasting. Feel free to retune weights/durations - none of this is load-bearing.
 
 - type: polymorphAnomalyTable
   id: DefaultPolymorphAnomalyTable
   options:
-  # --- Common critters: high weight, short-to-medium duration ---
   - polymorph: Chicken
     weight: 6
-    minDuration: 60      # 1 minute
-    maxDuration: 300     # 5 minutes
+    minDuration: 30
+    maxDuration: 120
   - polymorph: Mouse
     weight: 6
-    minDuration: 60
+    minDuration: 30
     maxDuration: 300
   - polymorph: ArtifactMonkey
     weight: 6
     minDuration: 60
-    maxDuration: 600     # 10 minutes
+    maxDuration: 600
   - polymorph: ArtifactAnomalyCow
     weight: 5
     minDuration: 60
@@ -50,7 +46,7 @@
     maxDuration: 300
   - polymorph: ArtifactAnomalyFrog
     weight: 5
-    minDuration: 60
+    minDuration: 20
     maxDuration: 300
   - polymorph: ArtifactAnomalySnake
     weight: 5
@@ -71,27 +67,27 @@
   - polymorph: ArtifactAnomalyFox
     weight: 5
     minDuration: 60
-    maxDuration: 300
+    maxDuration: 420
   - polymorph: ArtifactAnomalyCat
     weight: 5
     minDuration: 60
-    maxDuration: 300
+    maxDuration: 420
   - polymorph: ArtifactAnomalyCorgi
     weight: 5
     minDuration: 60
-    maxDuration: 300
+    maxDuration: 420
   - polymorph: ArtifactAnomalyHamster
     weight: 5
-    minDuration: 60
-    maxDuration: 300
+    minDuration: 120
+    maxDuration: 1200
   - polymorph: ArtifactAnomalyParrot
     weight: 5
     minDuration: 60
-    maxDuration: 300
+    maxDuration: 120
   - polymorph: ArtifactAnomalyPenguin
     weight: 5
     minDuration: 60
-    maxDuration: 300
+    maxDuration: 120
   - polymorph: ArtifactAnomalyKangaroo
     weight: 5
     minDuration: 60
@@ -99,7 +95,7 @@
   - polymorph: ArtifactAnomalyBat
     weight: 4
     minDuration: 60
-    maxDuration: 240     # 4 minutes
+    maxDuration: 240
   - polymorph: ArtifactAnomalyBee
     weight: 4
     minDuration: 60
@@ -108,26 +104,20 @@
     weight: 4
     minDuration: 60
     maxDuration: 240
-  - polymorph: ArtifactCluwne
-    weight: 2
-    minDuration: 60
-    maxDuration: 180     # 3 minutes - it's a curse, not a habitat
-
-  # --- Medium threats: moderate weight, medium-to-long duration ---
   - polymorph: ArtifactLizard
     weight: 3
-    minDuration: 180     # 3 minutes
-    maxDuration: 600     # 10 minutes
+    minDuration: 30
+    maxDuration: 120
   - polymorph: ArtifactLuminous
-    weight: 2
+    weight: 3
     minDuration: 180
     maxDuration: 600
   - polymorph: ArtifactAnomalyGiantSpider
-    weight: 2
-    minDuration: 300     # 5 minutes
-    maxDuration: 900     # 15 minutes
+    weight: 3
+    minDuration: 300
+    maxDuration: 900
   - polymorph: ArtifactAnomalyCarp
-    weight: 2
+    weight: 4
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyShark
@@ -135,15 +125,15 @@
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalySlimeBlue
-    weight: 2
+    weight: 4
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalySlimeGreen
-    weight: 2
+    weight: 4
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalySlimeYellow
-    weight: 2
+    weight: 4
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyWatcher
@@ -151,155 +141,147 @@
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyFleshGolem
-    weight: 2
+    weight: 3
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyTick
     weight: 2
     minDuration: 300
-    maxDuration: 900
+    maxDuration: 360
   - polymorph: ArtifactAnomalySnail
-    weight: 2
-    minDuration: 300
-    maxDuration: 900
+    weight: 4
+    minDuration: 30
+    maxDuration: 120
   - polymorph: ArtifactAnomalyCobra
-    weight: 2
+    weight: 3
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyBear
-    weight: 1
+    weight: 3
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyGoliath
     weight: 1
     minDuration: 300
-    maxDuration: 900
+    maxDuration: 1200
   - polymorph: ArtifactAnomalyBasilisk
     weight: 1
     minDuration: 300
-    maxDuration: 900
-
-  # --- Apex / rare: low weight, long duration ---
+    maxDuration: 1200
   - polymorph: ArtifactAnomalyRavager
-    weight: 1
-    minDuration: 300     # 5 minutes
-    maxDuration: 1200    # 20 minutes
+    weight: 2
+    minDuration: 300
+    maxDuration: 1200
   - polymorph: ArtifactAnomalyXenoDrone
     weight: 1
     minDuration: 300
     maxDuration: 1200
   - polymorph: ArtifactAnomalyXenoRunner
-    weight: 1
+    weight: 3
     minDuration: 300
     maxDuration: 1200
   - polymorph: ArtifactAnomalyXenoSpitter
-    weight: 1
+    weight: 3
     minDuration: 300
     maxDuration: 1200
   - polymorph: ArtifactAnomalyAbomination
-    weight: 1
+    weight: 4
     minDuration: 300
     maxDuration: 1200
   - polymorph: ArtifactAnomalyHivelord
     weight: 1
-    minDuration: 600     # 10 minutes
-    maxDuration: 1500    # 25 minutes
-  - polymorph: ArtifactAnomalyRatKing
-    weight: 1
     minDuration: 600
     maxDuration: 1500
+  - polymorph: ArtifactAnomalyRatKing
+    weight: 0.5
+    minDuration: 600
+    maxDuration: 1800
   - polymorph: ArtifactAnomalyXenoQueen
     weight: 1
     minDuration: 600
-    maxDuration: 1500
+    maxDuration: 1800
   - polymorph: ArtifactAnomalyHellspawn
-    weight: 1
-    minDuration: 900     # 15 minutes
-    maxDuration: 1800    # 30 minutes - the rarest, nastiest roll in the table
-
-  # --- Second wave: mining elementals (common-medium) ---
+    weight: 0.5
+    minDuration: 900
+    maxDuration: 1800
   - polymorph: ArtifactAnomalyQuartzCrab
-    weight: 2
-    minDuration: 120     # 2 minutes
-    maxDuration: 480     # 8 minutes
+    weight: 4
+    minDuration: 120
+    maxDuration: 480
   - polymorph: ArtifactAnomalyIronCrab
-    weight: 2
+    weight: 4
     minDuration: 120
     maxDuration: 480
   - polymorph: ArtifactAnomalyCoalCrab
-    weight: 2
+    weight: 4
     minDuration: 120
     maxDuration: 480
   - polymorph: ArtifactAnomalyUraniumCrab
-    weight: 2
+    weight: 4
     minDuration: 120
     maxDuration: 480
   - polymorph: ArtifactAnomalyBananiumCrab
-    weight: 2
+    weight: 1
     minDuration: 120
     maxDuration: 480
   - polymorph: ArtifactAnomalySilverCrab
-    weight: 2
+    weight: 4
     minDuration: 120
     maxDuration: 480
   - polymorph: ArtifactAnomalyGoldCrab
-    weight: 2
+    weight: 4
     minDuration: 120
     maxDuration: 480
-
-  # --- Second wave: common critters and oddities ---
   - polymorph: ArtifactAnomalyKobold
-    weight: 4
+    weight: 5
     minDuration: 60
     maxDuration: 300
   - polymorph: ArtifactAnomalyGorilla
-    weight: 3
+    weight: 4
     minDuration: 180
     maxDuration: 600
   - polymorph: ArtifactAnomalyCockroach
-    weight: 5
+    weight: 6
     minDuration: 30
-    maxDuration: 120     # trivial pest, keep it short
+    maxDuration: 60
   - polymorph: ArtifactAnomalyGlockroach
     weight: 4
     minDuration: 30
-    maxDuration: 150
+    maxDuration: 120
   - polymorph: ArtifactAnomalyMothroach
-    weight: 5
+    weight: 6
     minDuration: 30
     maxDuration: 120
   - polymorph: ArtifactAnomalyReindeer
-    weight: 4
+    weight: 5
     minDuration: 60
     maxDuration: 300
   - polymorph: ArtifactAnomalyBoxingKangaroo
-    weight: 3
+    weight: 4
     minDuration: 60
     maxDuration: 300
   - polymorph: ArtifactAnomalyMimic
-    weight: 2
-    minDuration: 180
-    maxDuration: 600
+    weight: 3
+    minDuration: 60
+    maxDuration: 120
   - polymorph: ArtifactAnomalyMoproach
     weight: 4
     minDuration: 60
-    maxDuration: 240
+    maxDuration: 300
   - polymorph: ArtifactAnomalyScurret
     weight: 4
-    minDuration: 60
-    maxDuration: 300
+    minDuration: 300
+    maxDuration: 1800
   - polymorph: ArtifactAnomalyEmotionalSupportScurret
     weight: 3
-    minDuration: 60
-    maxDuration: 300
-
-  # --- Second wave: medium threats ---
+    minDuration: 420
+    maxDuration: 1800
   - polymorph: ArtifactAnomalyClownSpider
     weight: 2
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyCarpHolo
-    weight: 1
+    weight: 3
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyCarpRainbow
@@ -307,33 +289,33 @@
     minDuration: 300
     maxDuration: 900
   - polymorph: ArtifactAnomalyLuminousObject
-    weight: 2
-    minDuration: 180
-    maxDuration: 600
+    weight: 3
+    minDuration: 30
+    maxDuration: 60
   - polymorph: ArtifactAnomalyLuminousEntity
-    weight: 2
-    minDuration: 180
-    maxDuration: 600
+    weight: 3
+    minDuration: 30
+    maxDuration: 60
   - polymorph: ArtifactAnomalyTomatoKiller
     weight: 2
     minDuration: 180
     maxDuration: 600
   - polymorph: ArtifactAnomalyArgocyteSlurva
-    weight: 2
-    minDuration: 180
-    maxDuration: 600
+    weight: 3
+    minDuration: 30
+    maxDuration: 60
   - polymorph: ArtifactAnomalyArgocyteBarrier
-    weight: 2
-    minDuration: 180
-    maxDuration: 600
+    weight: 3
+    minDuration: 60
+    maxDuration: 120
   - polymorph: ArtifactAnomalyArgocyteSkitter
-    weight: 2
-    minDuration: 300
-    maxDuration: 900
+    weight: 3
+    minDuration: 60
+    maxDuration: 120
   - polymorph: ArtifactAnomalyArgocyteSwiper
-    weight: 2
-    minDuration: 300
-    maxDuration: 900
+    weight: 3
+    minDuration: 60
+    maxDuration: 120
   - polymorph: ArtifactAnomalyArgocyteMolder
     weight: 2
     minDuration: 300
@@ -346,12 +328,10 @@
     weight: 2
     minDuration: 300
     maxDuration: 900
-
-  # --- Second wave: apex / rare ---
   - polymorph: ArtifactAnomalyHivelordBrood
-    weight: 1
-    minDuration: 600
-    maxDuration: 1500
+    weight: 5
+    minDuration: 30
+    maxDuration: 300
   - polymorph: ArtifactAnomalyBehonkerElectrical
     weight: 1
     minDuration: 600
@@ -379,16 +359,16 @@
   - polymorph: ArtifactAnomalyArgocyteEnforcer
     weight: 1
     minDuration: 600
-    maxDuration: 1500
+    maxDuration: 1800
   - polymorph: ArtifactAnomalyArgocyteFounder
     weight: 1
     minDuration: 900
     maxDuration: 1800
   - polymorph: ArtifactAnomalyArgocyteLeviathing
-    weight: 1
+    weight: 0.5
     minDuration: 900
     maxDuration: 1800
   - polymorph: ArtifactAnomalyLaserRaptor
-    weight: 1
+    weight: 0.5
     minDuration: 900
     maxDuration: 1800

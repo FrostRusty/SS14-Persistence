@@ -45,7 +45,6 @@ public sealed partial class PolymorphSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private ILogManager _log = default!;
-    private ISawmill _sawmill = default!;
 
     private const string RevertPolymorphId = "ActionRevertPolymorph";
     /// <summary>Accumulator for the throttled per-tick debug dump below.</summary>
@@ -68,8 +67,6 @@ public sealed partial class PolymorphSystem : EntitySystem
 
     public override void Initialize()
     {
-        _sawmill = _log.GetSawmill("polymorph");
-
         SubscribeLocalEvent<PolymorphableComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<PolymorphedEntityComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<PolymorphedEntityComponent, ComponentStartup>(OnPolymorphedStartup);
@@ -98,12 +95,6 @@ public sealed partial class PolymorphSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        _debugDumpTimer += frameTime;
-        var doDebugDump = _debugDumpTimer >= 0.5f;
-        if (doDebugDump)
-            _debugDumpTimer = 0f;
-
         if (_polymorphed.Count == 0)
             return;
 
@@ -118,13 +109,6 @@ public sealed partial class PolymorphSystem : EntitySystem
 
             comp.Time += frameTime;
 
-            if (doDebugDump)
-            {
-                TryComp<MobStateComponent>(uid, out var debugMob);
-                var debugTotalDamage = HasComp<DamageableComponent>(uid) ? _damageable.GetTotalDamage(uid) : (FixedPoint2?)null;
-                _sawmill.Info($"[HP DEBUG] {ToPrettyString(uid)} | state={debugMob?.CurrentState} | totalDamage={debugTotalDamage} | time={comp.Time:F1}/{comp.Configuration.Duration}");
-            }
-
             if (comp.Configuration.Duration != null && comp.Time >= comp.Configuration.Duration)
             {
                 Revert((uid, comp));
@@ -137,9 +121,7 @@ public sealed partial class PolymorphSystem : EntitySystem
             if (comp.Configuration.RevertOnDeath && _mobState.IsDead(uid, mob) ||
                 comp.Configuration.RevertOnCrit && _mobState.IsIncapacitated(uid, mob))
             {
-                _sawmill.Info($"Update() detected death/crit for {ToPrettyString(uid)}, calling Revert()");
                 var result = Revert((uid, comp));
-                _sawmill.Info($"Revert() from Update() returned {(result == null ? "null (FAILED)" : ToPrettyString(result.Value))}");
             }
         }
     }
@@ -199,26 +181,20 @@ public sealed partial class PolymorphSystem : EntitySystem
     /// </summary>
     private void OnDestruction(Entity<PolymorphedEntityComponent> ent, ref DestructionEventArgs args)
     {
-        _sawmill.Info($"OnDestruction fired for {ToPrettyString(ent)}, Reverted={ent.Comp.Reverted}, RevertOnDeath={ent.Comp.Configuration.RevertOnDeath}");
-
         if (ent.Comp.Reverted || !ent.Comp.Configuration.RevertOnDeath)
             return;
 
         var result = Revert((ent, ent));
-        _sawmill.Info($"Revert() from OnDestruction returned {(result == null ? "null (FAILED)" : ToPrettyString(result.Value))}");
     }
 
     private void OnPolymorphedTerminating(Entity<PolymorphedEntityComponent> ent, ref EntityTerminatingEvent args)
     {
-        _sawmill.Info($"OnPolymorphedTerminating fired for {ToPrettyString(ent)}, Reverted={ent.Comp.Reverted}, RevertOnDelete={ent.Comp.Configuration.RevertOnDelete}, Parent={ent.Comp.Parent}");
-
         if (ent.Comp.Reverted)
             return;
 
         if (ent.Comp.Configuration.RevertOnDelete)
         {
             var result = Revert(ent.AsNullable());
-            _sawmill.Info($"Revert() from OnPolymorphedTerminating returned {(result == null ? "null (FAILED)" : ToPrettyString(result.Value))}");
         }
 
         // Remove our original entity too
@@ -382,25 +358,21 @@ public sealed partial class PolymorphSystem : EntitySystem
         var (uid, component) = ent;
         if (!Resolve(ent, ref component))
         {
-            _sawmill.Warning($"Revert failed for {ToPrettyString(uid)}: no PolymorphedEntityComponent");
             return null;
         }
 
         if (Deleted(uid))
         {
-            _sawmill.Warning($"Revert failed for {ToPrettyString(uid)}: uid itself already deleted");
             return null;
         }
 
         if (component.Parent is not { } parent)
         {
-            _sawmill.Warning($"Revert failed for {ToPrettyString(uid)}: no Parent recorded");
             return null;
         }
 
         if (Deleted(parent))
         {
-            _sawmill.Warning($"Revert failed for {ToPrettyString(uid)}: Parent {parent} is DELETED"); // <-- this is your prime suspect
             return null;
         }
 
@@ -409,11 +381,8 @@ public sealed partial class PolymorphSystem : EntitySystem
 
         if (TerminatingOrDeleted(uidXform.ParentUid))
         {
-            _sawmill.Warning($"Revert failed for {ToPrettyString(uid)}: current grid/map {uidXform.ParentUid} is terminating");
             return null;
         }
-
-        _sawmill.Info($"Reverting {ToPrettyString(uid)} back to {ToPrettyString(parent)}");
 
         if (component.Configuration.ExitPolymorphSound != null)
             _audio.PlayPvs(component.Configuration.ExitPolymorphSound, uidXform.Coordinates);

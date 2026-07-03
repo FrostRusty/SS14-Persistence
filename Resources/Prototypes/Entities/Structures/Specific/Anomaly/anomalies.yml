@@ -1167,18 +1167,14 @@
     minProjectiles: 1
     maxProjectiles: 3
 
-# Custom sprite: cross-fades between three collaged forms on a shared silhouette -
-# apex predator (ravager/basilisk/goliath/hellspawn), hive royalty (xeno queen/rat king/
-# hivelord/abomination), and reptile-amphibian (basilisk/lizard/snake/frog). Both "anom1"
-# (idle) and "anom1-pulse" (shown while pulsing/supercritical) are the same 9-frame cycle -
-# pulse just plays it faster. See Resources/Textures/Structures/Specific/Anomalies/polymorph_anom.rsi.
-
 - type: entity
   id: AnomalyPolymorph
   parent: BaseAnomaly
   suffix: Polymorph
   components:
   - type: Anomaly
+    corePrototype: AnomalyCorePolymorph
+    coreInertPrototype: AnomalyCorePolymorphInert
     supercriticalSoundAtAnimationStart:
       collection: RadiationPulse
   - type: Sprite
