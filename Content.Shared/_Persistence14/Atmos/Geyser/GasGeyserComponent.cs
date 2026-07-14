@@ -19,6 +19,21 @@ public sealed partial class GasGeyserComponent : Component
     public TimeSpan EruptionDelay = TimeSpan.FromSeconds(60);
 
     /// <summary>
+    /// Amount of time added to <see cref="EruptionDelay"/> to get the maximum delay. 
+    /// </summary>
+    [DataField]
+    public TimeSpan EruptionRangeDeltaPositive = TimeSpan.FromSeconds(0);
+
+    /// <summary>
+    /// Amount of time subtracted from <see cref="EruptionDelay"/> to get the minimum delay. 
+    /// </summary>
+    [DataField]
+    public TimeSpan EruptionRangeDeltaNegative = TimeSpan.FromSeconds(0);
+
+    public TimeSpan MaxEruptionDelay => EruptionDelay + EruptionRangeDeltaPositive;
+    public TimeSpan MinEruptionDelay => EruptionDelay + EruptionRangeDeltaNegative;
+
+    /// <summary>
     /// Gases released into the atmosphere when the geyser erupts.
     /// </summary>
     [DataField(required: true, customTypeSerializer: typeof(GasArraySerializer)), AutoNetworkedField]

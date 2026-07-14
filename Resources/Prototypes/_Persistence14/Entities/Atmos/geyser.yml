@@ -21,6 +21,9 @@
   - type: InteractionOutline
   - type: Clickable
   - type: GasGeyser
+    eruptionDelay: 5m
+    eruptionRangeDeltaPositive: 2m
+    eruptionRangeDeltaNegative: 2m
 
 
 - type: entity

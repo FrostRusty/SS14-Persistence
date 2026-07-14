@@ -2,6 +2,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Shared._Persistence14.Atmos.Geyser;
 using Content.Shared.Atmos;
 using Robust.Server.GameObjects;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Persistence14.Atmos.Geyser;
@@ -11,6 +12,7 @@ public sealed partial class GasGeyserSystem : EntitySystem
     [Dependency] private readonly IGameTiming _gameTime = default!;
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
     [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     private const string Sawmill = "gas-geyser";
 
@@ -36,7 +38,8 @@ public sealed partial class GasGeyserSystem : EntitySystem
         var merger = new GasMixture(geyser.Comp.Moles, 1);
         _atmos.Merge(environment, merger);
 
-        geyser.Comp.NextEruptionTime = _gameTime.CurTime + geyser.Comp.EruptionDelay;
+        var delay = _random.NextFloat() * (geyser.Comp.MaxEruptionDelay - geyser.Comp.MinEruptionDelay) + geyser.Comp.MinEruptionDelay;
+        geyser.Comp.NextEruptionTime = _gameTime.CurTime + delay;
         Dirty(geyser);
 
         RaiseNetworkEvent(new GasGeyserErruptedEvent(GetNetEntity(geyser.Owner)));
