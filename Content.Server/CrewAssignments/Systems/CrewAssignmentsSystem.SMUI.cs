@@ -22,6 +22,7 @@ public sealed partial class CrewAssignmentSystem
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationRemoveOwner>(OnRemoveOwner);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationAddOwner>(OnAddOwner);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationChangeName>(OnChangeName);
+        SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationChangeFactionTag>(OnChangeFactionTag);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationAddAccess>(OnAddAccess);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationRemoveAccess>(OnDeleteAccess);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationCreateAssignment>(OnCreateAssignment);
@@ -630,6 +631,31 @@ public sealed partial class CrewAssignmentSystem
         UpdateOrders(station.Value);
 
     }
+
+    private void OnChangeFactionTag(EntityUid uid, StationModificationConsoleComponent component, StationModificationChangeFactionTag args)
+    {
+        if (args.Actor is not { Valid: true } player)
+            return;
+
+        var station = _station.GetOwningStation(uid);
+        if (station == null)
+            return;
+
+        if (!Validate(uid, component, player, out var stationData) || stationData == null)
+            return;
+
+        // Normalize keeps this safe/consistent even if client-side filtering is bypassed.
+        var normalized = StationDataComponent.NormalizeFactionTag(args.Tag);
+        stationData.FactionTag = string.IsNullOrEmpty(normalized) ? null : normalized;
+        Dirty(station.Value, stationData);
+
+        // Refresh issued IDs so the new tag appears right away instead of waiting
+        // for players to reassign or regenerate their cards.
+        if (stationData.UID != 0)
+            _idCard.RefreshStationIds(stationData.UID);
+
+        UpdateOrders(station.Value);
+    }
     private void OnAddOwner(EntityUid uid, StationModificationConsoleComponent component, StationModificationAddOwner args)
     {
         if (args.Actor is not { Valid: true } player)
@@ -740,6 +766,7 @@ public sealed partial class CrewAssignmentSystem
                 StationModUiKey.StationMod,
                 new StationModificationInterfaceState(
                 MetaData(station!.Value).EntityName,
+                data.GetResolvedFactionTag(MetaData(station.Value).EntityName),
                 GetNetEntity(station.Value),
                 data.Owners,
                 cadata.CrewAccesses,
