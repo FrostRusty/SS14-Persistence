@@ -646,6 +646,23 @@ public sealed partial class CrewAssignmentSystem
 
         // Normalize keeps this safe/consistent even if client-side filtering is bypassed.
         var normalized = StationDataComponent.NormalizeFactionTag(args.Tag);
+
+        if (string.IsNullOrEmpty(normalized))
+        {
+            // Clearing custom value falls back to generated tag. Prevent collisions there too.
+            var fallback = stationData.GetResolvedFactionTag(MetaData(station.Value).EntityName);
+            if (FactionTagExistsOnAnotherStation(station.Value, fallback))
+            {
+                ConsolePopup(player, $"Faction tag '{fallback}' is already used by another faction.");
+                return;
+            }
+        }
+        else if (FactionTagExistsOnAnotherStation(station.Value, normalized))
+        {
+            ConsolePopup(player, $"Faction tag '{normalized}' is already used by another faction.");
+            return;
+        }
+
         stationData.FactionTag = string.IsNullOrEmpty(normalized) ? null : normalized;
         Dirty(station.Value, stationData);
 
@@ -655,6 +672,29 @@ public sealed partial class CrewAssignmentSystem
             _idCard.RefreshStationIds(stationData.UID);
 
         UpdateOrders(station.Value);
+    }
+
+    private bool FactionTagExistsOnAnotherStation(EntityUid station, string candidateTag)
+    {
+        var normalizedCandidate = StationDataComponent.NormalizeFactionTag(candidateTag);
+        if (string.IsNullOrEmpty(normalizedCandidate))
+            return false;
+
+        var query = EntityQueryEnumerator<StationDataComponent>();
+        while (query.MoveNext(out var otherStation, out var otherData))
+        {
+            if (otherStation == station)
+                continue;
+
+            var otherResolved = otherData.GetResolvedFactionTag(MetaData(otherStation).EntityName);
+            if (string.IsNullOrEmpty(otherResolved))
+                continue;
+
+            if (string.Equals(otherResolved, normalizedCandidate, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
     }
     private void OnAddOwner(EntityUid uid, StationModificationConsoleComponent component, StationModificationAddOwner args)
     {
