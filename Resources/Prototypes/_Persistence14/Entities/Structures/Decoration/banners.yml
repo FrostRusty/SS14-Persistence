@@ -36,3 +36,16 @@
   - type: Construction
     graph: BannerGraph
     node: bannerFoe
+
+- type: entity
+  id: BannerPREG
+  parent: BannerBase
+  name: P.R.E.G banner
+  description: A banner displaying the P.R.E.G logo. Hopes and dreams upon the stars.
+  components:
+  - type: Sprite
+    sprite: _Persistence14/Structures/Decoration/banner.rsi
+    state: banner_preg
+  - type: Construction
+    graph: BannerGraph
+    node: bannerPREG
