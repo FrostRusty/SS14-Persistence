@@ -814,12 +814,6 @@
   id: Ice # CreateEntityTileReaction whitelist on Fresium
 
 - type: Tag
-  id: IFFShip # IFF sort tag for ships.
-
-- type: Tag
-  id: IFFStation # IFF sort tag for stations.
-
-- type: Tag
   id: Igniter # ConstructionGraph: makeshiftstunprod, FireBomb. Common ingredient in machines (HyperConvection)
 
 - type: Tag
@@ -1417,6 +1411,8 @@
   id: Steak # CargoBounty: BountySteak
 
 - type: Tag
+  id: StorageCounter # Targeting whitelist: HandLabeler ...
+- type: Tag
   id: StringInstrument # MachineBoard construction: DawInstrumentMachineCircuitboard
 
 - type: Tag
@@ -1465,6 +1461,9 @@
 
 - type: Tag
   id: TheaterBagel # used for Bagel Station's randomized theater
+
+- type: Tag
+  id: ThrusterWallmountElectronics # ConstructionGraph: WallmountThrusterGraph
 
 - type: Tag
   id: TimerBrigElectronics # ConstructionGraph: Timer
@@ -1752,6 +1751,6 @@
 
 - type: Tag
   id: XenoMeat
-  
+
 - type: Tag
   id: EggSpider

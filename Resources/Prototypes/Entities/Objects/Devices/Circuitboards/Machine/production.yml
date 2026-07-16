@@ -220,6 +220,16 @@
       Manipulator: 3
 
 - type: entity
+  id: PlushieLatheCircuitboard
+  parent: BaseMachineCircuitboard
+  name: plushie lathe machine board
+  components:
+  - type: MachineBoard
+    prototype: PlushieLathe
+    stackRequirements:
+      Manipulator: 3
+
+- type: entity
   id: VaccinatorMachineCircuitboard
   parent: BaseMachineCircuitboard
   name: vaccinator machine board
@@ -897,6 +907,19 @@
     stackRequirements:
       Manipulator: 3
       Glass: 2
+
+- type: entity
+  id: GyroscopeFloorMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: subfloor gyroscope machine board
+  components:
+  - type: Sprite
+    state: supply
+  - type: MachineBoard
+    prototype: GyroscopeFloor
+    stackRequirements:
+      Manipulator: 1
+      Glass: 1
 
 - type: entity
   id: PortableGeneratorSuperPacmanMachineCircuitboard

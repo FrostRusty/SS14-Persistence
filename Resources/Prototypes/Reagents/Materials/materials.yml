@@ -56,7 +56,7 @@
   name: materials-plastic
   icon: { sprite: Objects/Materials/Sheets/other.rsi, state: plastic }
   color: "#d9d9d9"
-  price: 0.5 # $50 for 1 unit
+  price: 0.25 # $25 for 1 unit
 
 - type: material
   id: Wood
@@ -107,6 +107,14 @@
   icon: { sprite: Objects/Materials/materials.rsi, state: cotton }
   color: "#cccccc"
   price: 0.02 #Who knew cotton was infinitely more valuable than silk
+  
+- type: material
+  id: Pyrotton
+  name: materials-pyrotton
+  unit: materials-unit-boll
+  icon: { sprite: Objects/Materials/materials.rsi, state: cotton }
+  color: "#cccccc"
+  price: 0.04 #Who knew cotton was infinitely more valuable than silk
 
 - type: material
   id: Bones
