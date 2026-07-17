@@ -819,10 +819,7 @@
     unlitIdleState: unlit
     unlitRunningState: unlit-building
     staticPacks:
-    - SecurityEquipmentStatic
-    - SecurityPracticeStatic
-    - SecurityAmmoStatic
-    - SecurityWeaponsStatic
+    - SOLEquipment
   - type: MaterialStorage
     whitelist: *StandardMaterialWhitelist
   - type: OreSiloClient
