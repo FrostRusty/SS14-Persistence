@@ -327,3 +327,8 @@
   parent: BaseSOLPDARecipe
   id: HoSPDASOL
   result: HoSPDASOL
+
+- type: latheRecipe
+  parent: BaseSOLPDARecipe
+  id: CoSPDASOL
+  result: CoSPDASOL 

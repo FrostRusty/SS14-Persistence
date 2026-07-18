@@ -2446,6 +2446,26 @@
   id: ClothingUniformJumpsuitRndSOL
   result: ClothingUniformJumpsuitRndSOL
 
+- type: latheRecipe
+  parent: BaseCommandJumpsuitRecipe
+  id: ClothingUniformJumpsuitCosSOL
+  result: ClothingUniformJumpsuitCosSOL
+
+- type: latheRecipe
+  parent: BaseCommandJumpsuitRecipe
+  id: ClothingUniformJumpskirtCosTurtleSOL
+  result: ClothingUniformJumpskirtCosTurtleSOL
+
+- type: latheRecipe
+  parent: BaseCommandJumpsuitRecipe
+  id: ClothingUniformJumpskirtCosSOL
+  result: ClothingUniformJumpskirtCosSOL
+
+- type: latheRecipe
+  parent: BaseCommandJumpsuitRecipe
+  id: ClothingUniformJumpskirtTanClerkSOL
+  result: ClothingUniformJumpskirtTanClerkSOL
+
 # Persi14 Outer Clothing
 - type: latheRecipe
   parent: BaseCoatRecipe
@@ -2961,6 +2981,11 @@
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakExecFormalSOL
   result: ClothingNeckCloakExecFormalSOL
+
+- type: latheRecipe
+  parent: BaseCommandNeckClothingRecipe
+  id: ClothingNeckCloakCosSOL
+  result: ClothingNeckCloakCosSOL
   
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
@@ -3017,6 +3042,11 @@
   id: ClothingNeckMantleEngiForemanSOL
   result: ClothingNeckMantleEngiForemanSOL
 
+- type: latheRecipe
+  parent: BaseCommandNeckClothingRecipe
+  id: ClothingNeckMantleCosSOL
+  result: ClothingNeckMantleCosSOL
+
 # Persi14 Hats
 
 - type: latheRecipe
@@ -3063,6 +3093,11 @@
   parent: BaseCommandHatRecipe
   id: ClothingHeadHatExeccapSOL
   result: ClothingHeadHatExeccapSOL
+
+- type: latheRecipe
+  parent: BaseCommandHatRecipe
+  id: ClothingHeadHatHatCosSOL
+  result: ClothingHeadHatHatCosSOL 
 
 # Persi14 Bags
 

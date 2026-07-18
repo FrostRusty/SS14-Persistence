@@ -590,6 +590,7 @@
   - ClothingHeadHatBeretCargoForemanSOL
   - ClothingHeadHatBeretSciOfficerSOL
   - ClothingHeadHatExeccapSOL
+  - ClothingHeadHatHatCosSOL
   - ClothingNeckCloakExecSOL
   - ClothingNeckCloakHosSOL
   - ClothingNeckCloakCeSOL
@@ -597,6 +598,7 @@
   - ClothingNeckCloakRdSOL
   - ClothingNeckCloakQmSOL
   - ClothingNeckCloakExecFormalSOL
+  - ClothingNeckCloakCosSOL
   - ClothingNeckMantleExecSOL
   - ClothingNeckMantleCESOL
   - ClothingNeckMantleCMOSOL
@@ -608,6 +610,7 @@
   - ClothingNeckMantleCargoForemanSOL
   - ClothingNeckMantleSciOfficerSOL
   - ClothingNeckMantleEngiForemanSOL
+  - ClothingNeckMantleCosSOL
   - ClothingOuterArmorExecutiveCarapaceSOL
   - ClothingOuterCoatHoSTrenchSOL
   - ClothingOuterCoatLabCmoSOL
@@ -626,6 +629,9 @@
   - ClothingUniformJumpskirtQuartermasterTurtleneckSOL
   - ClothingUniformJumpskirtRndSOL
   - ClothingUniformJumpskirtRndTurtleSOL
+  - ClothingUniformJumpskirtCosSOL
+  - ClothingUniformJumpskirtCosTurtleSOL
+  - ClothingUniformJumpskirtTanClerkSOL
   - ClothingUniformJumpsuitChiefEngineerSOL
   - ClothingUniformJumpsuitChiefEngineerTurtleSOL
   - ClothingUniformJumpsuitClerkSOL
@@ -639,9 +645,11 @@
   - ClothingUniformJumpsuitQMTurtleneckSOL
   - ClothingUniformJumpsuitRndTurtleneckSOL
   - ClothingUniformJumpsuitRndSOL
+  - ClothingUniformJumpsuitCosSOL
   - QuartermasterPDASOL
   - ExecutivePDASOL
   - CEPDASOL
   - CMOPDASOL
   - RnDPDASOL
   - HoSPDASOL
+  - CoSPDASOL
