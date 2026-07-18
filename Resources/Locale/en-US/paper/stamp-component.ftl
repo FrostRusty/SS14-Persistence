@@ -26,4 +26,5 @@ stamp-component-stamped-name-exec-sol = SOL Executive
 stamp-component-stamped-name-hos-sol = SOL Chief of Police
 stamp-component-stamped-name-cmo-sol = SOL Medical Director
 stamp-component-stamped-name-qm-sol = SOL Quartermaster
-stamp-component-stamped-name-ce-sol = SOL Chief Engineer
+stamp-component-stamped-name-ce-sol = SOL Chief 
+stamp-component-stamped-name-cos-sol = SOL Chief Engineer
