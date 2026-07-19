@@ -63,6 +63,7 @@ jelly_toast_recipe = jelly toast recipe
 moldy_bread_slice_recipe = moldy bread slice recipe
 two_slice_recipe = two slice recipe
 onion_rings_recipe = onion rings recipe
+onion_goggles_recipe = onion goggles recipe
 margherita_pizza_recipe = margherita pizza recipe
 mushroom_pizza_recipe = mushroom pizza recipe
 meat_pizza_recipe = meat pizza recipe
