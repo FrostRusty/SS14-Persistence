@@ -704,6 +704,16 @@
   solids:
     FoodOnionSlice: 1
 
+- type: microwaveMealRecipe
+  id: RecipeOnionGoggles
+  name: onion_Goggles_recipe
+  result: ClothingEyesHudFriedOnion
+  time: 15
+  group: Savory
+  solids:
+    FoodOnionSlice: 2
+    ClothingEyesGlasses: 1
+
 #Pizzas TODO: contruction graph based pizza
 - type: microwaveMealRecipe
   id: RecipeMargheritaPizza
