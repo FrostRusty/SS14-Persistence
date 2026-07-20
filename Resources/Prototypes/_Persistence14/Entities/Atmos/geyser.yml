@@ -1,0 +1,37 @@
+- type: entity
+  id: GeyserBase
+  abstract: true
+  name: geyser
+  placement: 
+    mode: SnapgridCenter
+  description: A whole in the ground that goes way too deep. Don't stand too close!
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _Persistence14/Structures/Specific/gas_geyser.rsi
+    offset: 0, 0.5
+    layers:
+    - state: hole
+      map: ["enum.GasGeyserVisualizationLayer.Hole"]
+    - state: geyser_animated
+      map: ["enum.GasGeyserVisualizationLayer.Gas"]
+      loop: false
+      autoAnimated: false
+  - type: InteractionOutline
+  - type: Clickable
+  - type: GasGeyser
+    eruptionDelay: 5m
+    eruptionRangeDeltaPositive: 2m
+    eruptionRangeDeltaNegative: 2m
+
+
+- type: entity
+  id: GeyserPlasma
+  parent: GeyserBase
+  suffix: plasma
+  components:
+  - type: GasGeyser
+    eruptionDelay: 10
+    moles: 
+      Plasma: 100
