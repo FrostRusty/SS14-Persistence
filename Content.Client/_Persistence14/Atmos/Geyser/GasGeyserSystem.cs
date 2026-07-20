@@ -75,6 +75,9 @@ public sealed partial class GasGeyserSystem : EntitySystem
         return new Color(r / totalMoles, g / totalMoles, b / totalMoles, a / totalMoles);
     }
 
+    /// <summary>
+    /// Ensures a given string matches properly with the required shape for parsing a color string into a color object.
+    /// </summary>
     private static Color ParseGasColor(string hex)
     {
         if (!hex.StartsWith('#'))

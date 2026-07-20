@@ -57,6 +57,9 @@ public sealed partial class GasGeyserComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float SpawnTemperature = Atmospherics.T20C;
 
+    /// <summary>
+    /// Don't play with this unless you know what you are doing...
+    /// </summary>
     [DataField]
     public string ErruptionAnimationKey = "geyser_animated";
 }

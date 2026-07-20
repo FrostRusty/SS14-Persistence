@@ -33,6 +33,9 @@ public sealed partial class GasGeyserSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Errupts a gas geyser, causing its gas mixture to be spewed into the environment.
+    /// </summary>
     public void Errupt(Entity<GasGeyserComponent> geyser, GasMixture environment)
     {
         var merger = new GasMixture(geyser.Comp.Moles, 1);
@@ -45,6 +48,9 @@ public sealed partial class GasGeyserSystem : EntitySystem
         RaiseNetworkEvent(new GasGeyserErruptedEvent(GetNetEntity(geyser.Owner)));
     }
 
+    /// <summary>
+    /// Determines if the environment is acceptable for the gase miner to errupt into, including pressure and qty restrictions on atmos.
+    /// </summary>
     private bool TryGetValidEnvironment(Entity<GasGeyserComponent> geyserEnt, out GasMixture environment)
     {
         var (uid, geyser) = geyserEnt;
