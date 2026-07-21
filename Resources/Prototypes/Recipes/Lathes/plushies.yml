@@ -282,6 +282,15 @@
     PlasmaGlass: 50
 
 - type: latheRecipe
+  id: PlushieIsolde
+  result: PlushieIsolde
+  completetime: 5
+  materials:
+    Cloth: 300
+    Cotton: 1000
+    Durathread: 50
+
+- type: latheRecipe
   parent: BasePlushieRecipe
   id: ToyIan
   result: ToyIan
