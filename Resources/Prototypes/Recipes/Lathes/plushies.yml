@@ -354,11 +354,6 @@
 
 - type: latheRecipe
   parent: BaseWehPlushieRecipe
-  id: WehAtmos
-  result: PlushieLizardJobAtmospherictechnician
-
-- type: latheRecipe
-  parent: BaseWehPlushieRecipe
   id: WehCap
   result: PlushieLizardJobCaptain
   completetime: 5
