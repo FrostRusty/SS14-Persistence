@@ -1515,7 +1515,7 @@
   parent: BasePlushie
   id: PlushieIsolde
   name: Isolde plushie
-  description: You no longer have to be a cultist kidnapper to have your very own Commander Isolde. The boogyman under your bed will fear this limited edition action plushie!
+  description: You no longer have to be a kidnapping cultist to have your very own Commander Isolde. The boogyman under your bed will fear this limited edition action plushie!
   components:
   - type: Sprite
     sprite: _Persistence14/Objects/Fun/Plushies/Isolde.rsi
