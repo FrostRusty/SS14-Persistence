@@ -205,9 +205,5 @@
   name: lathe-category-bags
 
 - type: latheCategory
-  id: Plushies
-  name: lathe-category-plushies
-
-- type: latheCategory
   id: WehPlushies
   name: lathe-category-lizard-plushies
