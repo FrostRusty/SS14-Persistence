@@ -203,3 +203,7 @@
 - type: latheCategory
   id: Bags
   name: lathe-category-bags
+
+- type: latheCategory
+  id: WehPlushies
+  name: lathe-category-lizard-plushies

@@ -573,6 +573,7 @@
     runningState: building
     staticPacks:
     - Plushies
+    - LizardPlushies
   - type: MaterialStorage
     whitelist: *StandardMaterialWhitelist
   - type: OreSiloClient
