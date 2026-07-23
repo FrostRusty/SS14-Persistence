@@ -1,2 +1,2 @@
-lathe-category-plushies = plushies
-lathe-category-lizard-plushies = lizard plushies
+lathe-category-plushies = Plushies
+lathe-category-lizard-plushies = Wehs
