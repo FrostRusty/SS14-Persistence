@@ -24,6 +24,7 @@
     eruptionDelay: 5m
     eruptionRangeDeltaPositive: 2m
     eruptionRangeDeltaNegative: 2m
+    spawnTemperature: 235
 
 
 - type: entity
@@ -32,6 +33,332 @@
   suffix: plasma
   components:
   - type: GasGeyser
-    eruptionDelay: 10
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 780
     moles: 
-      Plasma: 100
+      Plasma: 1200
+    variableMoles:
+      Plasma:
+        moles: 300
+        prob: 0.5
+      Tritium:
+        moles: 300
+        prob: 0.2
+      Hydrogen:
+        moles: 300
+        prob: 0.2
+
+
+- type: entity
+  id: GeyserChlorine
+  parent: GeyserBase
+  suffix: chlorine
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 260
+    moles:
+      Chlorine: 1200
+
+
+- type: entity
+  id: GeyserFluorine
+  parent: GeyserBase
+  suffix: fluorine
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 250
+    moles:
+      Fluorine: 1200
+
+
+- type: entity
+  id: GeyserMethane
+  parent: GeyserBase
+  suffix: methane
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 340
+    moles:
+      Methane: 1200
+
+
+- type: entity
+  id: GeyserOxygen
+  parent: GeyserBase
+  suffix: oxygen
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 255
+    moles:
+      Oxygen: 1200
+
+
+- type: entity
+  id: GeyserHydrogen
+  parent: GeyserBase
+  suffix: hydrogen
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 70
+    moles:
+      Hydrogen: 1200
+
+
+- type: entity
+  id: GeyserWaterVapor
+  parent: GeyserBase
+  suffix: water vapor
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 275
+    moles:
+      WaterVapor: 1200
+
+
+- type: entity
+  id: GeyserNitrogen
+  parent: GeyserBase
+  suffix: nitrogen
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 210
+    moles:
+      Nitrogen: 1200
+
+
+- type: entity
+  id: GeyserAmmonia
+  parent: GeyserBase
+  suffix: ammonia
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 285
+    moles:
+      Ammonia: 1200
+
+
+- type: entity
+  id: GeyserCarbonDioxide
+  parent: GeyserBase
+  suffix: carbon dioxide
+  components:
+  - type: GasGeyser
+    eruptionDelay: 2m
+    eruptionRangeDeltaPositive: 30s
+    eruptionRangeDeltaNegative: 30s
+    spawnTemperature: 300
+    moles:
+      CarbonDioxide: 1200
+
+
+- type: entity
+  id: GeyserPlasmaUnstable
+  parent: GeyserPlasma
+  suffix: plasma, unstable
+  components:
+  - type: GasGeyser
+    spawnTemperature: 980
+    variableMoles:
+      Tritium:
+        moles: 400
+        prob: 0.35
+      Hydrogen:
+        moles: 300
+        prob: 0.35
+      ChlorineTrifluoride:
+        moles: 120
+        prob: 0.08
+
+
+- type: entity
+  id: GeyserChlorineCorrosive
+  parent: GeyserChlorine
+  suffix: chlorine, corrosive
+  components:
+  - type: GasGeyser
+    spawnTemperature: 305
+    variableMoles:
+      Fluorine:
+        moles: 300
+        prob: 0.35
+      Oxygen:
+        moles: 200
+        prob: 0.25
+
+
+- type: entity
+  id: GeyserFluorineReactive
+  parent: GeyserFluorine
+  suffix: fluorine, reactive
+  components:
+  - type: GasGeyser
+    spawnTemperature: 315
+    variableMoles:
+      Chlorine:
+        moles: 280
+        prob: 0.35
+      Hydrogen:
+        moles: 220
+        prob: 0.2
+      Oxygen:
+        moles: 140
+        prob: 0.15
+
+
+- type: entity
+  id: GeyserMethaneVolatile
+  parent: GeyserMethane
+  suffix: methane, volatile
+  components:
+  - type: GasGeyser
+    spawnTemperature: 420
+    variableMoles:
+      Hydrogen:
+        moles: 260
+        prob: 0.4
+      CarbonDioxide:
+        moles: 200
+        prob: 0.25
+      Oxygen:
+        moles: 120
+        prob: 0.15
+
+
+- type: entity
+  id: GeyserOxygenOxidizer
+  parent: GeyserOxygen
+  suffix: oxygen, oxidizer
+  components:
+  - type: GasGeyser
+    spawnTemperature: 290
+    variableMoles:
+      Nitrogen:
+        moles: 240
+        prob: 0.4
+      WaterVapor:
+        moles: 220
+        prob: 0.25
+      Plasma:
+        moles: 120
+        prob: 0.1
+
+
+- type: entity
+  id: GeyserHydrogenVolatile
+  parent: GeyserHydrogen
+  suffix: hydrogen, volatile
+  components:
+  - type: GasGeyser
+    spawnTemperature: 95
+    variableMoles:
+      Oxygen:
+        moles: 220
+        prob: 0.4
+      Plasma:
+        moles: 140
+        prob: 0.25
+      Tritium:
+        moles: 80
+        prob: 0.15
+
+
+- type: entity
+  id: GeyserWaterVaporSuperheated
+  parent: GeyserWaterVapor
+  suffix: water vapor, superheated
+  components:
+  - type: GasGeyser
+    spawnTemperature: 390
+    variableMoles:
+      Oxygen:
+        moles: 220
+        prob: 0.35
+      Hydrogen:
+        moles: 220
+        prob: 0.35
+      Ammonia:
+        moles: 120
+        prob: 0.15
+
+
+- type: entity
+  id: GeyserNitrogenCryogenic
+  parent: GeyserNitrogen
+  suffix: nitrogen, cryogenic
+  components:
+  - type: GasGeyser
+    spawnTemperature: 185
+    variableMoles:
+      Frezon:
+        moles: 180
+        prob: 0.18
+      WaterVapor:
+        moles: 220
+        prob: 0.25
+      Oxygen:
+        moles: 180
+        prob: 0.25
+
+
+- type: entity
+  id: GeyserAmmoniaCaustic
+  parent: GeyserAmmonia
+  suffix: ammonia, caustic
+  components:
+  - type: GasGeyser
+    spawnTemperature: 295
+    variableMoles:
+      Nitrogen:
+        moles: 280
+        prob: 0.4
+      WaterVapor:
+        moles: 240
+        prob: 0.3
+      Chlorine:
+        moles: 120
+        prob: 0.1
+
+
+- type: entity
+  id: GeyserCarbonDioxideVolcanic
+  parent: GeyserCarbonDioxide
+  suffix: carbon dioxide, volcanic
+  components:
+  - type: GasGeyser
+    spawnTemperature: 410
+    variableMoles:
+      Methane:
+        moles: 260
+        prob: 0.25
+      Plasma:
+        moles: 160
+        prob: 0.15
+      NitrousOxide:
+        moles: 200
+        prob: 0.2
