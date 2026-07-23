@@ -188,6 +188,23 @@
     Cloth: 500
     Glass: 200
 
+- type: latheRecipe
+  abstract: true
+  id: BaseHandyFlag
+  categories:
+  - Flags
+  materials:
+    Wood: 50
+    Cloth: 200
+
+- type: latheRecipe
+  abstract: true
+  id: BaseBandanas
+  categories:
+  - Bandanas
+  materials:
+    Cloth: 200
+
 ## Recipes
 
 # Jumpsuits/skirts
@@ -2748,235 +2765,235 @@
 
 - type: latheRecipe
   parent: BaseMaskRecipe
-  id: ClothingMaskItalianMoustache 
-  result: ClothingMaskItalianMoustache 
+  id: ClothingMaskItalianMoustache
+  result: ClothingMaskItalianMoustache
 
 # Persi14 Neck
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckLawyerbadge 
-  result: ClothingNeckLawyerbadge 
+  id: ClothingNeckLawyerbadge
+  result: ClothingNeckLawyerbadge
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: Dinkystar 
+  id: Dinkystar
   result: Dinkystar
   materials:
     Plastic: 100
-    Diamond: 100 
+    Diamond: 100
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckLGBTPin 
-  result: ClothingNeckLGBTPin 
+  id: ClothingNeckLGBTPin
+  result: ClothingNeckLGBTPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckAllyPin 
-  result: ClothingNeckAllyPin 
+  id: ClothingNeckAllyPin
+  result: ClothingNeckAllyPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckAromanticPin 
-  result: ClothingNeckAromanticPin 
+  id: ClothingNeckAromanticPin
+  result: ClothingNeckAromanticPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckAroacePin 
-  result: ClothingNeckAroacePin 
+  id: ClothingNeckAroacePin
+  result: ClothingNeckAroacePin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckAsexualPin 
-  result: ClothingNeckAsexualPin 
+  id: ClothingNeckAsexualPin
+  result: ClothingNeckAsexualPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckBisexualPin 
-  result: ClothingNeckBisexualPin 
+  id: ClothingNeckBisexualPin
+  result: ClothingNeckBisexualPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckGayPin 
-  result: ClothingNeckGayPin 
+  id: ClothingNeckGayPin
+  result: ClothingNeckGayPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckIntersexPin 
-  result: ClothingNeckIntersexPin 
+  id: ClothingNeckIntersexPin
+  result: ClothingNeckIntersexPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckLesbianPin 
-  result: ClothingNeckLesbianPin 
+  id: ClothingNeckLesbianPin
+  result: ClothingNeckLesbianPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckNonBinaryPin 
-  result: ClothingNeckNonBinaryPin 
+  id: ClothingNeckNonBinaryPin
+  result: ClothingNeckNonBinaryPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckPansexualPin 
-  result: ClothingNeckPansexualPin 
+  id: ClothingNeckPansexualPin
+  result: ClothingNeckPansexualPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckPluralPin 
-  result: ClothingNeckPluralPin 
+  id: ClothingNeckPluralPin
+  result: ClothingNeckPluralPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckOmnisexualPin 
-  result: ClothingNeckOmnisexualPin 
+  id: ClothingNeckOmnisexualPin
+  result: ClothingNeckOmnisexualPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckGenderqueerPin 
-  result: ClothingNeckGenderqueerPin 
+  id: ClothingNeckGenderqueerPin
+  result: ClothingNeckGenderqueerPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckGenderfluidPin 
-  result: ClothingNeckGenderfluidPin 
+  id: ClothingNeckGenderfluidPin
+  result: ClothingNeckGenderfluidPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckTransPin 
-  result: ClothingNeckTransPin 
+  id: ClothingNeckTransPin
+  result: ClothingNeckTransPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckAutismPin 
-  result: ClothingNeckAutismPin 
+  id: ClothingNeckAutismPin
+  result: ClothingNeckAutismPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: ClothingNeckGoldAutismPin 
-  result: ClothingNeckGoldAutismPin 
+  id: ClothingNeckGoldAutismPin
+  result: ClothingNeckGoldAutismPin
 
 - type: latheRecipe
   parent: BasePinClothingRecipe
-  id: SprayFlowerPin 
+  id: SprayFlowerPin
   result: SprayFlowerPin
   materials:
     Plastic: 100
     Cloth: 200
-    Steel: 100 
+    Steel: 100
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckStoleChaplain 
-  result: ClothingNeckStoleChaplain 
+  id: ClothingNeckStoleChaplain
+  result: ClothingNeckStoleChaplain
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckStethoscope 
-  result: ClothingNeckStethoscope 
+  id: ClothingNeckStethoscope
+  result: ClothingNeckStethoscope
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckBling 
-  result: ClothingNeckBling 
+  id: ClothingNeckBling
+  result: ClothingNeckBling
   materials:
     Gold: 100
     Steel: 100 # Fake bling?
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakTrans 
-  result: ClothingNeckCloakTrans 
+  id: ClothingNeckCloakTrans
+  result: ClothingNeckCloakTrans
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakGoliathCloak 
-  result: ClothingNeckCloakGoliathCloak 
+  id: ClothingNeckCloakGoliathCloak
+  result: ClothingNeckCloakGoliathCloak
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakMoth 
-  result: ClothingNeckCloakMoth 
+  id: ClothingNeckCloakMoth
+  result: ClothingNeckCloakMoth
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakVoid 
-  result: ClothingNeckCloakVoid 
+  id: ClothingNeckCloakVoid
+  result: ClothingNeckCloakVoid
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakAce 
-  result: ClothingNeckCloakAce 
+  id: ClothingNeckCloakAce
+  result: ClothingNeckCloakAce
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakAro 
-  result: ClothingNeckCloakAro 
+  id: ClothingNeckCloakAro
+  result: ClothingNeckCloakAro
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakAroace 
-  result: ClothingNeckCloakAroace 
+  id: ClothingNeckCloakAroace
+  result: ClothingNeckCloakAroace
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakBi 
-  result: ClothingNeckCloakBi 
+  id: ClothingNeckCloakBi
+  result: ClothingNeckCloakBi
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakIntersex 
-  result: ClothingNeckCloakIntersex 
+  id: ClothingNeckCloakIntersex
+  result: ClothingNeckCloakIntersex
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakLesbian 
-  result: ClothingNeckCloakLesbian 
+  id: ClothingNeckCloakLesbian
+  result: ClothingNeckCloakLesbian
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakGay 
-  result: ClothingNeckCloakGay 
+  id: ClothingNeckCloakGay
+  result: ClothingNeckCloakGay
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakEnby 
-  result: ClothingNeckCloakEnby 
+  id: ClothingNeckCloakEnby
+  result: ClothingNeckCloakEnby
 
 - type: latheRecipe
   parent: BaseNeckClothingRecipe
-  id: ClothingNeckCloakPan 
+  id: ClothingNeckCloakPan
   result: ClothingNeckCloakPan
 
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakExecSOL
   result: ClothingNeckCloakExecSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakHosSOL
   result: ClothingNeckCloakHosSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakCeSOL
   result: ClothingNeckCloakCeSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingCloakCmoSOL
   result: ClothingCloakCmoSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakRdSOL
   result: ClothingNeckCloakRdSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakQmSOL
   result: ClothingNeckCloakQmSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakExecFormalSOL
@@ -2986,57 +3003,57 @@
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckCloakCosSOL
   result: ClothingNeckCloakCosSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleExecSOL
   result: ClothingNeckMantleExecSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleCESOL
   result: ClothingNeckMantleCESOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleCMOSOL
   result: ClothingNeckMantleCMOSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleHOSSOL
   result: ClothingNeckMantleHOSSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleRDSOL
   result: ClothingNeckMantleRDSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleQMSOL
   result: ClothingNeckMantleQMSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleMedOfficerSOL
   result: ClothingNeckMantleMedOfficerSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleExecSecSOL
   result: ClothingNeckMantleExecSecSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleCargoForemanSOL
   result: ClothingNeckMantleCargoForemanSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleSciOfficerSOL
   result: ClothingNeckMantleSciOfficerSOL
-  
+
 - type: latheRecipe
   parent: BaseCommandNeckClothingRecipe
   id: ClothingNeckMantleEngiForemanSOL
@@ -3097,7 +3114,7 @@
 - type: latheRecipe
   parent: BaseCommandHatRecipe
   id: ClothingHeadHatHatCosSOL
-  result: ClothingHeadHatHatCosSOL 
+  result: ClothingHeadHatHatCosSOL
 
 # Persi14 Bags
 
@@ -3161,3 +3178,77 @@
     Steel: 100
     Glass: 100
     Plastic: 100
+
+#Handy Flags
+
+- type: latheRecipe
+  parent: BaseHandyFlag
+  id: BlankHandyFlag
+  result: BlankHandyFlag
+
+- type: latheRecipe
+  parent: BaseHandyFlag
+  id: SyndieHandyFlag
+  result: SyndieHandyFlag
+
+- type: latheRecipe
+  parent: BaseHandyFlag
+  id: LGBTQHandyFlag
+  result: LGBTQHandyFlag
+
+- type: latheRecipe
+  parent: BaseHandyFlag
+  id: PirateHandyFlag
+  result: PirateHandyFlag
+
+# Bandanas
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandBlack
+  result: ClothingMaskBandBlack
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandBlue
+  result: ClothingMaskBandBlue
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandBotany
+  result: ClothingMaskBandBotany
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandGold
+  result: ClothingMaskBandGold
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandGreen
+  result: ClothingMaskBandGreen
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandGrey
+  result: ClothingMaskBandGrey
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandRed
+  result: ClothingMaskBandRed
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandSkull
+  result: ClothingMaskBandSkull
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandMerc
+  result: ClothingMaskBandMerc
+
+- type: latheRecipe
+  parent: BaseBandanas
+  id: ClothingMaskBandBrown
+  result: ClothingMaskBandBrown

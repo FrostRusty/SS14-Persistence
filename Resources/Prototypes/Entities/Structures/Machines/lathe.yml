@@ -542,11 +542,11 @@
     - EngineeringHardhatsStatic # Persi14
     - CivilianBags
     - CommandBags
-  - type: EmagLatheRecipes
-    emagStaticPacks:
     - ClothingSyndie
     - ContrabandBags
     - CentralCommandBags
+    - HandyFlags
+    - Bandanas
   - type: MaterialStorage
     whitelist: *StandardMaterialWhitelist
   - type: OreSiloClient
