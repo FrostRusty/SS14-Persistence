@@ -1,4 +1,5 @@
 using Content.Shared.Atmos;
+using Content.Shared.MiningFluid.Components;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._Persistence14.Atmos.Geyser;
@@ -31,13 +32,20 @@ public sealed partial class GasGeyserComponent : Component
     public TimeSpan EruptionRangeDeltaNegative = TimeSpan.FromSeconds(0);
 
     public TimeSpan MaxEruptionDelay => EruptionDelay + EruptionRangeDeltaPositive;
-    public TimeSpan MinEruptionDelay => EruptionDelay + EruptionRangeDeltaNegative;
+    public TimeSpan MinEruptionDelay => EruptionDelay - EruptionRangeDeltaNegative;
 
     /// <summary>
     /// Gases released into the atmosphere when the geyser erupts.
     /// </summary>
     [DataField(required: true, customTypeSerializer: typeof(GasArraySerializer)), AutoNetworkedField]
     public float[] Moles = new float[Atmospherics.AdjustedNumberOfGases];
+
+    /// <summary>
+    /// Optional weighted gas additions applied independently each eruption.
+    /// Mirrors TrappedFluid's variableMixture behavior (per-gas prob + moles).
+    /// </summary>
+    [DataField("variableMoles")]
+    public Dictionary<Gas, VariableFluidDefinition> VariableMoles = new();
 
     /// <summary>
     /// When external gas mixture exceeds this amount of moles, geysers cannot errupt.
