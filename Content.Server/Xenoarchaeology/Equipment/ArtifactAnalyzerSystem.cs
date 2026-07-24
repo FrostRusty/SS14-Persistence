@@ -50,10 +50,13 @@ public sealed class ArtifactAnalyzerSystem : SharedArtifactAnalyzerSystem
             return;
 
         _research.ModifyServerPoints(server.Value, sumResearch, serverComponent);
-        foreach (var artifact in artifacts)
+
+        // Only play feedback once, on the artifact currently shown on the console - an advanced
+        // analyzer could hold a hundred artifacts and we don't want a hundred sounds/popups.
+        if (TryGetArtifactFromConsole(ent, out var selectedArtifact))
         {
-            _audio.PlayPvs(ent.Comp.ExtractSound, artifact);
-            _popup.PopupEntity(Loc.GetString("analyzer-artifact-extract-popup"), artifact, PopupType.Large);
+            _audio.PlayPvs(ent.Comp.ExtractSound, selectedArtifact.Value);
+            _popup.PopupEntity(Loc.GetString("analyzer-artifact-extract-popup"), selectedArtifact.Value, PopupType.Large);
         }
     }
 
