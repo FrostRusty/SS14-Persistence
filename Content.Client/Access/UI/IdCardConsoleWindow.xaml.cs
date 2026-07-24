@@ -14,7 +14,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Linq;
 using static Content.Shared.Access.Components.IdCardConsoleComponent;
-using static Robust.Xaml.XamlJitCompilerResult;
 
 namespace Content.Client.Access.UI
 {
