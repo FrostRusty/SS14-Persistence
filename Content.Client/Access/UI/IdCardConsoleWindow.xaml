@@ -150,16 +150,19 @@
 
                     </TabContainer>
                 </BoxContainer>
-                <BoxContainer Orientation="Vertical" Name="ListViewMain" VerticalExpand="True">
-                    <BoxContainer Orientation="Horizontal">
-                        <Label Text="Name [Assignment]" StyleClasses="LabelKeyText"/>
-                        <Control HorizontalExpand="True" />
-                        <Label Text="Last Time Paid" StyleClasses="LabelKeyText"/>
+                <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical" Name="ListViewMain" VerticalExpand="True">
+                        <BoxContainer Orientation="Horizontal">
+                            <Label Text="Name [Assignment]" StyleClasses="LabelKeyText"/>
+                            <Control HorizontalExpand="True" />
+                            <Label Text="Last Time Paid" StyleClasses="LabelKeyText"/>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" Name="ListView" VerticalExpand="True">
+
+                        </BoxContainer>
                     </BoxContainer>
-                    <BoxContainer Orientation="Vertical" Name="ListView" VerticalExpand="True">
-                        
-                    </BoxContainer>
-                </BoxContainer>
+                </ScrollContainer>
+
             </TabContainer>
             
 
