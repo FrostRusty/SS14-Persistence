@@ -653,3 +653,28 @@
   - RnDPDASOL
   - HoSPDASOL
   - CoSPDASOL
+
+#Handy Flags
+- type: latheRecipePack
+  id: HandyFlags
+  recipes:
+  - BlankHandyFlag
+  - SyndieHandyFlag
+  - LGBTQHandyFlag
+  - PirateHandyFlag
+
+# Bandanas
+- type: latheRecipePack
+  id: Bandanas
+  recipes:
+  - ClothingMaskBandBlack
+  - ClothingMaskBandBlue
+  - ClothingMaskBandBotany
+  - ClothingMaskBandGold
+  - ClothingMaskBandGreen
+  - ClothingMaskBandGrey
+  - ClothingMaskBandRed
+  - ClothingMaskBandSkull
+  - ClothingMaskBandMerc
+  - ClothingMaskBandBrown
+
