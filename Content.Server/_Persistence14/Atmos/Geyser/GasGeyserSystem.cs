@@ -38,7 +38,21 @@ public sealed partial class GasGeyserSystem : EntitySystem
     /// </summary>
     public void Errupt(Entity<GasGeyserComponent> geyser, GasMixture environment)
     {
-        var merger = new GasMixture(geyser.Comp.Moles, 1);
+        var moles = (float[]) geyser.Comp.Moles.Clone();
+
+        foreach (var fluidEntry in geyser.Comp.VariableMoles)
+        {
+            if (fluidEntry.Value.Moles <= 0 || fluidEntry.Value.Probability <= 0)
+                continue;
+
+            if (_random.Prob(fluidEntry.Value.Probability))
+                moles[(int) fluidEntry.Key] += fluidEntry.Value.Moles;
+        }
+
+        var merger = new GasMixture(moles, 1)
+        {
+            Temperature = geyser.Comp.SpawnTemperature,
+        };
         _atmos.Merge(environment, merger);
 
         var delay = _random.NextFloat() * (geyser.Comp.MaxEruptionDelay - geyser.Comp.MinEruptionDelay) + geyser.Comp.MinEruptionDelay;
