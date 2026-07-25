@@ -6,7 +6,7 @@
   allowedDepartments:
   - Medical
   physicalDesc: reagent-physical-desc-nectar
-  flavor: surpisingly pleasant
+  flavor: medicine
   color: "#FFDE59"
   metabolisms:
     Bloodstream:
