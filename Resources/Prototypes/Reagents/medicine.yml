@@ -1477,6 +1477,9 @@
       - !type:AdjustReagent
         reagent: MindbreakerToxin
         amount: -3.0
+      - !type:AdjustReagent
+        reagent: Nectar
+        amount: -3.0
 
 - type: reagent
   id: Heparin
