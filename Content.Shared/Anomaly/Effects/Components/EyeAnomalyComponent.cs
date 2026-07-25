@@ -74,7 +74,7 @@ public sealed partial class EyeAnomalyComponent : Component
 
     /// <summary>Range (and line-of-sight requirement) to grab victims from.</summary>
     [DataField(required: true)]
-    public float TetherRange = 5f;
+    public float TetherRange = 9f;
 
     /// <summary>How far a possessed body will be allowed to wander from the anomaly while idle (Y).</summary>
     [DataField(required: true)]
