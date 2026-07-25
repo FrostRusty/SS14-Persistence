@@ -5,8 +5,7 @@ namespace Content.Shared.Mobs.Events;
 /// Content.Server.Mobs.CritMobActionsSystem) and again right before actually sending it, letting
 /// any system grant SOS access to something that isn't MobState.Dead and/or override the
 /// message text that gets sent - e.g. the Eye anomaly's tethered-victim hivemind, where a
-/// captured mind is very much still alive. Deliberately generic/reusable - the stock SOS system
-/// raising this knows nothing about why any particular subscriber might want either override.
+/// captured mind is very much still alive
 /// </summary>
 public sealed class GetSosOverrideEvent : EntityEventArgs
 {

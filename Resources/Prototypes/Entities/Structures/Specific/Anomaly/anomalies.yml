@@ -1200,7 +1200,7 @@
 # The crack-open (supercritical) visual itself is entirely generic (see the Anomaly component
 # fields below - skipSupercriticalAnimation, supercriticalAnimationState/Duration,
 # supercriticalSettledState/PulseState, suppressCoreOnSupercritical, stopPulsingAfterSupercritical,
-# deathAnimationState/Duration) - no Eye-specific code or GenericVisualizer wiring involved.
+# deathAnimationState/Duration)
 
 - type: entity
   id: AnomalyEye

@@ -4,15 +4,7 @@ using Robust.Shared.Timing;
 namespace Content.Server.Tether;
 
 /// <summary>
-/// Server-side half of the tether visual effect - deliberately minimal. All positioning,
-/// rotation, and the curved "S-wiggle" shape are computed entirely client-side every frame (see
-/// Content.Client.Tether.TetherVisualSystem), directly from Source/Target's current world
-/// positions, so this system's only jobs are spawning the entity, marking when it starts
-/// disconnecting, and deleting it once either endpoint stops existing or the retract animation
-/// has finished. It deliberately does NOT touch the entity's Transform at all - letting the
-/// server "authoritatively" position it would only reintroduce the exact one-network-round-trip
-/// lag this design is meant to avoid, since the server's view of a client-predicted player's
-/// position is always slightly stale compared to what that player currently sees themselves at.
+/// Server-side half of the tether visual effect
 /// </summary>
 public sealed class TetherVisualSystem : EntitySystem
 {

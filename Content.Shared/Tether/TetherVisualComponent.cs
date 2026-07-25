@@ -7,16 +7,6 @@ namespace Content.Shared.Tether;
 /// Marks an entity as a purely visual tether connecting two other entities. Geometry (position,
 /// rotation, and the curved "S-wiggle" shape) is computed entirely client-side, every frame,
 /// directly from Source/Target's current world positions - see
-/// Content.Client.Tether.TetherVisualSystem. This is deliberate: your own character's movement
-/// is client-predicted (moves instantly on input, before the server confirms it), but a
-/// server-authoritative position on a separate entity can only ever reflect where the server
-/// currently thinks you are, which lags behind by roughly one network round-trip. Computing the
-/// tether's shape from the same locally-known position data your own sprite is already drawn
-/// from eliminates that lag entirely. The server's only job now is spawning the entity and
-/// cleaning it up once Source or Target stops existing - see
-/// Content.Server.Tether.TetherVisualSystem.
-///
-/// This is deliberately generic/reusable - not tied to any specific anomaly or feature.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TetherVisualComponent : Component
