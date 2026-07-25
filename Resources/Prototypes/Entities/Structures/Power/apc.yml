@@ -248,11 +248,6 @@
 - type: entity
   parent: APCConstructed
   id: APCBasic
-  components:
-  - type: ContainerFill
-    containers:
-      board: [ APCElectronics ]
-      powercell: [ PowerCellSmall ]
 
 # APCs in use
 - type: entity
