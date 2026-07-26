@@ -1,4 +1,5 @@
 using Content.Server.Anomaly.Effects.Components;
+using Content.Shared._Persistence14.PersistentIdentifier;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Hands.Systems;
 using Content.Server.NPC.Queries;
@@ -43,6 +44,7 @@ namespace Content.Server.NPC.Systems;
 public sealed class NPCUtilitySystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly PersistentIdentifierSystem _pid = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
@@ -178,7 +180,10 @@ public sealed class NPCUtilitySystem : EntitySystem
         if (!TryComp<TetheredByEyeComponent>(owner, out var tether))
             return null;
 
-        var eyeAnomaly = tether.Eye;
+        if (!_pid.TryResolveId(tether.Eye, out var eyeEnt))
+            return null;
+
+        var eyeAnomaly = eyeEnt.Owner;
         return entity => entity == eyeAnomaly;
     }
 

@@ -7,6 +7,8 @@ using Content.Server.Radio.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Server.Tether;
 using Content.Shared.Actions;
+using Content.Shared._Persistence14.PersistentIdentifier;
+using Content.Shared._Persistence14.PersistentIdentifier.Reference;
 using Content.Shared.Anomaly;
 using Content.Shared.Anomaly.Components;
 using Content.Shared.Anomaly.Effects.Components;
@@ -68,6 +70,7 @@ public sealed class EyeAnomalySystem : EntitySystem
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly NPCSystem _npcSystem = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly PersistentIdentifierSystem _pid = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _pulseTargets = new();
     private readonly HashSet<EntityUid> _returning = new();
@@ -95,12 +98,16 @@ public sealed class EyeAnomalySystem : EntitySystem
     private void OnTetheredSosOverride(Entity<EyeMindVesselComponent> ent, ref GetSosOverrideEvent args)
     {
         args.AllowWhileAlive = true;
-        args.SpeakerOverride = ent.Comp.OriginalBody;
 
-        if (TryComp<EyeAnomalyComponent>(ent.Comp.Eye, out var eyeComp))
+        if (!_pid.TryResolveId(ent.Comp.OriginalBody, out var body))
+            return;
+
+        args.SpeakerOverride = body.Owner;
+
+        if (_pid.TryResolveId(ent.Comp.Eye, out var eye) && TryComp<EyeAnomalyComponent>(eye.Owner, out var eyeComp))
         {
-            var mapPos = _transform.GetWorldPosition(ent.Comp.OriginalBody);
-            args.MessageOverride = string.Format(eyeComp.SosMessageUnshielded, Name(ent.Comp.OriginalBody), mapPos.X, mapPos.Y);
+            var mapPos = _transform.GetWorldPosition(body.Owner);
+            args.MessageOverride = string.Format(eyeComp.SosMessageUnshielded, Name(body.Owner), mapPos.X, mapPos.Y);
         }
     }
 
@@ -133,7 +140,7 @@ public sealed class EyeAnomalySystem : EntitySystem
         var query = EntityQueryEnumerator<TetheredByEyeComponent>();
         while (query.MoveNext(out var body, out var tether))
         {
-            if (tether.Eye != vessel.Comp.Eye)
+            if (tether.Eye.TargetId != vessel.Comp.Eye.TargetId)
                 continue;
 
             _chat.TrySendInGameICMessage(body, args.Message, chatType, ChatTransmitRange.Normal, ignoreActionBlocker: true);
@@ -148,7 +155,7 @@ public sealed class EyeAnomalySystem : EntitySystem
             var radioQuery = EntityQueryEnumerator<TetheredByEyeComponent>();
             while (radioQuery.MoveNext(out var radioBody, out var radioTether))
             {
-                if (radioTether.Eye != vessel.Comp.Eye)
+                if (radioTether.Eye.TargetId != vessel.Comp.Eye.TargetId)
                     continue;
 
                 if (!_inventory.TryGetSlotEntity(radioBody, "ears", out var headsetEnt))
@@ -214,10 +221,11 @@ public sealed class EyeAnomalySystem : EntitySystem
                 continue;
 
             var tether = AddComp<TetheredByEyeComponent>(target.Owner);
-            tether.Eye = ent;
-            tether.VisualEntity = _tetherVisual.SpawnTether(ent.Owner, target.Owner, ent.Comp.TetherVisualPrototype,
+            _pid.AssignIdReference(ref tether.Eye, ent.Owner);
+            var visual = _tetherVisual.SpawnTether(ent.Owner, target.Owner, ent.Comp.TetherVisualPrototype,
                 TimeSpan.FromSeconds(ent.Comp.ConnectDuration),
                 TimeSpan.FromSeconds(ent.Comp.DisconnectDuration));
+            _pid.AssignIdReference(ref tether.VisualEntity, visual);
 
             // A MindShield holder gets a grace window where they're visibly tethered but keep
             // free control of their body - the tether itself doesn't care about MindShield at
@@ -326,8 +334,8 @@ public sealed class EyeAnomalySystem : EntitySystem
 
         var vessel = Spawn(ent.Comp.MindVesselPrototype, _transform.GetMapCoordinates(ent));
         var vesselComp = AddComp<EyeMindVesselComponent>(vessel);
-        vesselComp.Eye = ent;
-        vesselComp.OriginalBody = victim;
+        _pid.AssignIdReference(ref vesselComp.Eye, ent.Owner);
+        _pid.AssignIdReference(ref vesselComp.OriginalBody, victim);
 
         // Parented to the eye (not just spawned at its current position) so the vessel's own
         // transform - and therefore hearing/chat range - stays glued to the eye even if it moves.
@@ -344,8 +352,8 @@ public sealed class EyeAnomalySystem : EntitySystem
         // present) fire correctly the instant the player detaches below.
         _mind.TransferTo(mindId, vessel);
 
-        tether.Mind = mindId;
-        tether.MindHost = vessel;
+        _pid.AssignIdReference(ref tether.Mind, mindId);
+        _pid.AssignIdReference(ref tether.MindHost, vessel);
 
         // Grants the same "Open Death Network" action a dead player gets, on the VESSEL (what the
         // player is actually attached to). Only granted if the ORIGINAL body has a job implant -
@@ -408,7 +416,7 @@ public sealed class EyeAnomalySystem : EntitySystem
         var query = EntityQueryEnumerator<TetheredByEyeComponent>();
         while (query.MoveNext(out var body, out var tether))
         {
-            if (tether.Eye != eye)
+            if (!_pid.CompareId(tether.Eye, eye))
                 continue;
 
             if (_inventory.TryGetSlotEntity(body, "ears", out var headsetEnt) &&
@@ -421,8 +429,8 @@ public sealed class EyeAnomalySystem : EntitySystem
                 }
             }
 
-            if (tether.MindHost is { } vessel && Exists(vessel))
-                vessels.Add(vessel);
+            if (_pid.TryResolveId(tether.MindHost, out var vesselEnt))
+                vessels.Add(vesselEnt.Owner);
         }
 
         foreach (var vessel in vessels)
@@ -506,11 +514,13 @@ public sealed class EyeAnomalySystem : EntitySystem
         var tetherQuery = AllEntityQuery<TetheredByEyeComponent>();
         while (tetherQuery.MoveNext(out var victim, out var tether))
         {
-            if (!Exists(tether.Eye) || !TryComp<EyeAnomalyComponent>(tether.Eye, out var eyeComp))
+            if (!_pid.TryResolveId(tether.Eye, out var eyeEnt) || !TryComp<EyeAnomalyComponent>(eyeEnt.Owner, out var eyeComp))
             {
                 BreakTether(victim, tether);
                 continue;
             }
+
+            var eyeUid = eyeEnt.Owner;
 
             // MindShield grace period - the tether is already attached but the mind hasn't
             // actually been taken yet. Once this runs out, finish the capture exactly like an
@@ -521,13 +531,13 @@ public sealed class EyeAnomalySystem : EntitySystem
                 if (tether.MindShieldGraceRemaining is <= 0f)
                 {
                     tether.State = TetherState.Connected;
-                    SetupGuardianAI((tether.Eye, eyeComp), victim);
-                    CaptureVictimMind((tether.Eye, eyeComp), victim, tether);
-                    TriggerEyeSos((tether.Eye, eyeComp), victim, hadMindShield: true);
+                    SetupGuardianAI((eyeUid, eyeComp), victim);
+                    CaptureVictimMind((eyeUid, eyeComp), victim, tether);
+                    TriggerEyeSos((eyeUid, eyeComp), victim, hadMindShield: true);
                 }
             }
 
-            var eyeCoords = _transform.GetMapCoordinates(tether.Eye);
+            var eyeCoords = _transform.GetMapCoordinates(eyeUid);
             var victimCoords = _transform.GetMapCoordinates(victim);
             var sameMap = eyeCoords.MapId == victimCoords.MapId;
             var distance = sameMap ? (victimCoords.Position - eyeCoords.Position).Length() : float.MaxValue;
@@ -546,8 +556,8 @@ public sealed class EyeAnomalySystem : EntitySystem
         // Send the mind straight back home, regardless of why the tether is breaking (death,
         // crit, or going out of range). TransferTo is a no-op if the mind has since ended up
         // somewhere else entirely, so this is safe to call unconditionally.
-        if (tether.Mind is { } mindId)
-            _mind.TransferTo(mindId, victim);
+        if (_pid.TryResolveId(tether.Mind, out var mindEnt))
+            _mind.TransferTo(mindEnt.Owner, victim);
 
         // Tear down the guardian AI (if it was ever set up - a grace-period escape never gets
         // this far) and hand the body's factions back exactly as they were. RemComp triggers
@@ -563,8 +573,8 @@ public sealed class EyeAnomalySystem : EntitySystem
         _npcFaction.AddFactions((victim, npcFaction), tether.OldFactions);
         tether.OldFactions.Clear();
 
-        if (tether.MindHost is { } vessel && Exists(vessel))
-            QueueDel(vessel);
+        if (_pid.TryResolveId(tether.MindHost, out var vesselEnt))
+            QueueDel(vesselEnt.Owner);
 
         // Revoke the manually-granted SOS button - tracked separately from
         // MobStateActionsComponent.GrantedActions so this can't accidentally remove an action the
@@ -574,14 +584,19 @@ public sealed class EyeAnomalySystem : EntitySystem
 
         // Plays the retract animation over the tether's DisconnectDuration, then the tether
         // deletes itself - instead of vanishing instantly.
-        if (tether.VisualEntity is { } visual && Exists(visual))
-            _tetherVisual.BeginDisconnect(visual);
+        if (_pid.TryResolveId(tether.VisualEntity, out var visualEnt))
+            _tetherVisual.BeginDisconnect(visualEnt.Owner);
 
         RemComp<TetheredByEyeComponent>(victim);
 
-        RecomputeAggregatedRadioChannels(tether.Eye);
-
-        CheckEyeDeathTrigger(tether.Eye);
+        // Resolve the eye once for the post-break bookkeeping. If it no longer resolves (the eye
+        // itself was destroyed - which is one of the ways a tether breaks), there's nothing left
+        // to recompute channels for or to check for death, so skipping both is correct.
+        if (_pid.TryResolveId(tether.Eye, out var eyeEnt))
+        {
+            RecomputeAggregatedRadioChannels(eyeEnt.Owner);
+            CheckEyeDeathTrigger(eyeEnt.Owner);
+        }
     }
 
     /// <summary>
@@ -599,7 +614,7 @@ public sealed class EyeAnomalySystem : EntitySystem
         var query = EntityQueryEnumerator<TetheredByEyeComponent>();
         while (query.MoveNext(out var tether))
         {
-            if (tether.Eye == eye)
+            if (_pid.CompareId(tether.Eye, eye))
                 return; // still has at least one thrall
         }
 
@@ -718,19 +733,21 @@ public sealed class EyeAnomalySystem : EntitySystem
 
     /// <summary>
     /// Records (or refreshes) that a mind is away from home. HomeBody only ever gets set on the
-    /// FIRST displacement - EnsureComp hands back a freshly zeroed component whose HomeBody is
-    /// the default (non-existent) EntityUid, so checking "does HomeBody currently point at a real
-    /// entity" doubles as a clean "is this the first time" check without needing a separate flag.
+    /// FIRST displacement - EnsureComp hands back a freshly zeroed component whose HomeBody is the
+    /// default (empty) PersistentEntityReference, so "does HomeBody resolve to a real entity"
+    /// doubles as a clean "is this the first time" check without needing a separate flag.
     /// </summary>
     private void TrackDisplacement(EntityUid mindId, EntityUid trueHome, Entity<EyeAnomalyComponent> source, TimeSpan duration)
     {
         var home = EnsureComp<MindSwapHomeComponent>(mindId);
 
-        if (!Exists(home.HomeBody))
-            home.HomeBody = trueHome;
+        // Only stamp HomeBody the first time: if the current reference doesn't resolve to a live
+        // entity, this mind has never been displaced before (fresh component = EmptyId reference).
+        if (!_pid.TryResolveId(home.HomeBody, out _))
+            _pid.AssignIdReference(ref home.HomeBody, trueHome);
 
         home.ReturnAt = _timing.CurTime + duration;
-        home.SourceAnomaly = source;
+        _pid.AssignIdReference(ref home.SourceAnomaly, source.Owner);
     }
 
     /// <summary>
@@ -744,13 +761,15 @@ public sealed class EyeAnomalySystem : EntitySystem
         if (!TryComp<MindSwapHomeComponent>(mindId, out var home))
             return;
 
-        if (!Exists(home.HomeBody))
+        if (!_pid.TryResolveId(home.HomeBody, out var homeEnt))
         {
             RemComp<MindSwapHomeComponent>(mindId);
             return;
         }
 
-        if (_mind.TryGetMind(home.HomeBody, out var currentOccupant, out _) && currentOccupant == mindId)
+        var homeBody = homeEnt.Owner;
+
+        if (_mind.TryGetMind(homeBody, out var currentOccupant, out _) && currentOccupant == mindId)
         {
             RemComp<MindSwapHomeComponent>(mindId);
             return;
@@ -761,7 +780,7 @@ public sealed class EyeAnomalySystem : EntitySystem
 
         try
         {
-            if (_mind.TryGetMind(home.HomeBody, out var occupantMind, out _) && occupantMind != mindId)
+            if (_mind.TryGetMind(homeBody, out var occupantMind, out _) && occupantMind != mindId)
             {
                 if (_returning.Contains(occupantMind))
                 {
@@ -775,7 +794,7 @@ public sealed class EyeAnomalySystem : EntitySystem
                 }
             }
 
-            _mind.TransferTo(mindId, home.HomeBody);
+            _mind.TransferTo(mindId, homeBody);
             RemComp<MindSwapHomeComponent>(mindId);
         }
         finally
@@ -795,7 +814,8 @@ public sealed class EyeAnomalySystem : EntitySystem
         if (!TryComp<MindSwapHomeComponent>(mindId, out var home))
             return;
 
-        if (!TryComp<EyeAnomalyComponent>(home.SourceAnomaly, out var sourceComp))
+        if (!_pid.TryResolveId(home.SourceAnomaly, out var srcEnt) ||
+            !TryComp<EyeAnomalyComponent>(srcEnt.Owner, out var sourceComp))
             return;
 
         var shouldRevert = args.NewMobState == MobState.Dead ? sourceComp.RevertOnDeath : sourceComp.RevertOnCrit;

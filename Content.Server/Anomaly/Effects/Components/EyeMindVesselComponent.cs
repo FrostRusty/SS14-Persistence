@@ -1,3 +1,5 @@
+using Content.Shared._Persistence14.PersistentIdentifier.Reference;
+
 namespace Content.Server.Anomaly.Effects.Components;
 
 /// <summary>
@@ -21,11 +23,13 @@ namespace Content.Server.Anomaly.Effects.Components;
 [RegisterComponent]
 public sealed partial class EyeMindVesselComponent : Component
 {
-    /// <summary>The eye anomaly this vessel belongs to.</summary>
+    /// <summary>The eye anomaly this vessel belongs to. PersistentEntityReference so the link
+    /// survives a world save/reload (raw EntityUids are reassigned each session).</summary>
     [DataField]
-    public EntityUid Eye;
+    public PersistentEntityReference Eye;
 
-    /// <summary>The body this vessel's occupant will be returned to once the tether breaks.</summary>
+    /// <summary>The body this vessel's occupant will be returned to once the tether breaks.
+    /// PersistentEntityReference for save/reload stability.</summary>
     [DataField]
-    public EntityUid OriginalBody;
+    public PersistentEntityReference OriginalBody;
 }

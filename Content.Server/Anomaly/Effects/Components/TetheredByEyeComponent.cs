@@ -1,3 +1,4 @@
+using Content.Shared._Persistence14.PersistentIdentifier.Reference;
 using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Prototypes;
 
@@ -12,19 +13,21 @@ namespace Content.Server.Anomaly.Effects.Components;
 public sealed partial class TetheredByEyeComponent : Component
 {
     /// <summary>
-    /// The eye anomaly this body is tethered to.
+    /// The eye anomaly this body is tethered to. PersistentEntityReference (not a raw EntityUid)
+    /// so the link survives a world save/reload - UIDs are reassigned each session.
     /// </summary>
-    [DataField(required: true)]
-    public EntityUid Eye;
+    [DataField]
+    public PersistentEntityReference Eye;
 
     /// <summary>
     /// The mind that was piloting this body at the moment it was captured. Kept so it can be
     /// handed straight back on disconnect regardless of what happens to it in the meantime.
-    /// Null for the brief MindShield grace window, since control hasn't actually been taken yet
-    /// at that point.
+    /// Resolves to nothing (default EmptyId) during the brief MindShield grace window, since
+    /// control hasn't actually been taken yet at that point. PersistentEntityReference for
+    /// save/reload stability.
     /// </summary>
     [DataField]
-    public EntityUid? Mind;
+    public PersistentEntityReference Mind;
 
     /// <summary>
     /// The EyeMindVessel entity the victim's mind was moved into for the duration of the tether -
@@ -32,10 +35,10 @@ public sealed partial class TetheredByEyeComponent : Component
     /// anomaly, so the trapped player can watch helplessly but cannot act, and anything they say
     /// only becomes audible through the hivemind chorus relay rather than being overheard at its
     /// own (inaccessible) location. Null during the MindShield grace window; deleted on
-    /// disconnect.
+    /// disconnect. PersistentEntityReference for save/reload stability.
     /// </summary>
     [DataField]
-    public EntityUid? MindHost;
+    public PersistentEntityReference MindHost;
 
     /// <summary>
     /// Current animation/possession phase of this tether.
@@ -62,10 +65,11 @@ public sealed partial class TetheredByEyeComponent : Component
 
     /// <summary>
     /// The TetherVisualComponent-having entity drawing the connection between the eye and this
-    /// victim, so it can be cleanly deleted once the tether breaks.
+    /// victim, so it can be cleanly deleted once the tether breaks. PersistentEntityReference for
+    /// save/reload stability.
     /// </summary>
     [DataField]
-    public EntityUid? VisualEntity;
+    public PersistentEntityReference VisualEntity;
 
     /// <summary>
     /// If this victim had a MindShield when targeted, how much longer they keep free control

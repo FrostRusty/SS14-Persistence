@@ -143,9 +143,9 @@ public sealed partial class NPCCombatSystem
                 // it constantly stands near/fights around - ignore ONLY that entity for a
                 // thrall's own LOS check, so its own tether anchor can't block its shots.
                 Ignored? ignore = null;
-                if (TryComp<TetheredByEyeComponent>(uid, out var tetherComp))
+                if (TryComp<TetheredByEyeComponent>(uid, out var tetherComp) && _pid.TryResolveId(tetherComp.Eye, out var eyeEnt))
                 {
-                    var eyeAnomaly = tetherComp.Eye;
+                    var eyeAnomaly = eyeEnt.Owner;
                     ignore = entity => entity == eyeAnomaly;
                 }
 
