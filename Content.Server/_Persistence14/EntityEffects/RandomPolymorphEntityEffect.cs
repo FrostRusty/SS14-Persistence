@@ -1,12 +1,21 @@
 using System.Linq;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
-using Content.Shared._Persistence14.EntityEffects;
 using Content.Shared._Persistence14.RandomTable;
+using Content.Shared._Persistence14.RandomTable.Selectors;
 using Content.Shared.EntityEffects;
 using Content.Shared.Polymorph;
 
 namespace Content.Server._Persistence14.EntityEffects;
+
+public sealed partial class RandomPolymorph : EntityEffectBase<RandomPolymorph>
+{
+    [DataField(required: true)]
+    public RandomTableSelector Table = new RandomTableNullSelector();
+
+    [DataField]
+    public bool ThrowIfMultiple = true;
+}
 
 public sealed partial class RandomPolymorphEntityEffectSystem : EntityEffectSystem<PolymorphableComponent, RandomPolymorph>
 {
