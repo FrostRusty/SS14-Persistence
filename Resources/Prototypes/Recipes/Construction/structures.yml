@@ -2384,3 +2384,13 @@
   canRotate: false
   canBuildInImpassable: true
 
+- type: construction
+  id: BannerPREG
+  graph: BannerGraph
+  startNode: start
+  targetNode: bannerPREG
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: true

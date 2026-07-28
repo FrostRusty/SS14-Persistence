@@ -50,7 +50,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         private void OnInit(EntityUid uid, GasFilterComponent filter, ComponentInit args)
         {
             // Moffstation - Begin (filter multiple gases)
-            if (filter.FilteredGas is {} filteredGas)
+            if (filter.FilteredGas is { } filteredGas)
                 filter.FilteredGases.Add(filteredGas);
             // Moffstation - End
             UpdateAppearance(uid, filter);
@@ -60,7 +60,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         {
             if (!filter.Enabled
                 || !_nodeContainer.TryGetNodes(uid, filter.InletName, filter.FilterName, filter.OutletName, out PipeNode? inletNode, out PipeNode? filterNode, out PipeNode? outletNode)
-                || (outletNode.Air.Pressure >= Atmospherics.MaxOutputPressure && filterNode.Air.Pressure >= Atmospherics.MaxOutputPressure)) // No need to transfer if targets are full.
+                || outletNode.Air.Pressure >= Atmospherics.MaxOutputPressure && filterNode.Air.Pressure >= Atmospherics.MaxOutputPressure) // No need to transfer if targets are full.
             {
                 _ambientSoundSystem.SetAmbience(uid, false);
                 return;
@@ -81,8 +81,10 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             var passingGasses = Enum.GetValues<Gas>().Except(filter.FilteredGases).ToHashSet();
 
             var success = false;
-            success |= TryTransfer(removed, filter.FilteredGases, filterNode.Air);
-            success |= TryTransfer(removed, passingGasses, outletNode.Air);
+            if (filterNode.Air.Pressure < Atmospherics.MaxOutputPressure)
+                success |= TryTransfer(removed, filter.FilteredGases, filterNode.Air);
+            if (outletNode.Air.Pressure < Atmospherics.MaxOutputPressure)
+                success |= TryTransfer(removed, passingGasses, outletNode.Air);
 
             _ambientSoundSystem.SetAmbience(uid, success);
             _atmosphereSystem.Merge(inletNode.Air, removed);
@@ -184,7 +186,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
                 ent.Comp.FilteredGases.Remove(args.Gas);
             }
 
-            var proto = _atmosphereSystem.GetGas((int) args.Gas);
+            var proto = _atmosphereSystem.GetGas((int)args.Gas);
             _adminLogger.Add(
                 LogType.AtmosFilterChanged,
                 LogImpact.Medium,
@@ -231,11 +233,13 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         private bool TryTransfer(GasMixture source, HashSet<Gas> gasses, GasMixture target)
         {
             var limitMoles = AtmosphereSystem.MolesToMaxPressure(source, target, Atmospherics.MaxOutputPressure);
+            if (limitMoles <= Atmospherics.GasMinMoles) return false;
+
             var availableMoles = gasses.Aggregate(0f, (x, gas) => x + source.GetMoles(gas));
 
             var transferredMoles = Math.Clamp(availableMoles, 0f, limitMoles);
 
-            if (transferredMoles <= Atmospherics.GasMinMoles)
+            if (transferredMoles < Atmospherics.GasMinMoles)
                 return false;
 
             var transferredMixture = new GasMixture { Temperature = source.Temperature };
