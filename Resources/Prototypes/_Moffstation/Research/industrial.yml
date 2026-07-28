@@ -1,17 +1,17 @@
 # Tier 1
 
-- type: technology
-  id: ModularHudModulesIndustrialT1
-  name: research-technology-modular-hud-modules-industrial-t1
-  icon:
-    entity: HudModuleShowAccessReaderSettings
-  discipline: Industrial
-  tier: 1
-  cost: 1000
-  technologyPrerequisites:
-  - ModularHudFrames
-  recipeUnlocks:
-  - HudModuleShowAccessReaderSettings
+#- type: technology
+#  id: ModularHudModulesIndustrialT1
+#  name: research-technology-modular-hud-modules-industrial-t1
+#  icon:
+#    entity: HudModuleShowAccessReaderSettings
+#  discipline: Industrial
+#  tier: 1
+#  cost: 1000
+#  technologyPrerequisites:
+#  - ModularHudFrames
+#  recipeUnlocks:
+#  - HudModuleShowAccessReaderSettings
 
 # Tier 2
 
@@ -25,6 +25,6 @@
   cost: 3500
   technologyPrerequisites:
   - ModularHudFrames
-  - ModularHudModulesIndustrialT1
+#  - ModularHudModulesIndustrialT1
   recipeUnlocks:
   - HudModuleEyeProtection

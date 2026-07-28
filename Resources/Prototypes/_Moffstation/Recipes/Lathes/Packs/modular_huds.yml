@@ -19,7 +19,7 @@
   - HudModuleBlackAndWhiteOverlay
   - HudModuleEyeProtection
   - HudModuleNoirOverlay
-  - HudModuleShowAccessReaderSettings
+  #- HudModuleShowAccessReaderSettings
   - HudModuleShowContrabandDetails
   - HudModuleShowHungerIcons
   - HudModuleShowJobIcons
