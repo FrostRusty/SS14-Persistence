@@ -41,7 +41,7 @@ using Content.Server.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Body.Components;
 using Content.Shared.StatusEffectNew;
-using Content.Server._Persistence14.Polymorph;
+using Content.Shared._Persistence14.Polymorph;
 
 namespace Content.Server.Polymorph.Systems;
 
@@ -282,7 +282,7 @@ public sealed partial class PolymorphSystem : EntitySystem
             HasComp<PolymorphedEntityComponent>(uid))
             return false;
 
-        if (_statusEffect.HasEffectComp<PolymorphProtectionComponent>(uid))
+        if (_statusEffect.HasEffectComp<PolymorphProtectedComponent>(uid))
             return false;
 
         // If they're morphed, check their current config to see if they can be
