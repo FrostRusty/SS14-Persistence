@@ -268,47 +268,42 @@ public sealed partial class PolymorphSystem : EntitySystem
         return transferReagents;
     }
 
+    #region Polymorph
     /// <summary>
-    /// Adds the polymorph config to a queue to be processed the next update cycle. Allows for dependent systems to rely on existing entities and complete processing
-    /// prior to the deletion and serialization of the entity.
+    /// Determines if a given entity can polymorph to a given configuration.
     /// </summary>
-    public void QueuePolymorph(EntityUid uid, ProtoId<PolymorphPrototype> protoId)
+    private bool CanPolymorph(EntityUid uid, PolymorphConfiguration configuration, out PolymorphableComponent? polymorphable, out PolymorphedEntityComponent? polymorphed)
     {
-        var config = _proto.Index(protoId).Configuration;
-        QueuePolymorph(uid, config);
-    }
+        polymorphable = null;
+        polymorphed = null;
 
-    /// <summary>
-    /// Adds the polymorph config to a queue to be processed the next update cycle. Allows for dependent systems to rely on existing entities and complete processing
-    /// prior to the deletion and serialization of the entity.
-    /// </summary>
-    public void QueuePolymorph(EntityUid uid, PolymorphConfiguration configuration, Action<EntityUid>? onPolymorph = null)
-    {
-        if (HasComp<VoidedComponent>(uid) || HasComp<PolymorphedEntityComponent>(uid)) // Multi polymorphs currently broken so disabled. TODO: Fix chain polys
-            return;
+        // Multi polymorphs currently broken so disabled. TODO: Fix chain polys
+        if (HasComp<VoidedComponent>(uid) ||
+            HasComp<PolymorphedEntityComponent>(uid))
+            return false;
 
         if (_statusEffect.HasEffectComp<PolymorphProtectionComponent>(uid))
-            return;
+            return false;
 
         // If they're morphed, check their current config to see if they can be
         // morphed again. TryComp is called unconditionally (rather than inline in the &&
         // chain) so currentPoly is always definitely-assigned for later use tracking chained
         // re-polymorphs, regardless of whether IgnoreAllowRepeatedMorphs short-circuits this.
-        TryComp<PolymorphedEntityComponent>(uid, out var currentPoly);
-        if (!configuration.IgnoreAllowRepeatedMorphs
-            && currentPoly != null
+        if (TryComp<PolymorphedEntityComponent>(uid, out var currentPoly)
+            && !configuration.IgnoreAllowRepeatedMorphs
             && !currentPoly.Configuration.AllowRepeatedMorphs)
-            return;
+            return false;
 
         // If this polymorph has a cooldown, check if that amount of time has passed since the
         // last polymorph ended.
         if (TryComp<PolymorphableComponent>(uid, out var polymorphableComponent) &&
             polymorphableComponent.LastPolymorphEnd != null &&
             _gameTiming.CurTime < polymorphableComponent.LastPolymorphEnd + configuration.Cooldown)
-            return;
+            return false;
 
-        onPolymorph ??= _ => { };
-        _polymorphQueue.Enqueue((uid, configuration, onPolymorph));
+        polymorphable = polymorphableComponent;
+        polymorphed = currentPoly;
+        return true;
     }
 
     /// <summary>
@@ -330,29 +325,8 @@ public sealed partial class PolymorphSystem : EntitySystem
     /// <returns>The new entity, or null if the polymorph failed.</returns>
     public EntityUid? PolymorphEntity(EntityUid uid, PolymorphConfiguration configuration)
     {
-        if (HasComp<VoidedComponent>(uid) || HasComp<PolymorphedEntityComponent>(uid)) // Multi polymorphs currently broken so disabled. TODO: Fix chain polys
+        if (!CanPolymorph(uid, configuration, out var polymorphable, out var currentPoly))
             return null;
-
-        if (_statusEffect.HasEffectComp<PolymorphProtectionComponent>(uid))
-            return null;
-
-        // If they're morphed, check their current config to see if they can be
-        // morphed again. TryComp is called unconditionally (rather than inline in the &&
-        // chain) so currentPoly is always definitely-assigned for later use tracking chained
-        // re-polymorphs, regardless of whether IgnoreAllowRepeatedMorphs short-circuits this.
-        TryComp<PolymorphedEntityComponent>(uid, out var currentPoly);
-        if (!configuration.IgnoreAllowRepeatedMorphs
-            && currentPoly != null
-            && !currentPoly.Configuration.AllowRepeatedMorphs)
-            return null;
-
-        // If this polymorph has a cooldown, check if that amount of time has passed since the
-        // last polymorph ended.
-        if (TryComp<PolymorphableComponent>(uid, out var polymorphableComponent) &&
-            polymorphableComponent.LastPolymorphEnd != null &&
-            _gameTiming.CurTime < polymorphableComponent.LastPolymorphEnd + configuration.Cooldown)
-            return null;
-
 
         // Close player client windows
         if (TryComp<ActorComponent>(uid, out var actor))
@@ -471,20 +445,65 @@ public sealed partial class PolymorphSystem : EntitySystem
         return child;
     }
 
-    public void QueueRevert(Entity<PolymorphedEntityComponent?> ent, Action<EntityUid>? onRevert = null)
+    /// <summary>
+    /// Adds the polymorph config to a queue to be processed the next update cycle. Allows for dependent systems to rely on existing entities and complete processing
+    /// prior to the deletion and serialization of the entity.
+    /// </summary>
+    /// <param name="onPolymorph">A method to be called upon the actual completion of the polymorph.</param>
+    public void QueuePolymorph(EntityUid uid, ProtoId<PolymorphPrototype> protoId, Action<EntityUid>? onPolymorph = null)
     {
-        var (uid, component) = ent;
-        if (!Resolve(ent, ref component))
-        {
+        var config = _proto.Index(protoId).Configuration;
+        QueuePolymorph(uid, config, onPolymorph);
+    }
+
+    /// <summary>
+    /// Adds the polymorph config to a queue to be processed the next update cycle. Allows for dependent systems to rely on existing entities and complete processing
+    /// prior to the deletion and serialization of the entity.
+    /// </summary>
+    /// <param name="onPolymorph">A method to be called upon the actual completion of the polymorph.</param>
+    public void QueuePolymorph(EntityUid uid, PolymorphConfiguration configuration, Action<EntityUid>? onPolymorph = null)
+    {
+        if (!CanPolymorph(uid, configuration, out _, out _))
             return;
-        }
+
+        onPolymorph ??= _ => { };
+        _polymorphQueue.Enqueue((uid, configuration, onPolymorph));
+    }
+    #endregion
+
+    #region Revert
+    private bool CanRevert(Entity<PolymorphedEntityComponent?> ent, out PolymorphedEntityComponent polymorphed, out string parentPid, out TransformComponent xform)
+    {
+        polymorphed = default!;
+        parentPid = "invalid";
+        xform = default!;
+
+        var (uid, comp) = ent;
+        if (!Resolve(uid, ref comp))
+            return false;
 
         if (Deleted(uid))
-        {
-            return;
-        }
+            return false;
 
-        if (ent.Comp?.ParentPersistentId is not { } pid)
+        if (comp.ParentPersistentId is not { } pid)
+            return false;
+
+        xform = Transform(uid);
+        if (TerminatingOrDeleted(xform.ParentUid))
+            return false;
+
+        polymorphed = comp;
+        parentPid = pid;
+        return true;
+    }
+
+    /// <summary>
+    /// Enques revert to occur next update cycle. Allows inline edits to reverted entities without them completely losing access to the polymorphed unexpectedly.
+    /// </summary>
+    /// <param name="onRevert">A method to be called upon the actual reversion of the entity.</param>
+    public void QueueRevert(Entity<PolymorphedEntityComponent?> ent, Action<EntityUid>? onRevert = null)
+    {
+        if (!CanRevert(ent, out _, out _, out _))
             return;
 
         onRevert ??= _ => { };
@@ -498,30 +517,13 @@ public sealed partial class PolymorphSystem : EntitySystem
     /// <param name="component"></param>
     public EntityUid? Revert(Entity<PolymorphedEntityComponent?> ent)
     {
-        var (uid, component) = ent;
-        if (!Resolve(ent, ref component))
-        {
+        if (!CanRevert(ent, out var component, out var pid, out var uidXform))
             return null;
-        }
-
-        if (Deleted(uid))
-        {
-            return null;
-        }
-
-        if (ent.Comp?.ParentPersistentId is not { } pid)
-            return null;
+        var uid = ent.Owner;
 
 
-        var uidXform = Transform(uid);
-
-        if (TerminatingOrDeleted(uidXform.ParentUid))
-        {
-            return null;
-        }
-
+        // Reconstruct at entity coordinates.
         var coords = _transform.ToMapCoordinates(uidXform.Coordinates);
-
         if (!_void.TryReconstructEntity(pid, coords, out var parentEnt))
             return null;
 
@@ -592,6 +594,7 @@ public sealed partial class PolymorphSystem : EntitySystem
 
         return parentEnt;
     }
+    #endregion
 
     /// <summary>
     /// Creates a sidebar action for an entity to be able to polymorph at will
