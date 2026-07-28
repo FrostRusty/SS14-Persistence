@@ -205,5 +205,18 @@
   name: lathe-category-bags
 
 - type: latheCategory
+  id: WehPlushies
+  name: lathe-category-lizard-plushies
+
+- type: latheCategory
+  id: Flags
+  name: lathe-category-flags
+
+- type: latheCategory
+  id: Bandanas
+  name: lathe-category-bandanas
+
+
+- type: latheCategory
   id: Pouches
   name: lathe-category-pouches
