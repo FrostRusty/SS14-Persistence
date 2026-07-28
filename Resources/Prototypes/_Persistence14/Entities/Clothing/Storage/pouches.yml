@@ -176,57 +176,6 @@
         color: "#777b83"
 
 ## COMMAND
-- type: entity
-  id: NFPouchSr
-  parent: NFPouchUtility
-  name: colonial liaison's pouch
-  components:
-  - type: Sprite
-    layers:
-    - state: base
-      color: "#194214"
-    - state: closed
-      map: ["closeLayer"]
-      color: "#194214"
-    - state: open
-      color: "#194214"
-      map: ["openLayer"]
-      visible: false
-    - state: inside
-      color: "#fff4e2"
-      map: ["insideLayer"]
-      visible: false
-    - state: fill-util4-1
-      map: [ "pouchFill4" ]
-      visible: false
-    - state: fill-util3-1
-      map: [ "pouchFill3" ]
-      visible: false
-    - state: fill-util2-1
-      map: [ "pouchFill2" ]
-      visible: false
-    - state: fill-util1-1
-      map: [ "pouchFill1" ]
-      visible: false
-    - state: decal-line-01
-      map: [ "decal1" ]
-      color: "#f2b833"
-  - type: Item
-    inhandVisuals:
-      left:
-      - state: inhand-left
-        color: "#194214"
-      right:
-      - state: inhand-right
-        color: "#194214"
-  - type: Clothing
-    clothingVisuals:
-      belt:
-      - state: equipped-BELT
-        color: "#194214"
-      pocket:
-      - state: equipped-BELT
-        color: "#194214"
 
 - type: entity
   id: NFPouchCaptain
@@ -283,6 +232,7 @@
         color: "#3a6781"
 
 ## ENGINEERING
+
 - type: entity
   id: NFPouchEngineering
   parent: NFPouchUtility
@@ -1016,57 +966,6 @@
       - state: equipped-BELT
         color: "#935c3f"
 
-## NFSD
-- type: entity
-  id: NFPouchNfsd
-  parent: NFPouchUtility
-  name: TSFMC pouch
-  components:
-  - type: Sprite
-    layers:
-    - state: base
-      color: "#373a45"
-    - state: closed
-      map: ["closeLayer"]
-      color: "#7d94a9"
-    - state: open
-      color: "#7d94a9"
-      map: ["openLayer"]
-      visible: false
-    - state: inside
-      map: ["insideLayer"]
-      visible: false
-    - state: fill-util4-1
-      map: [ "pouchFill4" ]
-      visible: false
-    - state: fill-util3-1
-      map: [ "pouchFill3" ]
-      visible: false
-    - state: fill-util2-1
-      map: [ "pouchFill2" ]
-      visible: false
-    - state: fill-util1-1
-      map: [ "pouchFill1" ]
-      visible: false
-    - state: decal-line-01
-      map: [ "decal1" ]
-      color: "#316294"
-  - type: Item
-    inhandVisuals:
-      left:
-      - state: inhand-left
-        color: "#7d94a9"
-      right:
-      - state: inhand-right
-        color: "#7d94a9"
-  - type: Clothing
-    clothingVisuals:
-      belt:
-      - state: equipped-BELT
-        color: "#7d94a9"
-      pocket:
-      - state: equipped-BELT
-        color: "#7d94a9"
 
 - type: entity
   id: NFPouchPirate

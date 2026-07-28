@@ -1,0 +1,120 @@
+- type: latheRecipe
+  id: PouchUtility
+  parent: BaseDuffelBag
+  result: NFPouchUtility
+
+- type: latheRecipe
+  id: PouchContractor
+  parent: BaseDuffelBag
+  result: NFPouchContractor
+
+#COMMAND
+- type: latheRecipe
+  id: PouchCaptain
+  parent: BaseDuffelBag
+  result: NFPouchCaptain
+
+#ENGINEERING
+- type: latheRecipe
+  id: PouchEngineering
+  parent: BaseDuffelBag
+  result: NFPouchEngineering
+
+- type: latheRecipe
+  id: PouchAtmos
+  parent: BaseDuffelBag
+  result: NFPouchAtmospherics
+
+# SUPPLY
+- type: latheRecipe
+  id: PouchCargo
+  parent: BaseDuffelBag
+  result: NFPouchCargo
+
+- type: latheRecipe
+  id: PouchSalvage
+  parent: BaseDuffelBag
+  result: NFPouchSalvage
+
+# MEDICAL
+
+- type: latheRecipe
+  id: PouchMedical
+  parent: BaseDuffelBag
+  result: NFPouchFirstAid
+
+- type: latheRecipe
+  id: PouchFirstAid
+  parent: BaseDuffelBag
+  result: NFPouchFirstAidAlt
+
+# SCIENCE
+
+- type: latheRecipe
+  id: PouchScience
+  parent: BaseDuffelBag
+  result: NFPouchScience
+
+# SERVICE
+
+- type: latheRecipe
+  id: PouchJanitor
+  parent: BaseDuffelBag
+  result: NFPouchJanitor
+
+- type: latheRecipe
+  id: PouchHydroponics
+  parent: BaseDuffelBag
+  result: NFPouchJanitor
+
+- type: latheRecipe
+  id: PouchChaplain
+  parent: BaseDuffelBag
+  result: NFPouchChaplain
+
+- type: latheRecipe
+  id: PouchMime
+  parent: BaseDuffelBag
+  result: NFPouchMime
+
+- type: latheRecipe
+  id: PouchClown
+  parent: BaseDuffelBag
+  result: NFPouchClown
+
+- type: latheRecipe
+  id: PouchMailCarrier
+  parent: BaseDuffelBag
+  result: NFPouchMailCarrier
+
+# WILDCARDS
+
+- type: latheRecipe
+  id: PouchMercenary
+  parent: BaseDuffelBag
+  result: NFPouchMercenary
+
+- type: latheRecipe
+  id: PouchPrivateSecurity
+  parent: BaseDuffelBag
+  result: NFPouchPrivateSecurity
+
+- type: latheRecipe
+  id: PouchPirate
+  parent: BaseDuffelBag
+  result: NFPouchPirate
+
+- type: latheRecipe
+  id: PouchPirateCaptain
+  parent: BaseDuffelBag
+  result: NFPouchPirateCaptain
+
+- type: latheRecipe
+  id: PouchTobacco
+  parent: BaseDuffelBag
+  result: NFTobaccoPouch
+
+- type: latheRecipe
+  id: PouchPunk
+  parent: BaseDuffelBag
+  result: NFPouchPunk

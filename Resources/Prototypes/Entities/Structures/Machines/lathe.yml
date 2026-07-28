@@ -542,6 +542,7 @@
     - EngineeringHardhatsStatic # Persi14
     - CivilianBags
     - CommandBags
+    - PouchesPack
   - type: EmagLatheRecipes
     emagStaticPacks:
     - ClothingSyndie
