@@ -332,7 +332,6 @@
   - type: GuideHelp
     guides:
     - Security
-    - Antagonists
 
 - type: entity
   parent: ModularHudModuleBase

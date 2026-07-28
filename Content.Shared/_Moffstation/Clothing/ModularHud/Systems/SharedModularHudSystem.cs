@@ -382,8 +382,8 @@ public abstract partial class SharedModularHudSystem : EntitySystem
     private void RefreshEffectsForWearerForContainedModules(Entity<ModularHudComponent> entity, EntityUid equippee)
     {
         _blurryVision.UpdateBlurMagnitude(equippee);
-        var flashEv = new FlashImmunityChangedEvent(_flash.IsFlashImmune(equippee));
-        RaiseLocalEvent(equippee, ref flashEv);
+        //var flashEv = new FlashImmunityChangedEvent(_flash.IsFlashImmune(equippee));
+        //RaiseLocalEvent(equippee, ref flashEv);
 
         RefreshEffectsForModules(GetModules(entity));
         SyncVisuals(entity);

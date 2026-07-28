@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-=======
-using Content.Shared._Moffstation.Weapons.Ranged.Components; // Moffstation
 using Content.Shared.Access.Systems; // Moffstation
->>>>>>> 979525784d (Modular HUDs (#996))
 using Content.Shared.Armor;
 using Content.Shared.Atmos;
 using Content.Shared.Chat;

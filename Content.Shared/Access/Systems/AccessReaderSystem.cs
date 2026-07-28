@@ -88,10 +88,10 @@ public sealed class AccessReaderSystem : EntitySystem
         //    }
         //}
 
-        var examiner = args.Examiner;
+        /*var examiner = args.Examiner;
         var ev = new ShowAccessReaderSettingsEvent();
         RaiseLocalEvent(examiner, ref ev);
-        var canSeeAccessModification = accessHasBeenModified && ev.CanShowSettings;
+        var canSeeAccessModification = accessHasBeenModified && ev.CanShowSettings;*/
 
         //if (canSeeAccessModification)
         //{

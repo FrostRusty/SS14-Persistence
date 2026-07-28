@@ -216,16 +216,12 @@
     - Janitor
     - Instruments
     - Equipment
-<<<<<<< HEAD
     - Hardsuits
     - PaperworkDynamic
-=======
-    - WirelessCameraHandheld # MOFFSTATION CHANGE - Adds wireless handheld camera
     # Moffstation - Start - Modular HUDs
     - ModularHudFrames
     - ModularHudModules
     # Moffstation - End
->>>>>>> 979525784d (Modular HUDs (#996))
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityAmmo
@@ -416,15 +412,12 @@
     - SecurityAmmo
     - SecurityWeapons
     - SecurityDisablers
-<<<<<<< HEAD
     - SecurityHardsuits
-=======
     # Moffstation - Start - Modular HUDs
     - ModularHudFrames
     - SecurityModularHudFrames
     - SecurityModularHudModules
     # Moffstation - End
->>>>>>> 979525784d (Modular HUDs (#996))
   - type: EmagLatheRecipes
     emagStaticPacks:
     - SyndicateAmmoStatic
