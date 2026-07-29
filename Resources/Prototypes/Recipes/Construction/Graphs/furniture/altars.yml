@@ -275,7 +275,7 @@
           - tag: CrystalRed
             name: construction-graph-tag-red-crystal-shard
             icon:
-              sprite: "Objects/Misc/candles.rsi"
+              sprite: "Objects/Materials/Shards/crystal.rsi"
               state: "shard1"
               doAfter: 1
 
