@@ -23,7 +23,7 @@
     entity: HudModuleShowCriminalRecordIcons
   discipline: CivilianServices
   tier: 2
-  cost: 3500
+  cost: 17500 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   - ModularHudModulesCivilianT1
@@ -39,7 +39,7 @@
     entity: HudModuleShowMedicalIcons
   discipline: CivilianServices
   tier: 2
-  cost: 3500
+  cost: 17500 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   - ModularHudModulesCivilianT1

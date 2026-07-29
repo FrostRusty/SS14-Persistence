@@ -10,6 +10,7 @@
     Steel: 200
     Glass: 100
     Plastic: 50
+  unlockUses: 2
 
 - type: latheRecipe
   parent: BaseModularHudModuleT1Recipe
@@ -20,6 +21,8 @@
     Glass: 100
     Plastic: 50
     Silver: 50
+  unlockUses: 2
+
 
 # Tier 1
 
@@ -59,6 +62,7 @@
     Steel: 200
     Glass: 100
     Silver: 100 # Eye protection uses silver as a lens filter... or something
+  unlockUses: 2
 
 - type: latheRecipe
   parent: BaseModularHudModuleT2Recipe
