@@ -1,5 +1,7 @@
+
 # Tier 1
 
+# Removed for Persistence14
 #- type: technology
 #  id: ModularHudModulesIndustrialT1
 #  name: research-technology-modular-hud-modules-industrial-t1
@@ -22,7 +24,7 @@
     entity: HudModuleEyeProtection
   discipline: Industrial
   tier: 2
-  cost: 3500
+  cost: 17500 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
 #  - ModularHudModulesIndustrialT1

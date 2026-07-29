@@ -27,7 +27,7 @@
     entity: HudModuleFlashImmunity
   discipline: Arsenal
   tier: 2
-  cost: 4000
+  cost: 20000 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   recipeUnlocks:
