@@ -96,10 +96,8 @@
       specular:
         color: "#FFFFFF10"
         priority: 1000
-  - type: EyeProtection
   - type: IdentityBlocker
     coverage: EYES
-  - type: FlashImmunity
 
 - type: entity
   parent: ClothingEyesModularHudGlasses
