@@ -1,0 +1,87 @@
+# Requisitions Console — a customer-facing ordering terminal that links to nearby printing machines
+# (lathes / flatpackers) and lets customers cart + pay for a batch print in one go. A second, access-gated
+# tab lets an operator set raw-material prices and fees.
+#
+# NOTE: the sprite is a placeholder — it reuses the material silo RSI for now.
+- type: entity
+  id: MachineRequisitionsConsole
+  parent: BaseMachinePowered
+  name: requisitions console
+  description: A customer-facing ordering terminal. Links to nearby fabricators and prints a whole cart of items at once, for a price.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/computers.rsi
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: generic
+    - map: ["computerLayerKeys"]
+      state: generic_keys
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        computerLayerScreen:
+          True: { visible: true }
+          False: { visible: false }
+        computerLayerKeys:
+          True: { visible: true }
+          False: { visible: false }
+  - type: RequisitionsConsole
+    range: 20
+    # Fallback price used for any linked material not listed below.
+    fallbackMaterialPrice: 5
+    # Default per-unit prices, applied automatically the first time a material becomes priceable.
+    defaultMaterialPrices:
+      Steel: 10
+      Glass: 6
+      Plastic: 4
+      Gold: 45
+      Silver: 20
+      Plasma: 15
+      Uranium: 30
+      Diamond: 90
+      Plasteel: 25
+  # Lets customers insert their own sheets to lower the bill at checkout.
+  - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
+  # Faction-aware gating for the config tab. Empty by default => open until configured with an Access Overrider.
+  - type: AccessReader
+  - type: ActivatableUI
+    key: enum.RequisitionsConsoleUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.RequisitionsConsoleUiKey.Key:
+        type: RequisitionsConsoleBoundUserInterface
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: StaticPrice
+    price: 400
