@@ -23,7 +23,7 @@
     entity: HudModuleSolutionScanner
   discipline: Experimental
   tier: 2
-  cost: 2000
+  cost: 10000 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   - ModularHudModulesExperimentalT1
