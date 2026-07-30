@@ -22,3 +22,7 @@ Most assets are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licens
 
 > [!NOTE]
 > Some assets are licensed under the non-commercial [CC-BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) or similar non-commercial licenses and will need to be removed if you wish to use this project commercially.
+
+## Contributions
+
+All contributions must follow our [contribution policy](rules-contributing.md)
