@@ -21,6 +21,7 @@ requisitions-cart-count = {$count ->
 }
 requisitions-cart-empty = Cart is empty. Click items on the left to add them.
 requisitions-add = + add
+requisitions-prints-remaining = {$count} left
 requisitions-flatpack = flatpack
 requisitions-flatpack-note = +{$percent}% material, adds flatpack fee
 
@@ -40,6 +41,7 @@ requisitions-summary-fees = Fees
 requisitions-summary-total = Total
 requisitions-checkout-button = Confirm & print — lock spesos in machine
 requisitions-cancel-button = Cancel — return my cash & sheets
+requisitions-processing = PROCESSING A CHECKOUT — please wait
 requisitions-pending-line = Inserted: {$pending} spesos    Locked: {$locked} spesos
 requisitions-cash-inserted = Inserted {$spesos} spesos.
 requisitions-checkout-done = Order printed. {$spesos} spesos locked in the machine.
@@ -56,6 +58,7 @@ requisitions-config-materials = Raw materials (price per sheet)
 requisitions-config-fees = Fees
 requisitions-config-links = Linked machines
 requisitions-config-withdraw = Withdraw {$spesos} spesos
+requisitions-config-eject = Eject {$count} stored board(s)
 requisitions-links-none = No linkable machines in range.
 requisitions-link-linked = ✓ linked
 requisitions-link-inrange = in range

@@ -94,6 +94,28 @@ public sealed partial class RequisitionsConsoleComponent : Component
     [DataField]
     public int StoredBalance;
 
+    /// <summary>
+    /// Number of requisition prints still in progress across the linked machines. While &gt; 0 the console is
+    /// "processing a checkout" and refuses to start another one.
+    /// </summary>
+    [DataField]
+    public int OutstandingJobs;
+
+    #endregion
+
+    #region Flatpack storage
+
+    /// <summary>
+    /// Internal container holding printed boards waiting to be flatpacked. Boards are moved here (not held in
+    /// memory) so nothing is lost if packing stalls; an authorised operator can eject them from the config tab.
+    /// </summary>
+    [DataField]
+    public string FlatpackStorageId = "requisitions-flatpack-storage";
+
+    /// <summary>Earliest time to retry feeding a flatpacker, so a stalled pack doesn't churn every tick.</summary>
+    [DataField]
+    public TimeSpan NextFlatpackTry;
+
     #endregion
 
     #region Flatpack

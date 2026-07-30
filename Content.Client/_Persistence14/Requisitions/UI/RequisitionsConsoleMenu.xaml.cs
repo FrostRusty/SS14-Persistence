@@ -30,6 +30,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
     public event Action<RequisitionFee>? OnSetFee;
     public event Action<string>? OnRemoveFee;
     public event Action? OnWithdraw;
+    public event Action? OnEjectFlatpacks;
 
     private readonly IEntityManager _entMan;
     private readonly IPrototypeManager _proto;
@@ -59,10 +60,11 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         {
             _cart.Clear();
             _expanded.Clear();
-            RebuildCart();
+            CartChanged();
             OnCancel?.Invoke();
         };
         WithdrawButton.OnPressed += _ => OnWithdraw?.Invoke();
+        EjectButton.OnPressed += _ => OnEjectFlatpacks?.Invoke();
         AddFeeButton.OnPressed += _ => AddFee();
     }
 
@@ -83,6 +85,10 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
                            + Loc.GetString(state.FlatpackerLinked ? "requisitions-flatpacker-online" : "requisitions-flatpacker-offline");
 
         Tabs.SetTabVisible(1, state.HasConfigAccess);
+
+        // Lock the customer tab while a checkout is still printing.
+        ProcessingBanner.Visible = state.Processing;
+        SearchBar.Editable = !state.Processing;
 
         RebuildCatalogue();
         RebuildCart();
@@ -136,7 +142,12 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
 
             var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true, Margin = new Thickness(0, 1) };
 
-            var button = new ContainerButton { HorizontalExpand = true };
+            // Live research budget: the shown count drops as this recipe is carted, and adding is blocked at zero.
+            var inCart = _cart.Count(i => i.RecipeId == recipeId);
+            var soldOut = entry.PrintsRemaining is { } pr && inCart >= pr;
+
+            // Clickable [icon | name | prints] area.
+            var button = new ContainerButton { HorizontalExpand = true, Disabled = _state.Processing || soldOut };
             var hb = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
             hb.AddChild(MakeIcon(entry.Result));
             hb.AddChild(new Label
@@ -146,11 +157,22 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
                 Margin = new Thickness(6, 0, 0, 0),
                 ClipText = true,
             });
-            hb.AddChild(new Label { Text = $"${ItemCost(entry, flatpack)}", StyleClasses = { "LabelKeyText" } });
+            if (entry.PrintsRemaining is { } prints)
+            {
+                var left = Math.Max(0, prints - inCart);
+                hb.AddChild(new Label
+                {
+                    Text = Loc.GetString("requisitions-prints-remaining", ("count", left)),
+                    Margin = new Thickness(6, 0, 0, 0),
+                    FontColorOverride = Color.FromHex(left == 0 ? "#d05555" : "#e0a24b"),
+                    StyleClasses = { "LabelSubText" },
+                });
+            }
             button.AddChild(hb);
             button.OnPressed += _ => AddToCart(recipeId, flatpack);
             row.AddChild(button);
 
+            // Flatpack toggle, then price — kept outside the clickable area.
             if (entry.Flatpackable)
             {
                 var check = new CheckBox { Text = Loc.GetString("requisitions-flatpack"), Pressed = flatpack, Margin = new Thickness(8, 0, 0, 0) };
@@ -162,6 +184,8 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
                 row.AddChild(check);
             }
 
+            row.AddChild(new Label { Text = $"${ItemCost(entry, flatpack)}", StyleClasses = { "LabelKeyText" }, Margin = new Thickness(8, 0, 0, 0) });
+
             CatalogueContainer.AddChild(row);
         }
     }
@@ -169,6 +193,13 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
     private void AddToCart(string recipeId, bool flatpack)
     {
         _cart.Add(new RequisitionCartItem { RecipeId = recipeId, Quantity = 1, Flatpack = flatpack });
+        CartChanged();
+    }
+
+    /// <summary>The cart changed: refresh both the cart and the catalogue (whose live "prints left" depends on it).</summary>
+    private void CartChanged()
+    {
+        RebuildCatalogue();
         RebuildCart();
     }
 
@@ -238,7 +269,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
             {
                 _cart.RemoveAt(index);
                 _expanded.Clear();
-                RebuildCart();
+                CartChanged();
             };
             header.AddChild(remove);
             box.AddChild(header);
@@ -374,7 +405,8 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         PendingLabel.Text = Loc.GetString("requisitions-pending-line",
             ("pending", _state.PendingBalance), ("locked", _state.StoredBalance));
 
-        CheckoutButton.Disabled = _cart.Count == 0 || _state.PendingBalance < total;
+        CheckoutButton.Disabled = _state.Processing || _cart.Count == 0 || _state.PendingBalance < total;
+        CancelButton.Disabled = _state.Processing;
     }
 
     private void Checkout()
@@ -382,7 +414,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         OnCheckout?.Invoke(new List<RequisitionCartItem>(_cart));
         _cart.Clear();
         _expanded.Clear();
-        RebuildCart();
+        CartChanged();
     }
 
     #endregion
@@ -394,13 +426,16 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         WithdrawButton.Text = Loc.GetString("requisitions-config-withdraw", ("spesos", _state.StoredBalance));
         WithdrawButton.Disabled = _state.StoredBalance <= 0;
 
+        EjectButton.Visible = _state.PendingFlatpacks > 0;
+        EjectButton.Text = Loc.GetString("requisitions-config-eject", ("count", _state.PendingFlatpacks));
+
         // Raw materials
         MaterialContainer.RemoveAllChildren();
         foreach (var (mat, price) in _state.MaterialPrices.OrderBy(kv => MatName(kv.Key)))
         {
             var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
-            row.AddChild(new Label { Text = MatName(mat), HorizontalExpand = true });
-            row.AddChild(new Label { Text = Loc.GetString("requisitions-kind-material"), StyleClasses = { "LabelSubText" }, Margin = new Thickness(0, 0, 8, 0) });
+            row.AddChild(MakeMaterialIcon(mat, 20));
+            row.AddChild(new Label { Text = MatName(mat), HorizontalExpand = true, Margin = new Thickness(4, 0, 0, 0) });
             var edit = new LineEdit { Text = price.ToString(), MinWidth = 70 };
             var matId = mat;
             edit.OnTextEntered += a =>

@@ -16,6 +16,7 @@ using Content.Shared.Power;
 using Content.Shared.Research.Prototypes;
 using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -33,6 +34,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly FlatpackSystem _flatpack = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
 
     private EntityQuery<LatheComponent> _latheQuery;
 
@@ -44,10 +46,12 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionCheckoutMessage>(OnCheckout);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionCancelMessage>(OnCancel);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionWithdrawMessage>(OnWithdraw);
+        SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionEjectFlatpacksMessage>(OnEjectFlatpacks);
         SubscribeLocalEvent<RequisitionsConsoleComponent, MaterialAmountChangedEvent>(OnMaterialChanged);
         SubscribeLocalEvent<RequisitionsLatheJobComponent, LatheItemProducedEvent>(OnLatheItemProduced);
         // Run after the lathe's own power handler so its abort/refund has already returned materials to it.
         SubscribeLocalEvent<RequisitionsLatheJobComponent, PowerChangedEvent>(OnJobLathePowerChanged, after: new[] { typeof(LatheSystem) });
+        SubscribeLocalEvent<RequisitionsLatheJobComponent, ComponentShutdown>(OnJobLatheShutdown);
 
         _latheQuery = GetEntityQuery<LatheComponent>();
     }
@@ -87,6 +91,13 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
 
         if (args.Items.Count == 0)
             return;
+
+        // One checkout at a time: refuse while a previous order is still printing.
+        if (ent.Comp.OutstandingJobs > 0)
+        {
+            _popup.PopupEntity(Loc.GetString("requisitions-processing"), ent.Owner, args.Actor);
+            return;
+        }
 
         // The customer's inserted sheets (raw material units), used to discount and physically feed the print.
         var pool = _materialStorage.GetStoredMaterials(ent.Owner, localOnly: true)
@@ -229,6 +240,9 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
                     });
                 }
 
+                ent.Comp.OutstandingJobs += qty; // locks the console until these prints finish
+                UpdateUi(ent);
+
                 Log.Debug($"[Requisitions] queued '{recipe.ID}' x{qty} on {ToPrettyString(machine)}");
                 return true;
             }
@@ -285,15 +299,14 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     #region Flatpack transfer
 
     /// <summary>
-    /// A requisition item finished printing: release its escrowed payment to the console. If it was bound for a
-    /// flatpacker, remove the printed board and hand a fresh one to that flatpacker's queue; otherwise the item
-    /// is simply delivered at the lathe.
+    /// A requisition item finished printing: release its escrowed payment and mark one job done. Flatpack boards
+    /// are moved into the console's internal storage (from where they're fed to a flatpacker); everything else is
+    /// delivered as-is at the lathe.
     /// </summary>
     private void OnLatheItemProduced(Entity<RequisitionsLatheJobComponent> ent, ref LatheItemProducedEvent args)
     {
         var recipeId = args.Recipe.ID;
         var result = args.Result;
-        var boardProto = args.Recipe.Result;
 
         var idx = ent.Comp.Jobs.FindIndex(j => j.Recipe == recipeId);
         if (idx < 0)
@@ -304,28 +317,29 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         if (ent.Comp.Jobs.Count == 0)
             RemCompDeferred<RequisitionsLatheJobComponent>(ent);
 
-        // Payment is earned only now that the item exists: move it from escrow to the operator-withdrawable pot.
-        if (TryComp<RequisitionsConsoleComponent>(job.Console, out var console))
+        if (!TryComp<RequisitionsConsoleComponent>(job.Console, out var console))
+            return; // console gone: a non-flatpack item just stays at the lathe
+
+        // Payment is earned only now that the item exists, and this print no longer counts as in-progress.
+        var release = Math.Min(job.Cost, console.EscrowBalance);
+        console.EscrowBalance -= release;
+        console.StoredBalance += release;
+        console.OutstandingJobs = Math.Max(0, console.OutstandingJobs - 1);
+
+        // Flatpack items: move the actual printed board into the console's internal storage and try to feed a
+        // flatpacker from it. Storing the real board (rather than a proto in memory) means nothing is lost if
+        // packing stalls or the round restarts.
+        if (job.Flatpacker != null && !TerminatingOrDeleted(result))
         {
-            var release = Math.Min(job.Cost, console.EscrowBalance);
-            console.EscrowBalance -= release;
-            console.StoredBalance += release;
-            UpdateUi((job.Console, console));
+            var container = _container.EnsureContainer<Container>(job.Console, console.FlatpackStorageId);
+            if (_container.Insert(result, container))
+            {
+                console.NextFlatpackTry = TimeSpan.Zero;
+                TryFeedFlatpackers((job.Console, console));
+            }
         }
 
-        // Non-flatpack items are delivered as-is at the lathe.
-        if (job.Flatpacker is not { } flatpacker || TerminatingOrDeleted(flatpacker))
-            return;
-
-        // Flatpack items: remove the printed board and queue a fresh one for the flatpacker.
-        QueueDel(result);
-        if (boardProto is not { } board)
-            return;
-
-        var queue = EnsureComp<RequisitionsFlatpackQueueComponent>(flatpacker);
-        queue.Pending.Add(board);
-        Log.Debug($"[Requisitions] board {board} produced on {ToPrettyString(ent)} -> queued for flatpacker {ToPrettyString(flatpacker)} (pending {queue.Pending.Count})");
-        TryFeedFlatpacker((flatpacker, queue));
+        UpdateUi((job.Console, console));
     }
 
     /// <summary>
@@ -338,6 +352,21 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         if (args.Powered)
             return;
 
+        RefundJobs(ent);
+        ent.Comp.Jobs.Clear();
+        RemCompDeferred<RequisitionsLatheJobComponent>(ent);
+    }
+
+    /// <summary>The lathe (and its jobs) are being deleted mid-print — refund whatever's still outstanding.</summary>
+    private void OnJobLatheShutdown(Entity<RequisitionsLatheJobComponent> ent, ref ComponentShutdown args)
+    {
+        RefundJobs(ent);
+        ent.Comp.Jobs.Clear();
+    }
+
+    /// <summary>Refunds money and contributed materials for every outstanding job on a lathe to its customer.</summary>
+    private void RefundJobs(Entity<RequisitionsLatheJobComponent> ent)
+    {
         foreach (var job in ent.Comp.Jobs)
         {
             if (!TryComp<RequisitionsConsoleComponent>(job.Console, out var console))
@@ -369,40 +398,42 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
                 }
             }
 
+            console.OutstandingJobs = Math.Max(0, console.OutstandingJobs - 1); // this print is no longer pending
             UpdateUi((job.Console, console));
         }
-
-        ent.Comp.Jobs.Clear();
-        RemCompDeferred<RequisitionsLatheJobComponent>(ent);
     }
 
-    /// <summary>Feeds the next queued board into an idle flatpacker and starts it packing.</summary>
-    private void TryFeedFlatpacker(Entity<RequisitionsFlatpackQueueComponent> flatpacker)
+    /// <summary>
+    /// Feeds one stored board from the console's internal storage into an idle linked flatpacker. No spawning or
+    /// deleting: the real board is reparented into the flatpacker, or left in storage to retry later.
+    /// </summary>
+    private void TryFeedFlatpackers(Entity<RequisitionsConsoleComponent> console)
     {
-        var queue = flatpacker.Comp;
-        if (queue.Pending.Count == 0)
+        if (_timing.CurTime < console.Comp.NextFlatpackTry)
             return;
 
-        if (!TryComp<FlatpackCreatorComponent>(flatpacker, out var creator) || !_flatpack.IsIdle((flatpacker, creator)))
+        if (!_container.TryGetContainer(console, console.Comp.FlatpackStorageId, out var container) || container.ContainedEntities.Count == 0)
             return;
 
-        var proto = queue.Pending[0];
-        var board = Spawn(proto, Transform(flatpacker).Coordinates);
+        foreach (var machine in console.Comp.LinkedMachines)
+        {
+            if (!TryComp<FlatpackCreatorComponent>(machine, out var creator) || !_flatpack.IsIdle((machine, creator)))
+                continue;
 
-        if (_flatpack.TryPackBoard((flatpacker, creator), board))
-        {
-            queue.Pending.RemoveAt(0);
-            if (queue.Pending.Count == 0)
-                RemCompDeferred<RequisitionsFlatpackQueueComponent>(flatpacker);
+            var board = container.ContainedEntities[0];
+
+            // TryPackBoard reparents the board into the flatpacker on success; on failure it drops it in the
+            // world, so we pull it back into storage and back off.
+            if (_flatpack.TryPackBoard((machine, creator), board))
+                return;
+
+            _container.Insert(board, container);
+            console.Comp.NextFlatpackTry = _timing.CurTime + TimeSpan.FromSeconds(2);
+            return;
         }
-        else
-        {
-            // Couldn't start (e.g. the flatpacker has no materials yet). Clean up and back off so we don't
-            // churn spawning/deleting a board every tick — retry in a couple of seconds.
-            Del(board);
-            queue.NextTry = _timing.CurTime + TimeSpan.FromSeconds(2);
-            Log.Debug($"[Requisitions] flatpacker {ToPrettyString(flatpacker)} not ready to pack {proto}; backing off");
-        }
+
+        // Nothing idle right now — check again shortly.
+        console.Comp.NextFlatpackTry = _timing.CurTime + TimeSpan.FromSeconds(1);
     }
 
     private static readonly TimeSpan StartStagger = TimeSpan.FromSeconds(0.2);
@@ -423,8 +454,8 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
 
         var now = _timing.CurTime;
 
-        // Start at most one queued lathe every StartStagger seconds so a big order doesn't flip every machine
-        // into its high-power working state on the same tick and brown out the APC.
+        // Start at most one queued lathe every StartStagger seconds so a big order that involvs different lathes
+        // doesn't flip every machine into its high-power working state on the same tick and brown out the APC.
         if (_pendingStarts.Count > 0 && now >= _nextStart)
         {
             var lathe = _pendingStarts.Dequeue();
@@ -434,14 +465,9 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             _nextStart = now + StartStagger;
         }
 
-        var query = EntityQueryEnumerator<RequisitionsFlatpackQueueComponent>();
+        var query = EntityQueryEnumerator<RequisitionsConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
-        {
-            if (now < comp.NextTry)
-                continue;
-
-            TryFeedFlatpacker((uid, comp));
-        }
+            TryFeedFlatpackers((uid, comp));
     }
 
     /// <summary>Cash cost of a raw material amount, priced per sheet.</summary>
@@ -490,6 +516,20 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         UpdateUi(ent, args.Actor);
     }
 
+    private void OnEjectFlatpacks(Entity<RequisitionsConsoleComponent> ent, ref RequisitionEjectFlatpacksMessage args)
+    {
+        if (!HasConfigAccess(ent, args.Actor))
+        {
+            _popup.PopupEntity(Loc.GetString("requisitions-access-denied"), ent.Owner, args.Actor);
+            return;
+        }
+
+        if (_container.TryGetContainer(ent, ent.Comp.FlatpackStorageId, out var container))
+            _container.EmptyContainer(container);
+
+        UpdateUi(ent);
+    }
+
     private void SpawnCash(Entity<RequisitionsConsoleComponent> console, int amount, EntityUid toHands)
     {
         if (amount <= 0)
@@ -525,6 +565,8 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             // A shared BUI state can't be tailored per-viewer, so the config tab shows if any current viewer is
             // authorised. Every config action is still re-checked server-side regardless.
             HasConfigAccess = _ui.GetActors(ent.Owner, RequisitionsConsoleUiKey.Key).Any(a => HasConfigAccess(ent, a)),
+            Processing = ent.Comp.OutstandingJobs > 0,
+            PendingFlatpacks = _container.TryGetContainer(ent, ent.Comp.FlatpackStorageId, out var fpStore) ? fpStore.ContainedEntities.Count : 0,
             Currency = "spesos",
         };
 
@@ -546,13 +588,17 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             if (!_latheQuery.TryComp(machine, out var lathe))
                 continue;
 
-            foreach (var recipeId in _lathe.GetAvailableRecipes(machine, lathe).Keys)
+            foreach (var (recipeId, count) in _lathe.GetAvailableRecipes(machine, lathe))
             {
                 if (!Proto.TryIndex(recipeId, out var recipe))
                     continue;
 
                 var materials = recipe.Materials.OrderBy(kv => kv.Key.Id).Select(kv => $"{kv.Key.Id}:{kv.Value}");
                 var signature = $"{recipe.Result?.Id}|{string.Join(",", materials)}";
+
+                // A negative count is the "unlimited" sentinel for static recipes; a non-negative one is the
+                // remaining research prints.
+                var unlimited = count < 0;
 
                 if (!merged.TryGetValue(signature, out var entry))
                 {
@@ -563,8 +609,17 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
                         Result = recipe.Result?.Id,
                         Materials = recipe.Materials.ToDictionary(kv => kv.Key.Id, kv => kv.Value),
                         Flatpackable = ent.Comp.FlatpackerLinked && IsFlatpackable(recipe),
+                        PrintsRemaining = unlimited ? null : count,
                     };
                     merged[signature] = entry;
+                }
+                else if (unlimited)
+                {
+                    entry.PrintsRemaining = null; // available unlimited somewhere → not limited
+                }
+                else if (entry.PrintsRemaining is { } current)
+                {
+                    entry.PrintsRemaining = Math.Max(current, count); // most prints any linked source can do
                 }
 
                 entry.SourceCount++;

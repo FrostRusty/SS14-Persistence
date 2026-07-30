@@ -50,6 +50,12 @@ public sealed class RequisitionsConsoleState : BoundUserInterfaceState
     /// <summary>Whether the viewing player passes the access check for the config tab.</summary>
     public bool HasConfigAccess;
 
+    /// <summary>A checkout's prints are still running; the customer tab is locked until they finish.</summary>
+    public bool Processing;
+
+    /// <summary>Boards sitting in the console's internal storage waiting to be flatpacked (config tab).</summary>
+    public int PendingFlatpacks;
+
     /// <summary>Currency id, for display.</summary>
     public string Currency = "Credit";
 }
@@ -69,6 +75,9 @@ public sealed class RequisitionCatalogueEntry
 
     /// <summary>True if at least one linked flatpacker can flatpack this item.</summary>
     public bool Flatpackable;
+
+    /// <summary>Remaining research prints for a limited recipe, or null if it's unlimited (static).</summary>
+    public int? PrintsRemaining;
 
     /// <summary>How many linked machines can print this (for display; duplicates are squashed to one line).</summary>
     public int SourceCount;
@@ -179,5 +188,11 @@ public sealed class RequisitionRemoveFeeMessage : BoundUserInterfaceMessage
 /// <summary>Withdraw the stored balance as physical currency.</summary>
 [Serializable, NetSerializable]
 public sealed class RequisitionWithdrawMessage : BoundUserInterfaceMessage
+{
+}
+
+/// <summary>Eject any boards stuck in the internal flatpack storage back into the world.</summary>
+[Serializable, NetSerializable]
+public sealed class RequisitionEjectFlatpacksMessage : BoundUserInterfaceMessage
 {
 }

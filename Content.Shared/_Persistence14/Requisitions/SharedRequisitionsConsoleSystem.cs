@@ -110,18 +110,27 @@ public abstract class SharedRequisitionsConsoleSystem : EntitySystem
                 ent.Comp.FlatpackerLinked = true;
         }
 
-        SeedDefaultPrices(ent);
+        SyncMaterialPrices(ent);
         EnsureFlatpackFee(ent);
     }
 
     /// <summary>
-    /// Prices every material the linked machines could ever use that has no operator price yet, from
-    /// <see cref="RequisitionsConsoleComponent.DefaultMaterialPrices"/> (falling back to the flat default).
-    /// This is the "scoped to linked recipes" behaviour.
+    /// Keeps the priced-materials list exactly in step with what the linked machines can make: newly available
+    /// materials are seeded from <see cref="RequisitionsConsoleComponent.DefaultMaterialPrices"/> (falling back
+    /// to the flat default), and materials no longer used by any linked lathe are dropped — so unlinking a lathe
+    /// wipes any raw materials only it needed. This is the "scoped to linked recipes" behaviour.
     /// </summary>
-    private void SeedDefaultPrices(Entity<RequisitionsConsoleComponent> ent)
+    private void SyncMaterialPrices(Entity<RequisitionsConsoleComponent> ent)
     {
-        foreach (var material in GetPriceableMaterials(ent))
+        var priceable = GetPriceableMaterials(ent);
+
+        // Drop prices for materials nothing linked uses anymore.
+        var stale = ent.Comp.MaterialPrices.Keys.Where(k => !priceable.Contains(k)).ToList();
+        foreach (var mat in stale)
+            ent.Comp.MaterialPrices.Remove(mat);
+
+        // Seed a default price for anything newly priceable.
+        foreach (var material in priceable)
         {
             if (ent.Comp.MaterialPrices.ContainsKey(material))
                 continue;

@@ -25,6 +25,7 @@ public sealed class RequisitionsConsoleBoundUserInterface(EntityUid owner, Enum 
         _menu.OnSetFee += fee => SendMessage(new RequisitionSetFeeMessage(fee));
         _menu.OnRemoveFee += id => SendMessage(new RequisitionRemoveFeeMessage(id));
         _menu.OnWithdraw += () => SendMessage(new RequisitionWithdrawMessage());
+        _menu.OnEjectFlatpacks += () => SendMessage(new RequisitionEjectFlatpacksMessage());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
