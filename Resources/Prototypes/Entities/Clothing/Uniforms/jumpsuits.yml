@@ -428,6 +428,15 @@
     sprite: Clothing/Uniforms/Jumpsuit/medical.rsi
 
 - type: entity
+  parent: [ClothingUniformBase, ClothingUniformFoldableBase]
+  id: ClothingUniformJumpsuitCoroner
+  name: coroner jumpsuit
+  description: A suit made for staff who take care of the morgue. It has a cross patch on the right shoulder denoting that the wearer is trained medical personnel.
+  components:
+  - type: Sprite
+    sprite: Clothing/Uniforms/Jumpsuit/coroner.rsi
+
+- type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitMime
   name: mime suit
