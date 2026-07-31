@@ -8,15 +8,15 @@
       sound:
         path: /Audio/Items/multitool_drop.ogg
     - type: Sprite
-      sprite: Objects/Devices/anchor_key.rsi
+      sprite: _Persistence14/Objects/Devices/anchor_key.rsi
       layers:
         - state: noid_unstored
           map: ["enum.BSPAnchorKeyVisualLayers.Base"]
     - type: Item
       size: Small
-      sprite: Objects/Devices/anchor_key.rsi
+      sprite: _Persistence14/Objects/Devices/anchor_key.rsi
     - type: Clothing
-      sprite: Objects/Devices/anchor_key.rsi
+      sprite: _Persistence14/Objects/Devices/anchor_key.rsi
       quickEquip: false
       slots:
         - Belt
