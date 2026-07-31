@@ -36,12 +36,6 @@ public sealed class RequisitionsConsoleState : BoundUserInterfaceState
     /// <summary>Machines the operator can link/unlink (config tab). Empty for customers without config access.</summary>
     public List<RequisitionLinkEntry> Linkable = new();
 
-    /// <summary>Spesos the customer has inserted but not yet spent (refunded at checkout).</summary>
-    public int PendingBalance;
-
-    /// <summary>Spesos currently locked in the machine, withdrawable only by an operator.</summary>
-    public int StoredBalance;
-
     public bool FlatpackerLinked;
 
     /// <summary>Material-cost multiplier applied to flatpacked items, for client-side cost preview.</summary>
@@ -55,9 +49,6 @@ public sealed class RequisitionsConsoleState : BoundUserInterfaceState
 
     /// <summary>Boards sitting in the console's internal storage waiting to be flatpacked (config tab).</summary>
     public int PendingFlatpacks;
-
-    /// <summary>Currency id, for display.</summary>
-    public string Currency = "Credit";
 }
 
 /// <summary>One catalogue line: a single recipe, merged across every machine that can print it.</summary>
@@ -116,15 +107,22 @@ public sealed class RequisitionCheckoutMessage : BoundUserInterfaceMessage
 {
     public List<RequisitionCartItem> Items;
 
-    public RequisitionCheckoutMessage(List<RequisitionCartItem> items)
+    /// <summary>Whether to print a payable invoice for this order.</summary>
+    public bool PrintInvoice;
+
+    /// <summary>Title the customer typed for the invoice.</summary>
+    public string InvoiceTitle;
+
+    public RequisitionCheckoutMessage(List<RequisitionCartItem> items, bool printInvoice, string invoiceTitle)
     {
         Items = items;
+        PrintInvoice = printInvoice;
+        InvoiceTitle = invoiceTitle;
     }
 }
 
 /// <summary>
-/// The customer reclaims everything they've inserted but not yet committed: pending spesos are spat back as
-/// cash and contributed sheets are ejected. Not access-gated — it's the customer's own property.
+/// The customer changed their mind: the sheets they inserted toward this order are returned. Not access-gated.
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class RequisitionCancelMessage : BoundUserInterfaceMessage
@@ -183,12 +181,6 @@ public sealed class RequisitionRemoveFeeMessage : BoundUserInterfaceMessage
     {
         Id = id;
     }
-}
-
-/// <summary>Withdraw the stored balance as physical currency.</summary>
-[Serializable, NetSerializable]
-public sealed class RequisitionWithdrawMessage : BoundUserInterfaceMessage
-{
 }
 
 /// <summary>Eject any boards stuck in the internal flatpack storage back into the world.</summary>

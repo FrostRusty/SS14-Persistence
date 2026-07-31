@@ -203,16 +203,18 @@ public abstract class SharedRequisitionsConsoleSystem : EntitySystem
 
         var incoming = args.Fee;
 
-        // The flatpack fee's scope is fixed; operators may only set its price.
+        // The flatpack fee's scope is fixed; operators may only set its price and flat/percent type.
         var existing = ent.Comp.Fees.FirstOrDefault(f => f.Id == incoming.Id);
         if (existing != null && existing.Id == ent.Comp.FlatpackFeeId)
         {
             existing.Price = incoming.Price;
+            existing.Type = incoming.Type;
         }
         else if (existing != null)
         {
             existing.Name = incoming.Name;
             existing.Price = incoming.Price;
+            existing.Type = incoming.Type;
             existing.Scope = incoming.Scope;
             existing.Recipes = incoming.Recipes;
         }

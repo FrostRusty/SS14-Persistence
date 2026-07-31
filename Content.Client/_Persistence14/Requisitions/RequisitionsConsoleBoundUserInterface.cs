@@ -18,13 +18,12 @@ public sealed class RequisitionsConsoleBoundUserInterface(EntityUid owner, Enum 
         _menu = this.CreateWindow<RequisitionsConsoleMenu>();
         _menu.SetEntity(Owner);
 
-        _menu.OnCheckout += items => SendMessage(new RequisitionCheckoutMessage(items));
+        _menu.OnCheckout += (items, printInvoice, title) => SendMessage(new RequisitionCheckoutMessage(items, printInvoice, title));
         _menu.OnCancel += () => SendMessage(new RequisitionCancelMessage());
         _menu.OnToggleLink += netEnt => SendMessage(new ToggleRequisitionLinkMessage(netEnt));
         _menu.OnSetMaterialPrice += (mat, price) => SendMessage(new RequisitionSetMaterialPriceMessage(mat, price));
         _menu.OnSetFee += fee => SendMessage(new RequisitionSetFeeMessage(fee));
         _menu.OnRemoveFee += id => SendMessage(new RequisitionRemoveFeeMessage(id));
-        _menu.OnWithdraw += () => SendMessage(new RequisitionWithdrawMessage());
         _menu.OnEjectFlatpacks += () => SendMessage(new RequisitionEjectFlatpacksMessage());
     }
 

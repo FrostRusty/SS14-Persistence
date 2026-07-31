@@ -1,20 +1,21 @@
 using System.Linq;
+using System.Text;
 using Content.Server.Construction;
 using Content.Server.Lathe;
 using Content.Server.Materials;
-using Content.Server.Power.EntitySystems;
-using Content.Server.Stack;
 using Content.Shared._Persistence14.Requisitions;
 using Content.Shared.Construction.Components;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Interaction;
+using Content.Shared.Invoices.Components;
 using Content.Shared.Lathe;
 using Content.Shared.Materials;
 using Content.Shared.Materials.OreSilo;
 using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.Research.Prototypes;
-using Content.Shared.Stacks;
+using Content.Shared.Station;
+using Content.Shared.Station.Components;
+using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
@@ -28,13 +29,14 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly LatheSystem _lathe = default!;
     [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly FlatpackSystem _flatpack = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
 
     private EntityQuery<LatheComponent> _latheQuery;
 
@@ -42,10 +44,9 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RequisitionsConsoleComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<RequisitionsConsoleComponent, ActivatableUIOpenAttemptEvent>(OnOpenAttempt);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionCheckoutMessage>(OnCheckout);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionCancelMessage>(OnCancel);
-        SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionWithdrawMessage>(OnWithdraw);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionEjectFlatpacksMessage>(OnEjectFlatpacks);
         SubscribeLocalEvent<RequisitionsConsoleComponent, MaterialAmountChangedEvent>(OnMaterialChanged);
         SubscribeLocalEvent<RequisitionsLatheJobComponent, LatheItemProducedEvent>(OnLatheItemProduced);
@@ -56,23 +57,15 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         _latheQuery = GetEntityQuery<LatheComponent>();
     }
 
-    #region Cash insertion
-
-    private void OnInteractUsing(Entity<RequisitionsConsoleComponent> ent, ref InteractUsingEvent args)
+    /// <summary>The whole console is access-restricted: unauthorised players can't even open it.</summary>
+    private void OnOpenAttempt(Entity<RequisitionsConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (args.Handled)
+        if (args.Cancelled || HasConfigAccess(ent, args.User))
             return;
 
-        // Only intercept cash; sheets fall through to MaterialStorage's own handler (customer contributions).
-        if (!TryComp<StackComponent>(args.Used, out var stack) || stack.StackTypeId != ent.Comp.CashStack)
-            return;
-
-        ent.Comp.PendingBalance += stack.Count;
-        QueueDel(args.Used);
-        args.Handled = true;
-
-        _popup.PopupEntity(Loc.GetString("requisitions-cash-inserted", ("spesos", stack.Count)), ent.Owner, args.User);
-        UpdateUi(ent, args.User);
+        args.Cancel();
+        if (!args.Silent)
+            _popup.PopupEntity(Loc.GetString("requisitions-access-denied"), ent.Owner, args.User);
     }
 
     /// <summary>Materials inserted/removed (e.g. a customer contributing sheets) — refresh the open UI live.</summary>
@@ -80,8 +73,6 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     {
         UpdateUi(ent);
     }
-
-    #endregion
 
     #region Checkout
 
@@ -99,24 +90,32 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             return;
         }
 
-        // The customer's inserted sheets (raw material units), used to discount and physically feed the print.
+        // Inserted sheets the customer is contributing: they discount the bill and physically feed the print.
         var pool = _materialStorage.GetStoredMaterials(ent.Owner, localOnly: true)
             .ToDictionary(kv => kv.Key.Id, kv => kv.Value);
 
+        var invoiceMode = args.PrintInvoice;
         var runningCost = 0;
         var producedAny = false;
         var anyFailed = false;
 
-        Log.Debug($"[Requisitions] checkout on {ToPrettyString(ent)} by {ToPrettyString(args.Actor)}: {args.Items.Count} items, pending ${ent.Comp.PendingBalance}, {ent.Comp.LinkedMachines.Count} linked machines");
+        // Invoice body accumulation (only populated when printing an invoice).
+        var itemsBody = new StringBuilder();
+        var invoiceFees = new Dictionary<string, (string Name, bool Percent, int Rate, int Count, int Total)>();
+        var invoiceMats = new Dictionary<string, (int Raw, int Covered, int Billed)>();
+        var invoiceMatBilled = 0;
+        var invoiceMatWorth = 0;
 
         foreach (var item in args.Items)
         {
-            // A single bad line must never abort the whole order — isolate and log each one.
+            // A single bad line must never abort the whole order.
             try
             {
                 if (!Proto.TryIndex<LatheRecipePrototype>(item.RecipeId, out var recipe))
                 {
-                    Log.Warning($"[Requisitions] unknown recipe '{item.RecipeId}', skipping");
+                    if (invoiceMode)
+                        AppendInvoiceFailure(itemsBody, item.RecipeId, Loc.GetString("requisitions-fail-unknown"));
+                    anyFailed = true;
                     continue;
                 }
 
@@ -124,54 +123,92 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
                 var flatpack = item.Flatpack && ent.Comp.FlatpackerLinked && IsFlatpackable(recipe);
                 var mult = flatpack ? ent.Comp.FlatpackMaterialMultiplier : 1f;
 
-                // Raw material need per material, how much the customer's contribution covers, and the cash cost.
-                var cover = new Dictionary<string, int>();
-                var itemCost = 0;
+                // Per-unit raw material need (before the customer's contribution).
+                var perUnit = new Dictionary<string, int>();
                 foreach (var (mat, baseAmount) in recipe.Materials)
+                    perUnit[mat.Id] = (int) MathF.Ceiling(baseAmount * mult);
+
+                // Dispatch one unit at a time and only bill for what actually queues. A machine can accept fewer
+                // than requested — it runs out of materials partway, hits its per-request limit, or a researched
+                // recipe has fewer prints left — and the unqueued units must never reach the invoice.
+                string? failReason;
+                var coverUsed = new Dictionary<string, int>();
+                var queued = flatpack
+                    ? TryDispatchFlatpack(ent, recipe, qty, perUnit, pool, coverUsed, out failReason)
+                    : TryDispatchLathe(ent, recipe, qty, perUnit, pool, coverUsed, out failReason);
+
+                if (queued <= 0)
                 {
-                    var raw = (int) MathF.Ceiling(baseAmount * mult) * qty;
-                    var covered = Math.Min(pool.GetValueOrDefault(mat.Id), raw);
-                    cover[mat.Id] = covered;
-                    itemCost += SheetCost(ent.Comp, mat.Id, raw - covered);
+                    if (invoiceMode)
+                        AppendInvoiceFailure(itemsBody, Lathe.GetRecipeName(recipe), failReason ?? Loc.GetString("requisitions-fail-no-materials"));
+                    anyFailed = true;
+                    continue;
                 }
 
+                if (queued < qty)
+                    anyFailed = true; // only part of this line could be produced
+
+                // Bill for the units that actually queued: their material need, minus the customer's contribution
+                // that was applied to them, plus fees on the units' full material worth.
+                var itemCost = 0;
+                var worth = 0;
+                var matLines = new List<(string Mat, int Raw, int Covered, int Billed)>();
+                foreach (var (mat, need) in perUnit)
+                {
+                    var raw = need * queued;
+                    var covered = coverUsed.GetValueOrDefault(mat);
+                    var billed = SheetCost(ent.Comp, mat, raw - covered);
+                    itemCost += billed;
+                    worth += SheetCost(ent.Comp, mat, raw);
+                    matLines.Add((mat, raw, covered, billed));
+                }
+
+                var feeLines = new List<(RequisitionFee Fee, int Amount)>();
                 foreach (var fee in FeesFor(ent.Comp, item.RecipeId, flatpack))
-                    itemCost += fee.Price * qty;
-
-                // Never charge more than the customer inserted.
-                if (runningCost + itemCost > ent.Comp.PendingBalance)
                 {
-                    Log.Debug($"[Requisitions] '{item.RecipeId}' x{qty} costs ${itemCost} but only ${ent.Comp.PendingBalance - runningCost} left of inserted money — skipping");
-                    anyFailed = true;
-                    continue;
+                    var amt = fee.AmountFor(worth, queued);
+                    itemCost += amt;
+                    feeLines.Add((fee, amt));
                 }
-
-                var printed = flatpack
-                    ? TryDispatchFlatpack(ent, recipe, qty, cover, itemCost)
-                    : TryDispatchLathe(ent, recipe, qty, cover, itemCost);
-
-                Log.Debug($"[Requisitions] '{item.RecipeId}' x{qty} flatpack={flatpack} cost=${itemCost} -> printed={printed}");
-
-                if (!printed)
-                {
-                    anyFailed = true;
-                    continue;
-                }
-
-                foreach (var (mat, c) in cover)
-                    pool[mat] = pool.GetValueOrDefault(mat) - c;
 
                 runningCost += itemCost;
                 producedAny = true;
+
+                // Build this item's invoice section as we go.
+                if (invoiceMode)
+                {
+                    var name = Lathe.GetRecipeName(recipe);
+                    var label = queued < qty ? $"{name} (×{queued} of {qty})" : name;
+                    itemsBody.Append($"[bold][color=#9a6a12]{label}[/color][/bold]   ${itemCost}\n");
+                    foreach (var (mat, raw, covered, billed) in matLines)
+                    {
+                        invoiceMatBilled += billed;
+                        invoiceMatWorth += SheetCost(ent.Comp, mat, raw);
+                        var disc = covered > 0 ? $"  (−{SheetLabelServer(mat, covered)})" : "";
+                        itemsBody.Append($"    {SheetLabelServer(mat, raw)}{disc}   ${billed}\n");
+
+                        // Aggregate for the per-material totals list.
+                        var prevMat = invoiceMats.GetValueOrDefault(mat);
+                        invoiceMats[mat] = (prevMat.Raw + raw, prevMat.Covered + covered, prevMat.Billed + billed);
+                    }
+                    foreach (var (fee, amt) in feeLines)
+                    {
+                        var rate = fee.Type == RequisitionFeeType.Percent ? $"{fee.Price}%" : $"${fee.Price}";
+                        itemsBody.Append($"    {fee.Name} ({rate})   ${amt}\n");
+                        var prev = invoiceFees.GetValueOrDefault(fee.Id);
+                        invoiceFees[fee.Id] = (fee.Name, fee.Type == RequisitionFeeType.Percent, fee.Price, prev.Count + queued, prev.Total + amt);
+                    }
+                    itemsBody.Append('\n');
+                }
             }
             catch (Exception e)
             {
                 Log.Error($"[Requisitions] checkout of '{item.RecipeId}' threw, continuing with the rest: {e}");
+                if (invoiceMode)
+                    AppendInvoiceFailure(itemsBody, item.RecipeId, Loc.GetString("requisitions-fail-error"));
                 anyFailed = true;
             }
         }
-
-        Log.Debug($"[Requisitions] checkout done: producedAny={producedAny}, charged=${runningCost}, anyFailed={anyFailed}");
 
         if (!producedAny)
         {
@@ -179,90 +216,209 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             return;
         }
 
-        // Escrow payment for the queued prints; it's released to the operator only as each item finishes, and
-        // refunded to the customer if a print is lost to power failure. The remaining money is the change.
-        ent.Comp.PendingBalance -= runningCost;
-        ent.Comp.EscrowBalance += runningCost;
-
-        var change = ent.Comp.PendingBalance;
-        ent.Comp.PendingBalance = 0;
-        if (change > 0)
-            SpawnCash(ent, change, args.Actor);
-
-        // Hand back any inserted sheets the order didn't use.
+        // Return any inserted sheets the order didn't consume.
         foreach (var leftover in _materialStorage.EjectAllMaterial(ent.Owner))
             _hands.PickupOrDrop(args.Actor, leftover);
 
+        // When asked, print a payable invoice for the order — paid later via bank into the owning faction.
+        // A checkout without an invoice simply prints the items at no charge.
+        if (invoiceMode)
+        {
+            var body = BuildInvoiceBody(args.InvoiceTitle, itemsBody, invoiceMats, invoiceFees, invoiceMatBilled, invoiceMatWorth, runningCost);
+            SpawnInvoice(ent, args.Actor, args.InvoiceTitle, runningCost, body);
+        }
+
         _popup.PopupEntity(
-            Loc.GetString(anyFailed ? "requisitions-checkout-partial" : "requisitions-checkout-done", ("spesos", runningCost)),
+            Loc.GetString(anyFailed ? "requisitions-checkout-partial" : "requisitions-checkout-done"),
             ent.Owner, args.Actor);
 
         UpdateUi(ent, args.Actor);
     }
 
-    /// <summary>
-    /// Tries every linked lathe that can print the recipe until one accepts the job, so an order spread across
-    /// machines queues on all of them and a machine that's out of materials falls through to another that isn't.
-    /// </summary>
-    private bool TryDispatchLathe(Entity<RequisitionsConsoleComponent> ent, LatheRecipePrototype recipe, int qty, Dictionary<string, int> cover, int cost, EntityUid? flatpacker = null)
+    /// <summary>Assembles the invoice body markup: a header, per-item detail, then a totals section (a per-material
+    /// list, the material-cost summary, the fees, and the grand total).</summary>
+    private string BuildInvoiceBody(string title, StringBuilder items,
+        Dictionary<string, (int Raw, int Covered, int Billed)> mats,
+        Dictionary<string, (string Name, bool Percent, int Rate, int Count, int Total)> fees,
+        int matBilled, int matWorth, int total)
     {
-        var candidates = 0;
-        foreach (var machine in ent.Comp.LinkedMachines)
+        if (string.IsNullOrWhiteSpace(title))
+            title = Loc.GetString("requisitions-invoice-default-title");
+
+        // Colours are tuned for the light "paper" background the invoice renders on: deep, saturated tones.
+        // Title = deep indigo, section headers = dark teal, materials = neutral, the material subtotal = brown,
+        // fees = violet, grand total = green, failures (elsewhere) = dark red.
+        var sb = new StringBuilder();
+        sb.Append($"[head=2][color=#2a3f6a]{title}[/color][/head]\n\n");
+        sb.Append($"[head=3][color=#1f6f5c]{Loc.GetString("requisitions-invoice-items")}[/color][/head]\n");
+        sb.Append(items);
+        sb.Append($"[head=3][color=#1f6f5c]{Loc.GetString("requisitions-invoice-total-header")}[/color][/head]\n");
+
+        // Per-material totals across the whole order, like the console's stock/breakdown lines.
+        foreach (var (mat, tally) in mats.OrderBy(kv => kv.Key))
         {
-            if (!_latheQuery.TryComp(machine, out var lathe))
-                continue;
+            var disc = tally.Covered > 0 ? $"  [color=#2f7a3a](−{SheetLabelServer(mat, tally.Covered)})[/color]" : "";
+            sb.Append($"{SheetLabelServer(mat, tally.Raw)}{disc}   ${tally.Billed}\n");
+        }
 
-            if (!_lathe.GetAvailableRecipes(machine, lathe).ContainsKey(recipe.ID))
-                continue;
+        sb.Append($"[bold][color=#7a4a12]{Loc.GetString("requisitions-summary-material")}[/color][/bold]: ${matBilled}");
+        if (matWorth > matBilled)
+            sb.Append($"  [color=#2f7a3a](−${matWorth - matBilled} {Loc.GetString("requisitions-invoice-your-materials")})[/color]");
+        sb.Append('\n');
 
-            candidates++;
-            MoveCover(ent.Owner, machine, cover, into: true);
+        foreach (var (_, f) in fees)
+        {
+            var rate = f.Percent ? $"{f.Rate}%" : $"${f.Rate}";
+            sb.Append($"[color=#5e3a8c]{f.Name} ({rate}) ({f.Count})[/color]   ${f.Total}\n");
+        }
 
-            if (_lathe.TryAddToQueue(machine, recipe, qty))
+        sb.Append($"[bold][color=#1f7a33]{Loc.GetString("requisitions-summary-total")}: ${total}[/color][/bold]");
+        return sb.ToString();
+    }
+
+    /// <summary>Appends a bold-red "failed" line (with a reason) for an item the order couldn't fulfil.</summary>
+    private void AppendInvoiceFailure(StringBuilder body, string name, string reason)
+    {
+        body.Append($"[bold][color=#b32020]{name} — {Loc.GetString("requisitions-invoice-failed")}[/color][/bold]\n");
+        body.Append($"    [color=#b32020]{reason}[/color]\n\n");
+    }
+
+    /// <summary>Spawns a payable invoice item targeted at the faction the console is tagged to and hands it over.</summary>
+    private void SpawnInvoice(Entity<RequisitionsConsoleComponent> console, EntityUid actor, string title, int cost, string body)
+    {
+        var invoice = Spawn("Invoice", Transform(console).Coordinates);
+
+        if (TryComp<InvoiceComponent>(invoice, out var comp))
+        {
+            comp.InvoiceCost = cost;
+            comp.InvoiceReason = body;
+
+            // Pay into the faction the console was tagged to with the station/faction tagger (a StationTracker
+            // pointing at that station). Fall back to whatever station owns the console's grid when untagged.
+            EntityUid? station = null;
+            if (TryComp<StationTrackerComponent>(console.Owner, out var tracker) && tracker.Station is { } tagged)
+                station = tagged;
+            station ??= _station.GetOwningStation(console.Owner, null, true);
+
+            if (station != null && TryComp<StationDataComponent>(station, out var sd))
+                comp.TargetStation = sd.UID;
+        }
+
+        if (string.IsNullOrWhiteSpace(title))
+            title = Loc.GetString("requisitions-invoice-default-title");
+        _metaData.SetEntityName(invoice, $"invoice ${cost} {title}");
+        _hands.PickupOrDrop(actor, invoice);
+    }
+
+    private string SheetLabelServer(string matId, int rawAmount)
+    {
+        if (!Proto.TryIndex<MaterialPrototype>(matId, out var m))
+            return $"{matId} {rawAmount}";
+
+        var volume = _materialStorage.GetSheetVolume(m);
+        if (volume <= 0)
+            volume = 1;
+
+        // Amount first, e.g. "6 Steel sheets".
+        return $"{MathF.Round(rawAmount / (float) volume, 2)} {Loc.GetString(m.Name)} {Loc.GetString(m.Unit)}";
+    }
+
+    /// <summary>
+    /// Queues up to <paramref name="qty"/> units of the recipe, one at a time, across the linked lathes that can
+    /// print it — so an order spreads over machines and a machine that runs out of materials falls through to
+    /// another. Returns how many units were <b>actually</b> queued (a machine can accept fewer than requested),
+    /// and accumulates the customer's contribution that was applied into <paramref name="coverUsed"/>. Only the
+    /// queued units get billed, so a unit that can't be produced never reaches the invoice.
+    /// </summary>
+    private int TryDispatchLathe(Entity<RequisitionsConsoleComponent> ent, LatheRecipePrototype recipe, int qty,
+        Dictionary<string, int> perUnit, Dictionary<string, int> pool, Dictionary<string, int> coverUsed,
+        out string? reason, EntityUid? flatpacker = null)
+    {
+        reason = null;
+        var queued = 0;
+        var hadCandidate = false;
+
+        for (var u = 0; u < qty; u++)
+        {
+            // What the customer's remaining contribution covers for this single unit.
+            var unitCover = new Dictionary<string, int>();
+            foreach (var (mat, need) in perUnit)
             {
-                // Start staggered rather than immediately: starting many machines on the same tick spikes their
-                // combined power draw and browns out the APC. See ScheduleStart / Update.
-                ScheduleStart(machine);
+                var c = Math.Min(pool.GetValueOrDefault(mat), need);
+                if (c > 0)
+                    unitCover[mat] = c;
+            }
 
-                // Record a job per printed item so the escrowed payment is released when it finishes (and, for
-                // flatpack orders, so the finished board is transferred to a flatpacker).
-                var jobs = EnsureComp<RequisitionsLatheJobComponent>(machine);
-                for (var i = 0; i < qty; i++)
+            var placed = false;
+            foreach (var machine in ent.Comp.LinkedMachines)
+            {
+                if (!_latheQuery.TryComp(machine, out var lathe))
+                    continue;
+
+                if (!_lathe.GetAvailableRecipes(machine, lathe).ContainsKey(recipe.ID))
+                    continue;
+
+                hadCandidate = true;
+                MoveCover(ent.Owner, machine, unitCover, into: true);
+
+                if (_lathe.TryAddToQueue(machine, recipe, 1))
                 {
+                    // Start staggered rather than immediately: starting many machines on the same tick spikes
+                    // their combined power draw and browns out the APC. See ScheduleStart / Update.
+                    ScheduleStart(machine);
+
+                    // Record a job per printed unit so the console tracks progress and (for flatpack orders)
+                    // routes each finished board to a flatpacker.
+                    var jobs = EnsureComp<RequisitionsLatheJobComponent>(machine);
                     jobs.Jobs.Add(new RequisitionJob
                     {
                         Recipe = recipe.ID,
                         Console = ent.Owner,
-                        Cost = cost / qty + (i == 0 ? cost % qty : 0),
-                        // The contribution was moved in for the whole batch; attach it to the first job.
-                        Cover = i == 0 && cover.Count > 0 ? new Dictionary<string, int>(cover) : null,
+                        Cover = unitCover.Count > 0 ? new Dictionary<string, int>(unitCover) : null,
                         Flatpacker = flatpacker,
                     });
+
+                    // Spend this unit's contribution and remember it for billing.
+                    foreach (var (mat, c) in unitCover)
+                    {
+                        pool[mat] = pool.GetValueOrDefault(mat) - c;
+                        coverUsed[mat] = coverUsed.GetValueOrDefault(mat) + c;
+                    }
+
+                    ent.Comp.OutstandingJobs++; // locks the console until this print finishes
+                    queued++;
+                    placed = true;
+                    break;
                 }
 
-                ent.Comp.OutstandingJobs += qty; // locks the console until these prints finish
-                UpdateUi(ent);
-
-                Log.Debug($"[Requisitions] queued '{recipe.ID}' x{qty} on {ToPrettyString(machine)}");
-                return true;
+                MoveCover(ent.Owner, machine, unitCover, into: false); // revert and try the next machine
             }
 
-            Log.Debug($"[Requisitions] {ToPrettyString(machine)} has recipe '{recipe.ID}' but couldn't queue it (not enough materials); trying next");
-            MoveCover(ent.Owner, machine, cover, into: false); // revert and try the next machine
+            if (!placed)
+                break; // no linked machine could take another unit — stop here
         }
 
-        Log.Debug($"[Requisitions] no linked lathe could produce '{recipe.ID}' ({candidates} had the recipe)");
-        return false;
+        if (queued > 0)
+            UpdateUi(ent);
+        else
+            reason = Loc.GetString(hadCandidate ? "requisitions-fail-no-materials" : "requisitions-fail-no-machine");
+
+        return queued;
     }
 
     /// <summary>
-    /// Prints the board on a lathe like any other item; a transfer job (recorded on the lathe) moves each
-    /// finished board into a flatpacker once it's done printing. See <see cref="OnLatheItemProduced"/>.
+    /// Prints boards on a lathe like any other item; a transfer job on the lathe moves each finished board into a
+    /// flatpacker once it's done printing. See <see cref="OnLatheItemProduced"/>. Returns the number of units
+    /// actually queued.
     /// </summary>
-    private bool TryDispatchFlatpack(Entity<RequisitionsConsoleComponent> ent, LatheRecipePrototype recipe, int qty, Dictionary<string, int> cover, int cost)
+    private int TryDispatchFlatpack(Entity<RequisitionsConsoleComponent> ent, LatheRecipePrototype recipe, int qty,
+        Dictionary<string, int> perUnit, Dictionary<string, int> pool, Dictionary<string, int> coverUsed, out string? reason)
     {
         if (recipe.Result is null)
-            return false;
+        {
+            reason = Loc.GetString("requisitions-fail-no-machine");
+            return 0;
+        }
 
         EntityUid? flatpacker = null;
         foreach (var machine in ent.Comp.LinkedMachines)
@@ -275,9 +431,12 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         }
 
         if (flatpacker == null)
-            return false;
+        {
+            reason = Loc.GetString("requisitions-fail-no-flatpacker");
+            return 0;
+        }
 
-        return TryDispatchLathe(ent, recipe, qty, cover, cost, flatpacker);
+        return TryDispatchLathe(ent, recipe, qty, perUnit, pool, coverUsed, out reason, flatpacker);
     }
 
     /// <summary>Moves the covered contribution between the console and a target machine (into it, or back out).</summary>
@@ -299,9 +458,8 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     #region Flatpack transfer
 
     /// <summary>
-    /// A requisition item finished printing: release its escrowed payment and mark one job done. Flatpack boards
-    /// are moved into the console's internal storage (from where they're fed to a flatpacker); everything else is
-    /// delivered as-is at the lathe.
+    /// A requisition item finished printing: mark one job done. Flatpack boards are moved into the console's
+    /// internal storage (from where they're fed to a flatpacker); everything else is delivered at the lathe.
     /// </summary>
     private void OnLatheItemProduced(Entity<RequisitionsLatheJobComponent> ent, ref LatheItemProducedEvent args)
     {
@@ -320,10 +478,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         if (!TryComp<RequisitionsConsoleComponent>(job.Console, out var console))
             return; // console gone: a non-flatpack item just stays at the lathe
 
-        // Payment is earned only now that the item exists, and this print no longer counts as in-progress.
-        var release = Math.Min(job.Cost, console.EscrowBalance);
-        console.EscrowBalance -= release;
-        console.StoredBalance += release;
+        // This print no longer counts as in-progress.
         console.OutstandingJobs = Math.Max(0, console.OutstandingJobs - 1);
 
         // Flatpack items: move the actual printed board into the console's internal storage and try to feed a
@@ -343,50 +498,40 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
     }
 
     /// <summary>
-    /// The lathe lost power and aborts its in-progress print, which our per-item dispatch does not resume. Refund
-    /// the escrowed payment for every outstanding job back to the customer as cash, so a brownout never charges
-    /// for undelivered items.
+    /// The lathe lost power and aborts its in-progress print, which our per-item dispatch does not resume. Return
+    /// each outstanding job's contributed materials to the customer and clear the console's in-progress count.
     /// </summary>
     private void OnJobLathePowerChanged(Entity<RequisitionsLatheJobComponent> ent, ref PowerChangedEvent args)
     {
         if (args.Powered)
             return;
 
-        RefundJobs(ent);
+        ReleaseJobs(ent);
         ent.Comp.Jobs.Clear();
         RemCompDeferred<RequisitionsLatheJobComponent>(ent);
     }
 
-    /// <summary>The lathe (and its jobs) are being deleted mid-print — refund whatever's still outstanding.</summary>
+    /// <summary>The lathe (and its jobs) are being deleted mid-print — release whatever's still outstanding.</summary>
     private void OnJobLatheShutdown(Entity<RequisitionsLatheJobComponent> ent, ref ComponentShutdown args)
     {
-        RefundJobs(ent);
+        ReleaseJobs(ent);
         ent.Comp.Jobs.Clear();
     }
 
-    /// <summary>Refunds money and contributed materials for every outstanding job on a lathe to its customer.</summary>
-    private void RefundJobs(Entity<RequisitionsLatheJobComponent> ent)
+    /// <summary>
+    /// For every outstanding job on a lathe, returns the customer's contributed materials (the aborted lathe was
+    /// handed them back) and clears the console's in-progress count so it doesn't stay locked.
+    /// </summary>
+    private void ReleaseJobs(Entity<RequisitionsLatheJobComponent> ent)
     {
         foreach (var job in ent.Comp.Jobs)
         {
             if (!TryComp<RequisitionsConsoleComponent>(job.Console, out var console))
                 continue;
 
-            var coords = Transform(job.Console).Coordinates;
-
-            // Refund the escrowed money as cash at the console.
-            if (job.Cost > 0)
-            {
-                var refund = Math.Min(job.Cost, console.EscrowBalance);
-                console.EscrowBalance -= refund;
-                if (refund > 0)
-                    _stack.SpawnMultipleAtPosition(console.CashStack, refund, coords);
-            }
-
-            // Refund contributed materials: the aborted lathe was handed them back, so move them from the lathe
-            // out to the customer at the console (department stays whole, customer made whole).
             if (job.Cover is { } cover)
             {
+                var coords = Transform(job.Console).Coordinates;
                 foreach (var (mat, amount) in cover)
                 {
                     var take = Math.Min(amount, _materialStorage.GetMaterialAmount(ent.Owner, mat));
@@ -398,7 +543,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
                 }
             }
 
-            console.OutstandingJobs = Math.Max(0, console.OutstandingJobs - 1); // this print is no longer pending
+            console.OutstandingJobs = Math.Max(0, console.OutstandingJobs - 1);
             UpdateUi((job.Console, console));
         }
     }
@@ -470,7 +615,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             TryFeedFlatpackers((uid, comp));
     }
 
-    /// <summary>Cash cost of a raw material amount, priced per sheet.</summary>
+    /// <summary>Price of a raw material amount, charged per sheet.</summary>
     private int SheetCost(RequisitionsConsoleComponent comp, string materialId, int rawAmount)
     {
         if (rawAmount <= 0 || !Proto.TryIndex<MaterialPrototype>(materialId, out var mat))
@@ -483,39 +628,14 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         return (int) MathF.Round(rawAmount / (float) volume * GetPrice(comp, materialId));
     }
 
+    /// <summary>The customer changed their mind — return the sheets they inserted toward this order.</summary>
     private void OnCancel(Entity<RequisitionsConsoleComponent> ent, ref RequisitionCancelMessage args)
     {
-        // Reclaim the customer's own inserted money and sheets. Never touches the locked StoredBalance.
-        if (ent.Comp.PendingBalance > 0)
-        {
-            SpawnCash(ent, ent.Comp.PendingBalance, args.Actor);
-            ent.Comp.PendingBalance = 0;
-        }
-
         _materialStorage.EjectAllMaterial(ent.Owner);
         UpdateUi(ent, args.Actor);
     }
 
-    #endregion
-
-    #region Withdrawal
-
-    private void OnWithdraw(Entity<RequisitionsConsoleComponent> ent, ref RequisitionWithdrawMessage args)
-    {
-        if (!HasConfigAccess(ent, args.Actor))
-        {
-            _popup.PopupEntity(Loc.GetString("requisitions-access-denied"), ent.Owner, args.Actor);
-            return;
-        }
-
-        if (ent.Comp.StoredBalance <= 0)
-            return;
-
-        SpawnCash(ent, ent.Comp.StoredBalance, args.Actor);
-        ent.Comp.StoredBalance = 0;
-        UpdateUi(ent, args.Actor);
-    }
-
+    /// <summary>Ejects boards stuck in the internal flatpack storage back into the world (access-gated).</summary>
     private void OnEjectFlatpacks(Entity<RequisitionsConsoleComponent> ent, ref RequisitionEjectFlatpacksMessage args)
     {
         if (!HasConfigAccess(ent, args.Actor))
@@ -528,17 +648,6 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             _container.EmptyContainer(container);
 
         UpdateUi(ent);
-    }
-
-    private void SpawnCash(Entity<RequisitionsConsoleComponent> console, int amount, EntityUid toHands)
-    {
-        if (amount <= 0)
-            return;
-
-        var coords = Transform(console).Coordinates;
-        var stacks = _stack.SpawnMultipleAtPosition(console.Comp.CashStack, amount, coords);
-        foreach (var stack in stacks)
-            _hands.PickupOrDrop(toHands, stack);
     }
 
     #endregion
@@ -558,8 +667,6 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             MaterialPrices = ent.Comp.MaterialPrices.ToDictionary(kv => kv.Key.Id, kv => kv.Value),
             MaterialNames = BuildMaterialNames(ent),
             Fees = ent.Comp.Fees,
-            PendingBalance = ent.Comp.PendingBalance,
-            StoredBalance = ent.Comp.StoredBalance,
             FlatpackerLinked = ent.Comp.FlatpackerLinked,
             FlatpackMultiplier = ent.Comp.FlatpackMaterialMultiplier,
             // A shared BUI state can't be tailored per-viewer, so the config tab shows if any current viewer is
@@ -567,7 +674,6 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             HasConfigAccess = _ui.GetActors(ent.Owner, RequisitionsConsoleUiKey.Key).Any(a => HasConfigAccess(ent, a)),
             Processing = ent.Comp.OutstandingJobs > 0,
             PendingFlatpacks = _container.TryGetContainer(ent, ent.Comp.FlatpackStorageId, out var fpStore) ? fpStore.ContainedEntities.Count : 0,
-            Currency = "spesos",
         };
 
         if (state.HasConfigAccess)

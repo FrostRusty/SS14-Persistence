@@ -23,13 +23,12 @@ namespace Content.Client._Persistence14.Requisitions.UI;
 [GenerateTypedNameReferences]
 public sealed partial class RequisitionsConsoleMenu : FancyWindow
 {
-    public event Action<List<RequisitionCartItem>>? OnCheckout;
+    public event Action<List<RequisitionCartItem>, bool, string>? OnCheckout;
     public event Action? OnCancel;
     public event Action<NetEntity>? OnToggleLink;
     public event Action<string, int>? OnSetMaterialPrice;
     public event Action<RequisitionFee>? OnSetFee;
     public event Action<string>? OnRemoveFee;
-    public event Action? OnWithdraw;
     public event Action? OnEjectFlatpacks;
 
     private readonly IEntityManager _entMan;
@@ -63,7 +62,6 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
             CartChanged();
             OnCancel?.Invoke();
         };
-        WithdrawButton.OnPressed += _ => OnWithdraw?.Invoke();
         EjectButton.OnPressed += _ => OnEjectFlatpacks?.Invoke();
         AddFeeButton.OnPressed += _ => AddFee();
     }
@@ -298,11 +296,14 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
             detail.AddChild(line);
         }
 
+        var worth = ItemWorth(entry, item.Flatpack);
         foreach (var fee in FeesFor(entry.RecipeId, item.Flatpack))
         {
+            // For a percent fee show the rate and what it works out to on this item, e.g. "Research Fee (10%)".
+            var label = fee.Type == RequisitionFeeType.Percent ? $"{fee.Name} ({fee.Price}%)" : fee.Name;
             var line = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
-            line.AddChild(new Label { Text = fee.Name, HorizontalExpand = true, StyleClasses = { "LabelSubText" } });
-            line.AddChild(new Label { Text = $"${fee.Price}", StyleClasses = { "LabelSubText" } });
+            line.AddChild(new Label { Text = label, HorizontalExpand = true, StyleClasses = { "LabelSubText" } });
+            line.AddChild(new Label { Text = $"${fee.AmountFor(worth, 1)}", StyleClasses = { "LabelSubText" } });
             detail.AddChild(line);
         }
 
@@ -314,7 +315,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         BreakdownContainer.RemoveAllChildren();
 
         var need = new Dictionary<string, int>();
-        var feeAgg = new Dictionary<string, (string Name, int Count, int Total)>();
+        var feeAgg = new Dictionary<string, (string Name, bool Percent, int Rate, int Count, int Total)>();
         foreach (var item in _cart)
         {
             var entry = _state.Catalogue.FirstOrDefault(e => e.RecipeId == item.RecipeId);
@@ -323,13 +324,18 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
 
             var qty = Math.Max(1, item.Quantity);
             var mult = item.Flatpack ? _state.FlatpackMultiplier : 1f;
+            var worth = 0;
             foreach (var (mat, baseAmount) in entry.Materials)
-                need[mat] = need.GetValueOrDefault(mat) + (int) MathF.Ceiling(baseAmount * mult) * qty;
+            {
+                var raw = (int) MathF.Ceiling(baseAmount * mult) * qty;
+                need[mat] = need.GetValueOrDefault(mat) + raw;
+                worth += SheetCost(mat, raw);
+            }
 
             foreach (var fee in FeesFor(item.RecipeId, item.Flatpack))
             {
                 var prev = feeAgg.GetValueOrDefault(fee.Id);
-                feeAgg[fee.Id] = (fee.Name, prev.Count + qty, prev.Total + fee.Price * qty);
+                feeAgg[fee.Id] = (fee.Name, fee.Type == RequisitionFeeType.Percent, fee.Price, prev.Count + qty, prev.Total + fee.AmountFor(worth, qty));
             }
         }
 
@@ -354,7 +360,9 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
             }
         }
 
+        var red = Color.FromHex("#e03b3b");
         var materialTotal = 0;
+        var anyShort = false;
         foreach (var (mat, qty) in need.OrderBy(kv => kv.Key))
         {
             // The customer's inserted sheets cover part of the need, lowering the billed amount.
@@ -362,14 +370,27 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
             var cost = SheetCost(mat, qty - cover);
             materialTotal += cost;
 
+            // Short when what the silo must still supply exceeds its stock. Add silo materials, or have the
+            // customer contribute more, and it clears.
+            var isShort = qty - cover > _state.Stock.GetValueOrDefault(mat);
+            if (isShort)
+                anyShort = true;
+
             var text = MatLine(mat, qty);
             if (cover > 0)
-                text += "  (−" + SheetOnly(mat, cover) + ")";
+                text += "  (−" + MatLine(mat, cover) + ")";
 
             var line = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
             line.AddChild(MakeMaterialIcon(mat, 18));
-            line.AddChild(new Label { Text = text, HorizontalExpand = true, Margin = new Thickness(4, 0, 0, 0) });
-            line.AddChild(new Label { Text = $"${cost}" });
+            var nameLabel = new Label { Text = text, HorizontalExpand = true, Margin = new Thickness(4, 0, 0, 0) };
+            var costLabel = new Label { Text = $"${cost}" };
+            if (isShort)
+            {
+                nameLabel.FontColorOverride = red;
+                costLabel.FontColorOverride = red;
+            }
+            line.AddChild(nameLabel);
+            line.AddChild(costLabel);
             BreakdownContainer.AddChild(line);
         }
 
@@ -377,24 +398,35 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         foreach (var (_, fee) in feeAgg)
         {
             feeTotal += fee.Total;
+            // Both read "Name (amount) (count)": percent shows the rate, flat shows the per-unit charge.
+            var rate = fee.Percent ? $"{fee.Rate}%" : $"${fee.Rate}";
+            var text = $"{fee.Name} ({rate}) ({fee.Count})";
             var line = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
-            line.AddChild(new Label { Text = $"{fee.Name} ({fee.Count})", HorizontalExpand = true, Margin = new Thickness(22, 0, 0, 0) });
+            line.AddChild(new Label { Text = text, HorizontalExpand = true, Margin = new Thickness(22, 0, 0, 0) });
             line.AddChild(new Label { Text = $"${fee.Total}" });
             BreakdownContainer.AddChild(line);
         }
 
         var total = materialTotal + feeTotal;
 
-        // Divider, then Material cost / Fees on the left and the Total on the right.
+        // Divider, then Material cost / Fees on the left and the Total on the right. Material cost turns red
+        // while the silo can't cover the order.
         BreakdownContainer.AddChild(new PanelContainer { StyleClasses = { "LowDivider" }, Margin = new Thickness(0, 4, 0, 4) });
         var summary = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
+        var matSummary = new Label
+        {
+            Text = Loc.GetString("requisitions-summary-material") + $" ${materialTotal}",
+            StyleClasses = { "LabelSubText" },
+        };
+        if (anyShort)
+            matSummary.FontColorOverride = red;
+        summary.AddChild(matSummary);
         summary.AddChild(new Label
         {
-            Text = Loc.GetString("requisitions-summary-material") + $" ${materialTotal}    "
-                   + Loc.GetString("requisitions-summary-fees") + $" ${feeTotal}",
-            HorizontalExpand = true,
+            Text = "    " + Loc.GetString("requisitions-summary-fees") + $" ${feeTotal}",
             StyleClasses = { "LabelSubText" },
         });
+        summary.AddChild(new Control { HorizontalExpand = true });
         summary.AddChild(new Label
         {
             Text = Loc.GetString("requisitions-summary-total") + $" ${total}",
@@ -402,16 +434,13 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         });
         BreakdownContainer.AddChild(summary);
 
-        PendingLabel.Text = Loc.GetString("requisitions-pending-line",
-            ("pending", _state.PendingBalance), ("locked", _state.StoredBalance));
-
-        CheckoutButton.Disabled = _state.Processing || _cart.Count == 0 || _state.PendingBalance < total;
+        CheckoutButton.Disabled = _state.Processing || _cart.Count == 0;
         CancelButton.Disabled = _state.Processing;
     }
 
     private void Checkout()
     {
-        OnCheckout?.Invoke(new List<RequisitionCartItem>(_cart));
+        OnCheckout?.Invoke(new List<RequisitionCartItem>(_cart), PrintInvoiceCheck.Pressed, InvoiceTitle.Text);
         _cart.Clear();
         _expanded.Clear();
         CartChanged();
@@ -423,9 +452,6 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
 
     private void RebuildConfig()
     {
-        WithdrawButton.Text = Loc.GetString("requisitions-config-withdraw", ("spesos", _state.StoredBalance));
-        WithdrawButton.Disabled = _state.StoredBalance <= 0;
-
         EjectButton.Visible = _state.PendingFlatpacks > 0;
         EjectButton.Text = Loc.GetString("requisitions-config-eject", ("count", _state.PendingFlatpacks));
 
@@ -477,6 +503,21 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
                 OnSetFee?.Invoke(updated);
             };
             row.AddChild(priceEdit);
+
+            // Flat vs percent dropdown. A percent fee adds that % of the item's material value.
+            var typeDropdown = new OptionButton { MinWidth = 90, Margin = new Thickness(6, 0, 0, 0), ToolTip = Loc.GetString("requisitions-fee-type-tooltip") };
+            typeDropdown.AddItem(Loc.GetString("requisitions-fee-type-flat"), (int) RequisitionFeeType.Flat);
+            typeDropdown.AddItem(Loc.GetString("requisitions-fee-type-percent"), (int) RequisitionFeeType.Percent);
+            typeDropdown.SelectId((int) fee.Type);
+            var capturedType = fee;
+            typeDropdown.OnItemSelected += a =>
+            {
+                typeDropdown.SelectId(a.Id);
+                var updated = Clone(capturedType);
+                updated.Type = (RequisitionFeeType) a.Id;
+                OnSetFee?.Invoke(updated);
+            };
+            row.AddChild(typeDropdown);
 
             if (!isFlatpack)
             {
@@ -597,6 +638,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         Id = fee.Id,
         Name = fee.Name,
         Price = fee.Price,
+        Type = fee.Type,
         Scope = fee.Scope,
         Recipes = new HashSet<ProtoId<LatheRecipePrototype>>(fee.Recipes),
     };
@@ -626,7 +668,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
     private float SheetVolume(string matId) =>
         _proto.TryIndex<MaterialPrototype>(matId, out var m) ? Math.Max(1, _materialStorage.GetSheetVolume(m)) : 1;
 
-    /// <summary>Just the amount, e.g. "12.5 sheets".</summary>
+    /// <summary>Just the amount and unit, e.g. "12.5 sheets" (or "12.5 ingots" for ingot materials).</summary>
     private string SheetOnly(string matId, int rawAmount)
     {
         var sheets = rawAmount / SheetVolume(matId);
@@ -634,8 +676,13 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         return Loc.GetString("requisitions-material-sheets", ("amount", MathF.Round(sheets, 2)), ("unit", unit));
     }
 
-    /// <summary>Named material line, e.g. "Steel  12.5 sheets".</summary>
-    private string MatLine(string matId, int rawAmount) => $"{MatName(matId)}  {SheetOnly(matId, rawAmount)}";
+    /// <summary>Named material line, amount first to match the invoice, e.g. "12.5 Steel sheets".</summary>
+    private string MatLine(string matId, int rawAmount)
+    {
+        var amount = MathF.Round(rawAmount / SheetVolume(matId), 2);
+        var unit = _proto.TryIndex<MaterialPrototype>(matId, out var m) ? Loc.GetString(m.Unit) : matId;
+        return $"{amount} {MatName(matId)} {unit}";
+    }
 
     private int SheetCost(string matId, int rawAmount)
     {
@@ -660,14 +707,22 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         }
     }
 
-    private int ItemCost(RequisitionCatalogueEntry entry, bool flatpack)
+    /// <summary>Full material value of one unit (no contribution discount) — the base for percent fees.</summary>
+    private int ItemWorth(RequisitionCatalogueEntry entry, bool flatpack)
     {
         var mult = flatpack ? _state.FlatpackMultiplier : 1f;
-        var cost = 0;
+        var worth = 0;
         foreach (var (mat, baseAmount) in entry.Materials)
-            cost += SheetCost(mat, (int) MathF.Ceiling(baseAmount * mult));
+            worth += SheetCost(mat, (int) MathF.Ceiling(baseAmount * mult));
+        return worth;
+    }
+
+    private int ItemCost(RequisitionCatalogueEntry entry, bool flatpack)
+    {
+        var worth = ItemWorth(entry, flatpack);
+        var cost = worth;
         foreach (var fee in FeesFor(entry.RecipeId, flatpack))
-            cost += fee.Price;
+            cost += fee.AmountFor(worth, 1);
         return cost;
     }
 

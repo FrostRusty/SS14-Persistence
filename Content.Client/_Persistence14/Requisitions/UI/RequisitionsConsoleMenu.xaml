@@ -12,6 +12,10 @@
 
             <!-- ============ CHECKOUT TAB ============ -->
             <BoxContainer Name="CheckoutTab" Orientation="Vertical" VerticalExpand="True">
+              <BoxContainer Orientation="Horizontal" Margin="6 6 6 0">
+                <LineEdit Name="InvoiceTitle" PlaceHolder="&gt;INVOICE TITLE HERE&lt;" HorizontalExpand="True"/>
+                <CheckBox Name="PrintInvoiceCheck" Text="{Loc 'requisitions-print-invoice'}" Margin="8 0 0 0"/>
+              </BoxContainer>
               <Control VerticalExpand="True" HorizontalExpand="True">
               <BoxContainer Orientation="Horizontal" SeparationOverride="10" Margin="6" VerticalExpand="True">
 
@@ -44,7 +48,6 @@
                     <ScrollContainer MinHeight="120" MaxHeight="240" HScrollEnabled="False">
                         <BoxContainer Name="BreakdownContainer" Orientation="Vertical" HorizontalExpand="True"/>
                     </ScrollContainer>
-                    <Label Name="PendingLabel" StyleClasses="LabelSubText"/>
                     <BoxContainer Orientation="Horizontal" Margin="0 4 0 0">
                         <Button Name="CancelButton" Text="{Loc 'requisitions-cancel-button'}" StyleClasses="ButtonColorRed"/>
                         <Control HorizontalExpand="True"/>
@@ -69,7 +72,6 @@
                     <Label Text="{Loc 'requisitions-config-header'}" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
                     <Button Name="AddFeeButton" Text="{Loc 'requisitions-config-add'}"/>
                     <Button Name="EjectButton" Text="Eject boards" Margin="6 0 0 0" Visible="False"/>
-                    <Button Name="WithdrawButton" Text="{Loc 'requisitions-config-withdraw'}" Margin="6 0 0 0"/>
                 </BoxContainer>
                 <PanelContainer StyleClasses="LowDivider" Margin="0 4 0 4"/>
                 <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
