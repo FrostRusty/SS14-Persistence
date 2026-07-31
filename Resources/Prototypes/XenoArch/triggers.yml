@@ -431,7 +431,7 @@
 
 - type: xenoArchTrigger
   id: TriggerChemAcidic
-  tip: xenoarch-trigger-tip-chem-narcotic
+  tip: xenoarch-trigger-tip-chem-acidic
   components:
   - type: XATReactive
     reagents:
