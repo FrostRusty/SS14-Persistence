@@ -8,12 +8,13 @@
       sound:
         path: /Audio/Items/multitool_drop.ogg
     - type: Sprite
-      sprite: Objects/Tools/access_configurator.rsi
-      state: icon
+      sprite: _Persistence14/Objects/Tools/phrase-extractor.rsi
+      state: icon-red
     - type: Item
       size: Small
     - type: Clothing
-      sprite: Objects/Tools/access_configurator.rsi
+      sprite: _Persistence14/Objects/Tools/phrase-extractor.rsi
+      state: equipped-BELT-red
       quickEquip: false
       slots:
         - Belt
@@ -22,3 +23,4 @@
       materialComposition:
         Plastic: 50
         Steel: 100
+//Sprites for hand directions included but are yet to be implemented.
