@@ -5,7 +5,7 @@
   description: A digital invoice which processes payments.
   components:
     - type: Sprite
-      sprite: Objects/Misc/bureaucracy.rsi
+      sprite: _Persistence14/Objects/Misc/bureaucracy.rsi
       state: invoiceunpaid
     - type: Item
       size: Tiny
