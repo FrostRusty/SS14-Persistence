@@ -49,6 +49,9 @@ public sealed class RequisitionsConsoleState : BoundUserInterfaceState
 
     /// <summary>Boards sitting in the console's internal storage waiting to be flatpacked (config tab).</summary>
     public int PendingFlatpacks;
+
+    /// <summary>Whether printed invoices itemise each line's materials/fees, or just show "item — cost" and a total.</summary>
+    public bool DetailedInvoice = true;
 }
 
 /// <summary>One catalogue line: a single recipe, merged across every machine that can print it.</summary>
@@ -180,6 +183,18 @@ public sealed class RequisitionRemoveFeeMessage : BoundUserInterfaceMessage
     public RequisitionRemoveFeeMessage(string id)
     {
         Id = id;
+    }
+}
+
+/// <summary>Set whether printed invoices are fully itemised or trimmed to one line per item plus a total.</summary>
+[Serializable, NetSerializable]
+public sealed class RequisitionSetDetailedInvoiceMessage : BoundUserInterfaceMessage
+{
+    public bool Detailed;
+
+    public RequisitionSetDetailedInvoiceMessage(bool detailed)
+    {
+        Detailed = detailed;
     }
 }
 

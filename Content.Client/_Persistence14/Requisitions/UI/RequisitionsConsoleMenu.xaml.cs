@@ -30,6 +30,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
     public event Action<RequisitionFee>? OnSetFee;
     public event Action<string>? OnRemoveFee;
     public event Action? OnEjectFlatpacks;
+    public event Action<bool>? OnSetDetailedInvoice;
 
     private readonly IEntityManager _entMan;
     private readonly IPrototypeManager _proto;
@@ -64,6 +65,7 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
         };
         EjectButton.OnPressed += _ => OnEjectFlatpacks?.Invoke();
         AddFeeButton.OnPressed += _ => AddFee();
+        DetailedInvoiceCheck.OnToggled += a => OnSetDetailedInvoice?.Invoke(a.Pressed);
     }
 
     public void SetEntity(EntityUid owner)
@@ -452,6 +454,8 @@ public sealed partial class RequisitionsConsoleMenu : FancyWindow
 
     private void RebuildConfig()
     {
+        DetailedInvoiceCheck.Pressed = _state.DetailedInvoice;
+
         EjectButton.Visible = _state.PendingFlatpacks > 0;
         EjectButton.Text = Loc.GetString("requisitions-config-eject", ("count", _state.PendingFlatpacks));
 

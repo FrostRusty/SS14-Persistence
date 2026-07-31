@@ -32,6 +32,7 @@ public abstract class SharedRequisitionsConsoleSystem : EntitySystem
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionSetMaterialPriceMessage>(OnSetMaterialPrice);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionSetFeeMessage>(OnSetFee);
         SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionRemoveFeeMessage>(OnRemoveFee);
+        SubscribeLocalEvent<RequisitionsConsoleComponent, RequisitionSetDetailedInvoiceMessage>(OnSetDetailedInvoice);
         SubscribeLocalEvent<RequisitionsConsoleComponent, ComponentShutdown>(OnShutdown);
 
         Subs.BuiEvents<RequisitionsConsoleComponent>(RequisitionsConsoleUiKey.Key, subs =>
@@ -240,6 +241,15 @@ public abstract class SharedRequisitionsConsoleSystem : EntitySystem
         var actor = args.Actor;
         ent.Comp.Fees.RemoveAll(f => f.Id == id);
         UpdateUi(ent, actor);
+    }
+
+    private void OnSetDetailedInvoice(Entity<RequisitionsConsoleComponent> ent, ref RequisitionSetDetailedInvoiceMessage args)
+    {
+        if (!HasConfigAccess(ent, args.Actor))
+            return;
+
+        ent.Comp.DetailedInvoice = args.Detailed;
+        UpdateUi(ent, args.Actor);
     }
 
     #endregion

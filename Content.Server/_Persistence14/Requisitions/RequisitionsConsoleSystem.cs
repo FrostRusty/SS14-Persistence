@@ -95,6 +95,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             .ToDictionary(kv => kv.Key.Id, kv => kv.Value);
 
         var invoiceMode = args.PrintInvoice;
+        var detailedInvoice = ent.Comp.DetailedInvoice;
         var runningCost = 0;
         var producedAny = false;
         var anyFailed = false;
@@ -174,31 +175,41 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
                 runningCost += itemCost;
                 producedAny = true;
 
-                // Build this item's invoice section as we go.
+                // Build this item's invoice section as we go. Every item gets its "name — cost" line; the
+                // per-material and per-fee breakdown (and the totals it feeds) is only built for a detailed invoice.
                 if (invoiceMode)
                 {
                     var name = Lathe.GetRecipeName(recipe);
                     var label = queued < qty ? $"{name} (×{queued} of {qty})" : name;
                     itemsBody.Append($"[bold][color=#9a6a12]{label}[/color][/bold]   ${itemCost}\n");
-                    foreach (var (mat, raw, covered, billed) in matLines)
-                    {
-                        invoiceMatBilled += billed;
-                        invoiceMatWorth += SheetCost(ent.Comp, mat, raw);
-                        var disc = covered > 0 ? $"  (−{SheetLabelServer(mat, covered)})" : "";
-                        itemsBody.Append($"    {SheetLabelServer(mat, raw)}{disc}   ${billed}\n");
 
-                        // Aggregate for the per-material totals list.
-                        var prevMat = invoiceMats.GetValueOrDefault(mat);
-                        invoiceMats[mat] = (prevMat.Raw + raw, prevMat.Covered + covered, prevMat.Billed + billed);
-                    }
-                    foreach (var (fee, amt) in feeLines)
+                    if (detailedInvoice)
                     {
-                        var rate = fee.Type == RequisitionFeeType.Percent ? $"{fee.Price}%" : $"${fee.Price}";
-                        itemsBody.Append($"    {fee.Name} ({rate})   ${amt}\n");
-                        var prev = invoiceFees.GetValueOrDefault(fee.Id);
-                        invoiceFees[fee.Id] = (fee.Name, fee.Type == RequisitionFeeType.Percent, fee.Price, prev.Count + queued, prev.Total + amt);
+                        foreach (var (mat, raw, covered, billed) in matLines)
+                        {
+                            invoiceMatBilled += billed;
+                            invoiceMatWorth += SheetCost(ent.Comp, mat, raw);
+                            var disc = covered > 0 ? $"  (−{SheetLabelServer(mat, covered)})" : "";
+                            itemsBody.Append($"    {SheetLabelServer(mat, raw)}{disc}   ${billed}\n");
+
+                            // Aggregate for the per-material totals list.
+                            var prevMat = invoiceMats.GetValueOrDefault(mat);
+                            invoiceMats[mat] = (prevMat.Raw + raw, prevMat.Covered + covered, prevMat.Billed + billed);
+                        }
+                        foreach (var (fee, amt) in feeLines)
+                        {
+                            var rate = fee.Type == RequisitionFeeType.Percent ? $"{fee.Price}%" : $"${fee.Price}";
+                            itemsBody.Append($"    {fee.Name} ({rate})   ${amt}\n");
+                            var prev = invoiceFees.GetValueOrDefault(fee.Id);
+                            invoiceFees[fee.Id] = (fee.Name, fee.Type == RequisitionFeeType.Percent, fee.Price, prev.Count + queued, prev.Total + amt);
+                        }
+                        itemsBody.Append('\n');
                     }
-                    itemsBody.Append('\n');
+                    else
+                    {
+                        // Trimmed invoice: still separate each item with a blank line, like the failure lines do.
+                        itemsBody.Append('\n');
+                    }
                 }
             }
             catch (Exception e)
@@ -224,7 +235,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         // A checkout without an invoice simply prints the items at no charge.
         if (invoiceMode)
         {
-            var body = BuildInvoiceBody(args.InvoiceTitle, itemsBody, invoiceMats, invoiceFees, invoiceMatBilled, invoiceMatWorth, runningCost);
+            var body = BuildInvoiceBody(args.InvoiceTitle, itemsBody, invoiceMats, invoiceFees, invoiceMatBilled, invoiceMatWorth, runningCost, detailedInvoice);
             SpawnInvoice(ent, args.Actor, args.InvoiceTitle, runningCost, body);
         }
 
@@ -235,12 +246,13 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         UpdateUi(ent, args.Actor);
     }
 
-    /// <summary>Assembles the invoice body markup: a header, per-item detail, then a totals section (a per-material
-    /// list, the material-cost summary, the fees, and the grand total).</summary>
+    /// <summary>Assembles the invoice body markup. A detailed invoice has a header, per-item detail, then a totals
+    /// section (per-material list, material-cost summary, fees, grand total). A non-detailed one is just the title,
+    /// one "name — cost" line per item (plus any failures), and the grand total.</summary>
     private string BuildInvoiceBody(string title, StringBuilder items,
         Dictionary<string, (int Raw, int Covered, int Billed)> mats,
         Dictionary<string, (string Name, bool Percent, int Rate, int Count, int Total)> fees,
-        int matBilled, int matWorth, int total)
+        int matBilled, int matWorth, int total, bool detailed)
     {
         if (string.IsNullOrWhiteSpace(title))
             title = Loc.GetString("requisitions-invoice-default-title");
@@ -250,6 +262,16 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
         // fees = violet, grand total = green, failures (elsewhere) = dark red.
         var sb = new StringBuilder();
         sb.Append($"[head=2][color=#2a3f6a]{title}[/color][/head]\n\n");
+
+        // Trimmed invoice: just the per-item lines and the grand total.
+        if (!detailed)
+        {
+            sb.Append(items);
+            sb.Append('\n');
+            sb.Append($"[bold][color=#1f7a33]{Loc.GetString("requisitions-summary-total")}: ${total}[/color][/bold]");
+            return sb.ToString();
+        }
+
         sb.Append($"[head=3][color=#1f6f5c]{Loc.GetString("requisitions-invoice-items")}[/color][/head]\n");
         sb.Append(items);
         sb.Append($"[head=3][color=#1f6f5c]{Loc.GetString("requisitions-invoice-total-header")}[/color][/head]\n");
@@ -674,6 +696,7 @@ public sealed class RequisitionsConsoleSystem : SharedRequisitionsConsoleSystem
             HasConfigAccess = _ui.GetActors(ent.Owner, RequisitionsConsoleUiKey.Key).Any(a => HasConfigAccess(ent, a)),
             Processing = ent.Comp.OutstandingJobs > 0,
             PendingFlatpacks = _container.TryGetContainer(ent, ent.Comp.FlatpackStorageId, out var fpStore) ? fpStore.ContainedEntities.Count : 0,
+            DetailedInvoice = ent.Comp.DetailedInvoice,
         };
 
         if (state.HasConfigAccess)

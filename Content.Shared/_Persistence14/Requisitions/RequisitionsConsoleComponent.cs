@@ -54,6 +54,13 @@ public sealed partial class RequisitionsConsoleComponent : Component
     [DataField]
     public int FallbackMaterialPrice;
 
+    /// <summary>
+    /// When true, a printed invoice itemises each line's materials and fees plus per-order totals. When false,
+    /// the invoice is trimmed to just one line per item ("name — cost"), failures, and the grand total.
+    /// </summary>
+    [DataField]
+    public bool DetailedInvoice = true;
+
     #endregion
 
     #region State

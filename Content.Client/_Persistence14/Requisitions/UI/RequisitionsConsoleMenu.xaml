@@ -70,6 +70,7 @@
             <BoxContainer Name="ConfigTab" Orientation="Vertical" Margin="6" VerticalExpand="True">
                 <BoxContainer Orientation="Horizontal">
                     <Label Text="{Loc 'requisitions-config-header'}" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
+                    <CheckBox Name="DetailedInvoiceCheck" Text="{Loc 'requisitions-config-detailed-invoice'}" ToolTip="{Loc 'requisitions-config-detailed-invoice-tooltip'}" Margin="0 0 8 0"/>
                     <Button Name="AddFeeButton" Text="{Loc 'requisitions-config-add'}"/>
                     <Button Name="EjectButton" Text="Eject boards" Margin="6 0 0 0" Visible="False"/>
                 </BoxContainer>
