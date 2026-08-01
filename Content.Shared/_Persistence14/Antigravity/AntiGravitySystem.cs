@@ -1,6 +1,7 @@
 using Content.Shared.Gravity;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._Persistence14.Antigravity;
 
@@ -13,33 +14,47 @@ namespace Content.Shared._Persistence14.Antigravity;
 public sealed partial class AntiGravitySystem : EntitySystem
 {
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<AntiGravityComponent, StatusEffectAppliedEvent>(OnApplyStatusEffect);
         SubscribeLocalEvent<AntiGravityComponent, ComponentStartup>(OnComponentStartup);
-        SubscribeLocalEvent<AntiGravityComponent, StatusEffectRemovedEvent>(OnRemoveStatusEffect);
         SubscribeLocalEvent<AntiGravityComponent, ComponentRemove>(OnComponentRemoved);
         SubscribeLocalEvent<AntiGravityComponent, IsWeightlessEvent>(OnWeightless);
+
+        SubscribeLocalEvent<AntiGravityComponent, StatusEffectAppliedEvent>(OnApplyStatusEffect);
+        SubscribeLocalEvent<AntiGravityComponent, StatusEffectRemovedEvent>(OnRemoveStatusEffect);
+        SubscribeLocalEvent<AntiGravityComponent, StatusEffectRelayedEvent<IsWeightlessEvent>>(OnWeightlessStatus);
+
+        // Makes sure the IsWeightless event is relayed.
+        SubscribeLocalEvent<StatusEffectContainerComponent, IsWeightlessEvent>(_statusEffect.RelayEvent);
     }
 
     public void OnApplyStatusEffect(Entity<AntiGravityComponent> entity, ref StatusEffectAppliedEvent args)
     {
-        _gravity.RefreshWeightless(entity.Owner, true);
+        if (!HasComp<GravityAffectedComponent>(args.Target))
+            return;
+        _gravity.RefreshWeightless(args.Target, true);
     }
 
     public void OnComponentStartup(Entity<AntiGravityComponent> entity, ref ComponentStartup args)
     {
+        if (!HasComp<GravityAffectedComponent>(entity.Owner))
+            return;
         _gravity.RefreshWeightless(entity.Owner, true);
     }
 
     public void OnRemoveStatusEffect(Entity<AntiGravityComponent> entity, ref StatusEffectRemovedEvent args)
     {
-        _gravity.RefreshWeightless(entity.Owner, false);
+        if (!HasComp<GravityAffectedComponent>(args.Target))
+            return;
+        _gravity.RefreshWeightless(args.Target, false);
     }
 
     public void OnComponentRemoved(Entity<AntiGravityComponent> entity, ref ComponentRemove args)
     {
+        if (!HasComp<GravityAffectedComponent>(entity.Owner))
+            return;
         _gravity.RefreshWeightless(entity.Owner, false);
     }
 
@@ -50,5 +65,16 @@ public sealed partial class AntiGravitySystem : EntitySystem
 
         args.Handled = true;
         args.IsWeightless = true; // Always be weightless!
+    }
+
+    private void OnWeightlessStatus(Entity<AntiGravityComponent> entity, ref StatusEffectRelayedEvent<IsWeightlessEvent> args)
+    {
+        var weightless = args.Args;
+        if (weightless.Handled)
+            return;
+
+        weightless.Handled = true;
+        weightless.IsWeightless = true;
+        args.Args = weightless;
     }
 }
