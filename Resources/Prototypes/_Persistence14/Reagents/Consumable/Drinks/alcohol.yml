@@ -23,12 +23,12 @@
         - !type:ModifyStatusEffect
           effectProto: StatusEffectAntiGrav
           type: Add
-          time: 10
+          time: 5
       metabolites:
         Ethanol: 0.4
 
 - type: reagent
-  id: tartarustwist
+  id: tartarusTwist
   name: reagent-name-tartarus-twist
   parent: BaseAlcohol
   desc: reagent-desc-tartarus-twist
