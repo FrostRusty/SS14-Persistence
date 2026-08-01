@@ -14,7 +14,6 @@
       size: Small
     - type: Clothing
       sprite: _Persistence14/Objects/Tools/phrase-extractor.rsi
-      state: equipped-BELT-red
       quickEquip: false
       slots:
         - Belt
@@ -23,4 +22,3 @@
       materialComposition:
         Plastic: 50
         Steel: 100
-//Sprites for hand directions included but are yet to be implemented.
