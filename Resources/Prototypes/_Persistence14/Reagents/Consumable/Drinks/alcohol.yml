@@ -23,7 +23,7 @@
         - !type:ModifyStatusEffect
           effectProto: StatusEffectAntiGrav
           type: Add
-          time: 10
+          time: 3
       metabolites:
         Ethanol: 0.4
 
@@ -43,5 +43,18 @@
   metamorphicChangeColor: false
   metabolisms:
     Digestion:
+      effects:
+        - !type:Emote
+          emote: Scream
+          probability: 0.25
+        - !type:GenericStatusEffect
+          key: Stutter
+          component: StutteringAccent
+        - !type:Jitter
+        - !type:PopupMessage
+          type: Local
+          visualType: Large
+          messages: ["tartarus-twist-effect-damned", "tartarus-twist-effect-burning", "tartarus-twist-effect-pain"]
+          probability: 0.1
       metabolites:
         Ethanol: 0.6
