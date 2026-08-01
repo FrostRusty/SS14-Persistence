@@ -19,6 +19,11 @@
   metamorphicChangeColor: false
   metabolisms:
     Digestion:
+      effects:
+        - !type:ModifyStatusEffect
+          effectProto: StatusEffectAntiGrav
+          type: Add
+          time: 10
       metabolites:
         Ethanol: 0.4
 
