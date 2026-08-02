@@ -1525,7 +1525,7 @@
     state: icon
   - type: EmitSoundOnUse
     sound: &PlushieHelenaSound
-      path: /Audio/Vioce/Talk/vulp.ogg
+      path: /Audio/Voice/Talk/vulp.ogg
       params:
         volume: -5
   - type: EmitSoundOnLand

@@ -1643,7 +1643,7 @@
 
 #Helena Plushie
 - type: foodSequenceElement
-  id: PlushieAna
+  id: PlushieHelena
   scale: 0.8, 0.8
   name: food-sequence-cotton-burger-content-plushie-helena
   sprites:
