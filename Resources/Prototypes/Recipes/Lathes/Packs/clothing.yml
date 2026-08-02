@@ -204,6 +204,7 @@
   - ClothingOuterCoatLabGene
   - ClothingOuterCoatLab
   - ClothingOuterCoatLabSeniorPhysician
+  - ClothingOuterCoatLabSeniorPhysicianNew
   - ClothingOuterCoatRnd
   - ClothingOuterCoatRobo
   - ClothingOuterCoatRD
@@ -273,6 +274,7 @@
   - ClothingUniformJumpsuitCMOTurtle
   - ClothingUniformJumpskirtCMOTurtle
   - ClothingHeadHatBeretSeniorPhysician
+  - ClothingHeadHatBeretSeniorPhysicianNew
   - ClothingUniformJumpsuitMedicalDoctor
   - ClothingUniformJumpskirtMedicalDoctor
   - ClothingUniformJumpsuitPsychologist
@@ -281,7 +283,9 @@
   - UniformScrubsColorGreen
   - UniformScrubsColorPurple
   - ClothingUniformJumpsuitSeniorPhysician
+  - ClothingUniformJumpsuitSeniorPhysicianNew
   - ClothingUniformJumpskirtSeniorPhysician
+  - ClothingUniformJumpskirtSeniorPhysicianNew
   - ClothingUniformJumpsuitParamedic
   - ClothingUniformJumpskirtParamedic
   - ClothingHeadHatParamedicsoft
