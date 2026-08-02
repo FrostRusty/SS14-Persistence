@@ -96,9 +96,21 @@ public abstract partial class SharedXenoArtifactSystem
         }
     }
 
-    public void SetArtifexiumApplied(Entity<XenoArtifactUnlockingComponent> ent, bool val)
+    /// <summary>
+    /// Adds units of applied artifexium to the current unlocking window.
+    /// </summary>
+    public void AddArtifexiumScale(Entity<XenoArtifactUnlockingComponent> ent, float amount)
     {
-        ent.Comp.ArtifexiumApplied = val;
+        ent.Comp.ArtifexiumScale += amount;
+        Dirty(ent);
+    }
+
+    /// <summary>
+    /// Sets the window to resolve on the next update tick instead of waiting out the timer.
+    /// </summary>
+    public void SetInstantUnlock(Entity<XenoArtifactUnlockingComponent> ent)
+    {
+        ent.Comp.EndTime = _timing.CurTime;
         Dirty(ent);
     }
 }
