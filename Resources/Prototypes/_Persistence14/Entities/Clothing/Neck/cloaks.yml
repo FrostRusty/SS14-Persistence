@@ -101,7 +101,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingNeckMilitiaLeaderCloak
-  name: threshold militia cloak
+  name: threshold militia leader cloak
   description: A dark purple cloak designed to wrap the wearer in the embrace of a spacer's true home. This unique version has silver trim running the bottom and silver clasps around the neck to denote the wearer's importance as the leader of the Threshold militia. Wear this with pride, Warrior of the Threshold.
   components:
   - type: Sprite
