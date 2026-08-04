@@ -660,6 +660,8 @@
   - RnDPDASOL
   - HoSPDASOL
   - CoSPDASOL
+  - ClothingNeckMilitiaCloak
+  - ClothingNeckMilitiaLeaderCloak
 
 #Handy Flags
 - type: latheRecipePack
